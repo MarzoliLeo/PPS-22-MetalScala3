@@ -1,0 +1,29 @@
+name: Scala3 Build and Test
+
+on:
+  push:
+    branches:
+      - main  # Adjust this branch name to match your project's default branch
+
+jobs:
+  #This configuration will set up GitHub Actions to build and test your Scala 3 project for CI.
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+
+      - name: Build and Test
+        run: sbt test
+
+      #Generate documentation
+      - name: Generate Documentation
+        run: sbt doc
+
+  # ... (previous configuration)
