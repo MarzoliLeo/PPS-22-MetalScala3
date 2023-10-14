@@ -11,22 +11,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-
       - name: Set up Java
         uses: actions/setup-java@v2
         with:
           java-version: '11'
-        runs-on: ubuntu-latest
-        strategy:
-          matrix:
-            node: [16.x]
-        steps:
-          - name: Set up Node.js
-            uses: actions/setup-node@v2
-            with:
-              node-version: ${{ matrix.node }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
 
       #Build and Test
       - name: Build and Test
