@@ -20,7 +20,3 @@ jobs:
       #Build and Test
       - name: Build and Test
         run: sbt test
-
-      #Generate documentation
-      - name: Generate Documentation
-        run: sbt doc
