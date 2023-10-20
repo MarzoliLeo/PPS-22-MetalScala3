@@ -6,3 +6,6 @@ lazy val root = (project in file("."))
   .settings(
     name := "MetalScala3"
   )
+
+libraryDependencies += "org.openjfx" % "javafx" % "21.0.1" pomOnly()
+libraryDependencies += "org.openjfx" % "javafx-fxml" % "21"
