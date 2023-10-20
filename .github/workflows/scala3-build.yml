@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master  # Adjust this branch name to match your project's default branch
+      - javafx_main_window  # Add your new branch here
 
 jobs:
   #This configuration will set up GitHub Actions to build and test your Scala 3 project for CI.
