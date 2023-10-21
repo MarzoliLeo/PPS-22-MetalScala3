@@ -1,6 +1,6 @@
 package view
 
-import javafx.event.ActionEvent
+import javafx.event.{ActionEvent, EventHandler}
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
 import javafx.scene.control.Button
@@ -8,14 +8,25 @@ import javafx.scene.layout.{GridPane, Pane}
 import javafx.stage.Stage
 
 object MainMenu:
-  def apply(primaryStage: Stage): Pane =
+
+  /**
+   * Creates a new stage with the main menu
+   * @param btnMap Map of button text to event handler to assign an Event Handler to a button based on its text
+   * @return The Pane of the main menu
+   */
+  def apply(btnMap: Map[String, EventHandler[ActionEvent]]): Pane =
     val loader: FXMLLoader = FXMLLoader(getClass.getResource("/main.fxml"))
-    val root: GridPane = loader.load[javafx.scene.layout.GridPane]()
-    val onButtonClicked: PartialFunction[Button, Unit] = {
-      case button if button.getText == "Start" => button.setOnAction((_: ActionEvent) => println("Hello World"))
-      case button if button.getText == "Exit" => button.setOnAction((_: ActionEvent) => primaryStage.close())
-    }
-    root.getChildren
-      .filtered(_.isInstanceOf[Button])
-      .forEach(x => onButtonClicked(x.asInstanceOf[Button]))
+    val root: Pane = loader.load()
+    root
+      .getChildren
+      .stream()
+      .filter(_.isInstanceOf[Button])
+      .map(_.asInstanceOf[Button])
+      .forEach { button =>
+        btnMap
+          .get(button.getText)
+          .foreach { handler =>
+            button.setOnAction(handler)
+          }
+      }
     root
