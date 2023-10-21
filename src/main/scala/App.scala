@@ -1,17 +1,33 @@
 import javafx.application.Application
 import javafx.event.ActionEvent
-import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
-import javafx.scene.control.Button
-import javafx.scene.layout.GridPane
 import javafx.stage.Stage
 import view.MainMenu
 
 class App extends Application:
-  @Override def start(primaryStage: Stage): Unit =
-    val gameTitle = "Metal Scala 3"
-    primaryStage.setTitle(gameTitle)
-    primaryStage.setScene(Scene(MainMenu(primaryStage), 800, 600))
+  @Override
+  def start(primaryStage: Stage): Unit =
+    val GAME_TITLE = "Metal Scala 3"
+    val WINDOW_WIDTH = 800
+    val WINDOW_HEIGHT = 600
+    primaryStage.setTitle(GAME_TITLE)
+
+    def handleStart(): Unit = println("Start")
+
+    def handleExit(): Unit = primaryStage.close()
+
+    val startButtonText = "Start"
+    val exitButtonText = "Exit"
+    primaryStage.setScene(Scene(
+      MainMenu {
+        Map(
+          startButtonText -> handleStart,
+          exitButtonText -> handleExit
+        )
+      },
+      WINDOW_WIDTH,
+      WINDOW_HEIGHT
+    ))
     primaryStage.show()
 
 object App:
