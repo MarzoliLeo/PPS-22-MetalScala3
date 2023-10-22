@@ -2,7 +2,7 @@ import javafx.application.Application
 import javafx.event.ActionEvent
 import javafx.scene.Scene
 import javafx.stage.Stage
-import view.MainMenu
+import view.menu.MainMenu
 
 class App extends Application:
   @Override
@@ -12,19 +12,12 @@ class App extends Application:
     val WINDOW_HEIGHT = 600
     primaryStage.setTitle(GAME_TITLE)
 
-    def handleStart(): Unit = println("Start")
-
-    def handleExit(): Unit = primaryStage.close()
-
     val startButtonText = "Start"
     val exitButtonText = "Exit"
     primaryStage.setScene(Scene(
       MainMenu {
-        Map(
-          startButtonText -> handleStart,
-          exitButtonText -> handleExit
-        )
-      },
+        primaryStage
+      }.getContent,
       WINDOW_WIDTH,
       WINDOW_HEIGHT
     ))
