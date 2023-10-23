@@ -4,9 +4,7 @@ import javafx.event.{ActionEvent, EventHandler}
 import javafx.fxml.FXMLLoader
 import javafx.scene.control.Button
 import javafx.scene.layout.{GridPane, Pane}
-import javafx.scene.{Node, Scene}
 import javafx.stage.Stage
-import jdk.internal.vm.ThreadContainers.root
 import view.View
 
 trait MainMenu extends View:
