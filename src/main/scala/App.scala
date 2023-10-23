@@ -12,15 +12,14 @@ class App extends Application:
     val WINDOW_HEIGHT = 600
     primaryStage.setTitle(GAME_TITLE)
 
-    val startButtonText = "Start"
-    val exitButtonText = "Exit"
-    primaryStage.setScene(Scene(
-      MainMenu {
-        primaryStage
-      }.getContent,
-      WINDOW_WIDTH,
-      WINDOW_HEIGHT
-    ))
+    primaryStage
+      .setScene(Scene(
+        MainMenu {
+          primaryStage
+        },
+        WINDOW_WIDTH,
+        WINDOW_HEIGHT
+      ))
     primaryStage.show()
 
 object App:
