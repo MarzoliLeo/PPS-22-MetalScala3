@@ -9,3 +9,6 @@ lazy val root = (project in file("."))
     name := "MetalScala3",
     libraryDependencies += "com.github.sbt" % "junit-interface" % "0.13.3" % Test
   )
+
+libraryDependencies += "org.openjfx" % "javafx" % "21.0.1" pomOnly()
+libraryDependencies += "org.openjfx" % "javafx-fxml" % "21"
