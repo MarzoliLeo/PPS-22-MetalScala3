@@ -8,4 +8,5 @@ hs_err_pid*
 /target/
 /target/scala-3.2.0/classes/
 /.idea
+/.idea/modules
 /.bsp
