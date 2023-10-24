@@ -27,14 +27,15 @@ trait MainMenu extends View:
   def handleExitButton(): Unit
 
 private class MainMenuImpl(parentStage: Stage,
-                           nextStage: Stage
+                           nextPane: Pane
                           ) extends MainMenu:
+
   val loader: FXMLLoader = FXMLLoader(getClass.getResource("/main.fxml"))
   val root: GridPane = loader.load[javafx.scene.layout.GridPane]()
   getButton(root, "Start").setOnAction((_: ActionEvent) => handleStartButton())
   getButton(root, "Exit").setOnAction((_: ActionEvent) => handleExitButton())
 
-  def handleStartButton(): Unit = parentStage.setScene(nextStage.getScene)
+  def handleStartButton(): Unit = parentStage.getScene.setRoot(nextPane)
 
   def handleExitButton(): Unit = parentStage.close()
 
@@ -45,4 +46,4 @@ private class MainMenuImpl(parentStage: Stage,
   override def exitButton: Button = getButton(root, "Exit")
 
 object MainMenu:
-  def apply(parentStage: Stage, nextStage: Stage): MainMenu = MainMenuImpl(parentStage, nextStage)
+  def apply(parentStage: Stage, nextPane: Pane): MainMenu = MainMenuImpl(parentStage, nextPane)

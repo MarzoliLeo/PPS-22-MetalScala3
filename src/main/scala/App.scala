@@ -1,6 +1,7 @@
 import javafx.application.Application
 import javafx.event.ActionEvent
 import javafx.scene.Scene
+import javafx.scene.layout.GridPane
 import javafx.stage.Stage
 import view.menu.MainMenu
 
@@ -14,7 +15,7 @@ class App extends Application:
 
     primaryStage
       .setScene(Scene(
-        MainMenu(primaryStage, Stage()),
+        MainMenu(primaryStage, GridPane()),
         WINDOW_WIDTH,
         WINDOW_HEIGHT
       ))
