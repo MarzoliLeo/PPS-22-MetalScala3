@@ -14,9 +14,7 @@ class App extends Application:
 
     primaryStage
       .setScene(Scene(
-        MainMenu {
-          primaryStage
-        },
+        MainMenu(primaryStage, Stage()),
         WINDOW_WIDTH,
         WINDOW_HEIGHT
       ))
