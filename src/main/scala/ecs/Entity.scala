@@ -6,7 +6,7 @@ trait Entity:
   def removeComponent(componentType: ComponentType): Entity
   def replaceComponent(component: Component): Entity
   def hasComponent(componentType: ComponentType): Boolean
-  def getComponent(componentType: ComponentType): Option[Component]
+  def getComponent(componentType: ComponentType): Component
 
 object Entity:
 
@@ -31,8 +31,12 @@ object Entity:
       addComponent(component)
       this
 
-    override def getComponent(componentType: ComponentType): Option[Component] =
-      signature.get(componentType)
+    override def getComponent(componentType: ComponentType): Component =
+      if hasComponent(componentType) then { 
+        signature(componentType)
+      } else {
+        throw new IllegalArgumentException(s"entity does not contains an instance of ${componentType}")
+      }
 
 
     override def hasComponent(componentType: ComponentType): Boolean =

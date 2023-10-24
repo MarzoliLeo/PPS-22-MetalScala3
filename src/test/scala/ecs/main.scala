@@ -10,18 +10,18 @@ class EntityTest {
   @Test
   def entityCreationTest(): Unit =
     assertTrue(player.hasComponent(classOf[Position]))
-    assertEquals(player.getComponent(classOf[Position]).get, Position(0,0))
+    assertEquals(player.getComponent(classOf[Position]), Position(0,0))
 
   @Test
   def removeComponentTest(): Unit =
     player.removeComponent(classOf[Position])
-    assertEquals(player.getComponent(classOf[Position]), None)
+    assertFalse(player.hasComponent(classOf[Position]))
 
   @Test
   def replaceComponentTest(): Unit =
     val newPosition = Position(1,1)
     player.replaceComponent(newPosition)
-    assertEquals(player.getComponent(classOf[Position]).get, newPosition)
+    assertEquals(player.getComponent(classOf[Position]), newPosition)
 }
 
 
