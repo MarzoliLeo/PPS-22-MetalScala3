@@ -7,4 +7,6 @@ hs_err_pid*
 /project/target/
 /target/
 /target/scala-3.2.0/classes/
+# file: ~/.gitignore_global
+.DS_Store
 .idea
