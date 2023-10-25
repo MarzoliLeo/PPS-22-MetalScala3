@@ -1,4 +1,4 @@
-package ecs
+package ecs.components
 
 sealed trait Component
 

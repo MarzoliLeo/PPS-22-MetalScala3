@@ -1,11 +1,15 @@
 package engine
 
+import ecs.entities.EntityManager
+import ecs.systems.SystemManager
 import org.junit.Test
 import org.junit.Assert.*
 
 class EngineTest {
 
-  val engine = Engine.apply()
+  val entityManager = EntityManager()
+  val systemManager: SystemManager = SystemManager(entityManager)
+  val engine: Engine = Engine(systemManager)
 
   engine.start()
   @Test

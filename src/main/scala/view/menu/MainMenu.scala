@@ -9,11 +9,10 @@ import view.View
 
 trait MainMenu extends View:
   def getButton(root: Pane, buttonText: String): Button =
-    root
-      .getChildren
+    root.getChildren
       .filtered {
         case btn: Button if btn.getText == buttonText => true
-        case _ => false
+        case _                                        => false
       }
       .get(0)
       .asInstanceOf[Button]
@@ -26,9 +25,7 @@ trait MainMenu extends View:
 
   def handleExitButton(): Unit
 
-private class MainMenuImpl(parentStage: Stage,
-                           nextPane: Pane
-                          ) extends MainMenu:
+private class MainMenuImpl(parentStage: Stage, nextPane: Pane) extends MainMenu:
 
   val loader: FXMLLoader = FXMLLoader(getClass.getResource("/main.fxml"))
   val root: GridPane = loader.load[javafx.scene.layout.GridPane]()
@@ -46,4 +43,5 @@ private class MainMenuImpl(parentStage: Stage,
   override def exitButton: Button = getButton(root, "Exit")
 
 object MainMenu:
-  def apply(parentStage: Stage, nextPane: Pane): MainMenu = MainMenuImpl(parentStage, nextPane)
+  def apply(parentStage: Stage, nextPane: Pane): MainMenu =
+    MainMenuImpl(parentStage, nextPane)

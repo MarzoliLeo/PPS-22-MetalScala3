@@ -1,6 +1,6 @@
 package ecs.entities
 
-import ecs.Component
+import ecs.components.Component
 
 trait Entity(components: Component*) {
   private final type ComponentType = Class[_ <: Component]

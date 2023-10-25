@@ -1,13 +1,13 @@
 package ecs.entities
 
+import ecs.components.Position
 import ecs.entities.Entity
-import ecs.{Position, entities}
 import org.scalatest.Assertions.*
 import org.scalatest.funsuite.AnyFunSuite
 
 class EntityTest extends AnyFunSuite {
 
-  val player: Entity = entities.PlayerEntity(Position(0, 0))
+  val player: Entity = PlayerEntity(Position(0, 0))
 
   test("entity has position component") {
     assert(player.hasComponent(classOf[Position]))

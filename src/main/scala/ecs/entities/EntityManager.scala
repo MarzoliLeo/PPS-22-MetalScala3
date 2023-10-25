@@ -1,6 +1,6 @@
 package ecs.entities
 
-import ecs.Component
+import ecs.components.Component
 
 trait EntityManager {
   def entities: List[Entity]
