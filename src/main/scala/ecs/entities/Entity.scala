@@ -24,6 +24,7 @@ trait Entity(components: Component*) {
     this
   }
 
+  // todo: add type parameter to make it more idiomatic and type safe
   def getComponent(componentType: ComponentType): Option[Component] =
     signature.get(componentType)
 

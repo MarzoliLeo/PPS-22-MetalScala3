@@ -1,27 +1,27 @@
 package ecs.entities
 
-import ecs.components.Position
+import ecs.components.PositionComponent
 import ecs.entities.Entity
 import org.scalatest.Assertions.*
 import org.scalatest.funsuite.AnyFunSuite
 
 class EntityTest extends AnyFunSuite {
 
-  val player: Entity = PlayerEntity(Position(0, 0))
+  val player: Entity = PlayerEntity(PositionComponent(0, 0))
 
   test("entity has position component") {
-    assert(player.hasComponent(classOf[Position]))
-    assert(player.getComponent(classOf[Position]).contains(Position(0, 0)))
+    assert(player.hasComponent(classOf[PositionComponent]))
+    assert(player.getComponent(classOf[PositionComponent]).contains(PositionComponent(0, 0)))
   }
 
   test("remove position component") {
-    player.removeComponent(classOf[Position])
-    assert(!player.hasComponent(classOf[Position]))
+    player.removeComponent(classOf[PositionComponent])
+    assert(!player.hasComponent(classOf[PositionComponent]))
   }
 
   test("replace position component") {
-    val newPosition = Position(1, 1)
+    val newPosition = PositionComponent(1, 1)
     player.replaceComponent(newPosition)
-    assert(player.getComponent(classOf[Position]).contains(newPosition))
+    assert(player.getComponent(classOf[PositionComponent]).contains(newPosition))
   }
 }

@@ -35,7 +35,7 @@ private[engine] object GameLoop {
 
           //Wait for the next tick (calculating the time to wait).
           val tickTime = System.currentTimeMillis() - start
-          print("[AfterTick] Lo stato del sistema è: " + _status + "\n")
+          //print("[AfterTick] Lo stato del sistema è: " + _status + "\n")
           val deltaTime = (millisecond/fps) - tickTime
           if (deltaTime > 0) {
             Thread.sleep(deltaTime)

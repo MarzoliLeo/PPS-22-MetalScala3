@@ -1,13 +1,13 @@
 package view.menu
 
-import ecs.components.Position
+import ecs.components.PositionComponent
 import view.View
 import javafx.scene.layout.{GridPane, Pane}
 import javafx.fxml.FXMLLoader
 import javafx.stage.Stage
 
 trait Controller extends View:
-  def renderObjects(node : javafx.scene.Node, position : Position) : Unit
+  def renderObjects(node : javafx.scene.Node, position : PositionComponent) : Unit
 
 object Controller:
   def apply(parentStage: Stage, nextPane: Pane): Controller = ControllerImp(parentStage, nextPane)
@@ -17,7 +17,7 @@ object Controller:
 
     override def getContent: Pane = root
     // javafx.scene.Node its any renderizable object in JavaFX.
-    override def renderObjects( node : javafx.scene.Node, position : Position): Unit =
+    override def renderObjects( node : javafx.scene.Node, position : PositionComponent): Unit =
       node.setTranslateX(position.x)
       node.setTranslateY(position.y)
 

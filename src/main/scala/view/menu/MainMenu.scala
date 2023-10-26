@@ -1,6 +1,6 @@
 package view.menu
 
-import ecs.components.Position
+import ecs.components.PositionComponent
 import ecs.entities.Entity
 import javafx.event.{ActionEvent, EventHandler}
 import javafx.fxml.FXMLLoader
@@ -29,7 +29,7 @@ trait MainMenu extends View:
 
   def handleExitButton(): Unit
 
-  def CANCELLAMITIPREGO(entities: List[Entity]): Unit
+  /*def CANCELLAMITIPREGO(entities: List[Entity]): Unit*/
 
 private class MainMenuImpl(parentStage: Stage, nextPane: Pane) extends MainMenu:
 
@@ -48,18 +48,18 @@ private class MainMenuImpl(parentStage: Stage, nextPane: Pane) extends MainMenu:
 
   override def exitButton: Button = getButton(root, "Exit")
 
-  override def CANCELLAMITIPREGO(entities: List[Entity]): Unit =
-    entities.foreach { e =>
-      e.getComponent(classOf[Position]) match
-        case Some(pos) => val box = Box(50,50, 50)
-          val material = PhongMaterial(Color.RED)
-          box.setMaterial(material)
-          root.add(box,0,0)
-          box.setTranslateX(pos.asInstanceOf[Position].x)
-          box.setTranslateY(pos.asInstanceOf[Position].y)
-        case None =>
-    }
-
+  /*  override def CANCELLAMITIPREGO(entities: List[Entity]): Unit =
+      entities.foreach { e =>
+        e.getComponent(classOf[Position]) match
+          case Some(pos) => val box = Box(50,50, 50)
+            val material = PhongMaterial(Color.RED)
+            box.setMaterial(material)
+            root.add(box,0,0)
+            box.setTranslateX(pos.asInstanceOf[Position].x)
+            box.setTranslateY(pos.asInstanceOf[Position].y)
+          case None =>
+      }
+  */
 object MainMenu:
   def apply(parentStage: Stage, nextPane: Pane): MainMenu =
     MainMenuImpl(parentStage, nextPane)

@@ -5,7 +5,7 @@ import ecs.systems
 import ecs.systems.SystemManager
 import ecs.systems.Systems.playerMovementSystem
 import engine.GameStatus.*
-import ecs.components.Position
+import ecs.components.PositionComponent
 import view.menu.MainMenu
 
 trait Engine extends GameEngine {
@@ -26,9 +26,8 @@ object Engine {
     private val systemManager = SystemManager(entityManager)
     override def tick(): Unit =
       systemManager.updateAll()
-      mainMenu.CANCELLAMITIPREGO(entityManager.entities)
     private def init(): Unit = {
-      entityManager.addEntity(PlayerEntity(Position(50, 50)))
+      entityManager.addEntity(PlayerEntity(PositionComponent(50, 50)))
       systemManager.addSystem(playerMovementSystem)
     }
 
