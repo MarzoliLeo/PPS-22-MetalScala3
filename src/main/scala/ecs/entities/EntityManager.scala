@@ -6,31 +6,19 @@ trait EntityManager {
   def entities: List[Entity]
   def addEntity(entity: Entity): EntityManager
   def removeEntity(entity: Entity): EntityManager
-  def getEntitiesWithComponent[T <: Component](
-      componentClass: Class[T]
-  ): List[Entity]
-  def getEntitiesByClass[T <: Entity](
-      entityClass: Class[T]
-  ): List[T]
+  def getEntitiesWithComponent[T <: Component](componentClass: Class[T]): List[Entity]
+  def getEntitiesByClass[T <: Entity](entityClass: Class[T]): List[Entity]
 }
 
 private case class EntityManagerImpl(entities: List[Entity] = List.empty)
     extends EntityManager {
 
-  override def getEntitiesWithComponent[T <: Component](
-      componentClass: Class[T]
-  ): List[Entity] = {
+  override def getEntitiesWithComponent[T <: Component](componentClass: Class[T]): List[Entity] = {
     entities.filter(_.getComponent(componentClass).isDefined)
   }
 
-  override def getEntitiesByClass[T <: Entity](
-      entityClass: Class[T]
-  ): List[T] = {
-    entities.flatMap {
-      case entity: T => Some(entity)
-      case _         => None
-    }
-  }
+  override def getEntitiesByClass[T <: Entity](entityClass: Class[T]): List[Entity] =
+    entities.filter(_.getClass == entityClass)
 
   override def addEntity(entity: Entity): EntityManager =
     EntityManagerImpl(entity :: entities)

@@ -1,3 +1,4 @@
+import App.main
 import javafx.application.Application
 import javafx.event.ActionEvent
 import javafx.scene.Scene
@@ -6,6 +7,9 @@ import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.Box
 import javafx.stage.Stage
 import view.menu.MainMenu
+import ecs.entities.EntityManager
+import ecs.systems.SystemManager
+import engine.Engine
 
 class App extends Application:
   @Override
@@ -14,26 +18,23 @@ class App extends Application:
     val WINDOW_WIDTH = 800
     val WINDOW_HEIGHT = 600
     primaryStage.setTitle(GAME_TITLE)
-
-    val box = Box(50, 50, 50)
-    box.setTranslateX(100)
-    box.setTranslateY(100)
-    box.setTranslateZ(100)
-    val material = PhongMaterial(Color.RED)
-    box.setMaterial(material)
-
     val nextPane = GridPane()
-    nextPane.add(box, 0, 0)
+    val mainMenu = MainMenu(primaryStage, nextPane)
+    //TODO metterlo nel tasto start.
+    val gameEngine = Engine(mainMenu)
+
 
     primaryStage
       .setScene(
-        Scene(
-          MainMenu(primaryStage, nextPane),
-          WINDOW_WIDTH,
-          WINDOW_HEIGHT
-        )
+          Scene(
+              mainMenu,
+              WINDOW_WIDTH,
+              WINDOW_HEIGHT
       )
+  )
     primaryStage.show()
+
+    gameEngine.start()
 
 object App:
   def main(args: Array[String]): Unit =

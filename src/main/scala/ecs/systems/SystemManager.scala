@@ -3,24 +3,26 @@ package ecs.systems
 import ecs.entities.EntityManager
 
 trait SystemManager:
+  protected type System = EntityManager => Unit
+
   var systems: List[System]
-  def addSystem(system: System): Unit
-  def removeSystem(system: System): Unit
+  def addSystem(system: System): SystemManager
+  def removeSystem(system: System): SystemManager
   def updateAll(): Unit
 
-private class SystemManagerImpl(var entityManager: EntityManager)
-    extends SystemManager:
-
+private class SystemManagerImpl(var entityManager: EntityManager ) extends SystemManager:
   var systems: List[System] = List()
 
-  override def addSystem(system: System): Unit =
+  override def addSystem(system: System): SystemManager =
     systems = systems :+ system
+    this
 
-  override def removeSystem(system: System): Unit =
+  override def removeSystem(system: System): SystemManager =
     systems = systems.filterNot(_ == system)
+    this
 
   override def updateAll(): Unit =
-    systems.foreach(_.update(entityManager))
+    systems.foreach(_(entityManager))
 
 
 object SystemManager:

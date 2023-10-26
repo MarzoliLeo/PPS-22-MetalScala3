@@ -4,12 +4,11 @@ import ecs.components.Component
 
 trait Entity(components: Component*) {
   private final type ComponentType = Class[_ <: Component]
-
   private var signature: Map[ComponentType, Component] = Map()
 
   components.foreach(addComponent)
 
-  private def addComponent(component: Component): Entity = {
+  def addComponent(component: Component): Entity = {
     signature = signature + (component.getClass -> component)
     this
   }

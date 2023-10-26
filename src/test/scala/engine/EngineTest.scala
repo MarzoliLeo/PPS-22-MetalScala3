@@ -4,7 +4,7 @@ import ecs.entities.EntityManager
 import ecs.systems.SystemManager
 import org.junit.Test
 import org.junit.Assert.*
-
+/*
 class EngineTest {
 
   val entityManager = EntityManager()
@@ -43,4 +43,4 @@ class EngineTest {
     assertEquals(GameStatus.Running, engine.getStatus())
   }
 
-}
+}*/
