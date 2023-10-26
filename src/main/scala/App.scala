@@ -30,7 +30,6 @@ class App extends Application:
 
     val mainMenu = MainMenu(primaryStage, gameView)
 
-
     primaryStage
       .setScene(
         Scene(
