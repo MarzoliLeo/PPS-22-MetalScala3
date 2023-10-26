@@ -11,6 +11,7 @@ hs_err_pid*
 .DS_Store
 .idea
 .bsp
+.github
 /.metals/
 /.vscode/
 /.bloop/

@@ -1,5 +1,5 @@
 package view
-import ecs.components.{ColorComponent, Component, DisplayableComponent, PositionComponent}
+import ecs.components.{ColorComponent, Component, VisibleComponent, PositionComponent}
 import ecs.entities.{BoxEntity, Entity, EntityManager}
 import javafx.scene.layout.{FlowPane, Pane}
 import javafx.scene.paint.{Color, PhongMaterial}
@@ -10,8 +10,9 @@ trait GameView extends View
 private class GameViewImpl(entities: EntityManager) extends GameView:
   val root: FlowPane = FlowPane()
 
-  private val displayableEntities: List[Entity] = entities
-    .getEntitiesWithComponent(classOf[DisplayableComponent])
+  private val displayableEntities: List[Entity] =
+    entities
+    .getEntitiesWithComponent(classOf[VisibleComponent])
     .filter(_.hasComponent(classOf[PositionComponent]))
 
   private val boxes: List[Box] = displayableEntities.collect {
@@ -31,6 +32,7 @@ private class GameViewImpl(entities: EntityManager) extends GameView:
       box
   }
 
+  //Add the boxes to the root pane. So it can be displayed.
   boxes.foreach(root.getChildren.add)
 
   override def getContent: Pane = root

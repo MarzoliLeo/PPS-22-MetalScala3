@@ -1,5 +1,5 @@
 import App.main
-import ecs.components.{ColorComponent, DisplayableComponent, PositionComponent}
+import ecs.components.{ColorComponent, PositionComponent, VisibleComponent}
 import ecs.entities.{BoxEntity, EntityManager}
 import ecs.systems.SystemManager
 import engine.Engine
@@ -10,7 +10,7 @@ import javafx.scene.layout.*
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.Box
 import javafx.stage.Stage
-import view.GameView
+import view.{BuildEntitiesForTheGame, GameView}
 import view.menu.MainMenu
 
 class App extends Application:
@@ -21,19 +21,15 @@ class App extends Application:
     val WINDOW_HEIGHT = 600
     primaryStage.setTitle(GAME_TITLE)
 
-    val entityManager = EntityManager()
-      .addEntity(
-        BoxEntity()
-          .addComponent(PositionComponent(100, 100))
-          .addComponent(DisplayableComponent())
-          .addComponent(ColorComponent(Color.YELLOW))
-      )
+    //references useful for modularity.
+    val entityManager : EntityManager = EntityManager()
+    val buildEntitiesForTheGame : BuildEntitiesForTheGame = BuildEntitiesForTheGame()
 
-    val gameView = GameView(entityManager)
+    //Creation of the entities to be displayed in the game.
+    val gameView = GameView(buildEntitiesForTheGame.build(entityManager))
 
     val mainMenu = MainMenu(primaryStage, gameView)
-    // TODO metterlo nel tasto start.
-    val gameEngine = Engine(mainMenu)
+
 
     primaryStage
       .setScene(
@@ -45,7 +41,6 @@ class App extends Application:
       )
     primaryStage.show()
 
-    gameEngine.start()
 
 object App:
   def main(args: Array[String]): Unit =

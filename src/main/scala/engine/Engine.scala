@@ -18,21 +18,23 @@ trait Engine extends GameEngine {
 }
 
 object Engine {
-  def apply(mainMenu: MainMenu): Engine = new EngineImpl(mainMenu)
-  private class EngineImpl(mainMenu: MainMenu) extends Engine {
+  def apply(): Engine = new EngineImpl()
+  private class EngineImpl() extends Engine {
     private val Fps = 60
     private val gameLoop = GameLoop(Fps, this)
     private val entityManager = EntityManager()
     private val systemManager = SystemManager(entityManager)
     override def tick(): Unit =
       systemManager.updateAll()
+
+    /* QUESTO E' STATO SPOSTATO DENTRO BUILDENTITIESFORTHEGAME class.
     private def init(): Unit = {
       entityManager.addEntity(PlayerEntity(PositionComponent(50, 50)))
       systemManager.addSystem(playerMovementSystem)
-    }
+    }*/
 
     override def start(): Unit = {
-      init()
+      //init()
       gameLoop.status match {
         case Stopped =>
           gameLoop.start() // .start() its because gameloop is a thread.

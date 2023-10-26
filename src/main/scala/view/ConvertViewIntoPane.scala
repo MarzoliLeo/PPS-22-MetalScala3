@@ -7,3 +7,4 @@ trait View:
 
 object View:
   given Conversion[View, Pane] = _.getContent
+

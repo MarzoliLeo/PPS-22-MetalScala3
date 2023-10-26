@@ -1,4 +1,4 @@
-package view.menu
+/*package view.menu
 
 import ecs.components.PositionComponent
 import view.View
@@ -21,3 +21,4 @@ object Controller:
       node.setTranslateX(position.x)
       node.setTranslateY(position.y)
 
+*/
