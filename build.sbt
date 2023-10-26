@@ -9,5 +9,6 @@ lazy val root = (project in file("."))
     libraryDependencies += "org.openjfx" % "javafx" % "21.0.1" pomOnly (),
     libraryDependencies += "org.openjfx" % "javafx-fxml" % "21",
     libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.17",
-    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.17" % "test"
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.17" % "test",
+    libraryDependencies += "org.mockito" % "mockito-core" % "5.6.0" % Test
   )

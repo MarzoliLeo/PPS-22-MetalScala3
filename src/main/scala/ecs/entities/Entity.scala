@@ -25,16 +25,9 @@ trait Entity(components: Component*) {
     this
   }
 
-  def getComponent(componentType: ComponentType): Component = {
-    if (hasComponent(componentType)) {
-      signature(componentType)
-    } else {
-      throw new IllegalArgumentException(
-        s"entity does not contain an instance of $componentType"
-      )
-    }
-  }
+  def getComponent(componentType: ComponentType): Option[Component] =
+    signature.get(componentType)
 
   def hasComponent(componentType: ComponentType): Boolean =
-    signature.keys.exists(k => k == componentType)
+    signature.contains(componentType)
 }

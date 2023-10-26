@@ -13,8 +13,6 @@ private class SystemManagerImpl(var entityManager: EntityManager)
 
   var systems: List[System] = List()
 
-  addSystem(PlayerMovementSystem())
-
   override def addSystem(system: System): Unit =
     systems = systems :+ system
 

@@ -9,7 +9,8 @@ object PlayerMovementSystem extends System:
     entityManager
       .getEntitiesByClass(classOf[PlayerEntity])
       .foreach(x => {
-        val currentPosition = x.getComponent(classOf[Position]).asInstanceOf[Position]
+        val currentPosition =
+          x.getComponent(classOf[Position]).asInstanceOf[Position]
         x.replaceComponent(
           Position(
             currentPosition.x + 1,

@@ -26,12 +26,15 @@ class App extends Application:
     nextPane.add(box, 0, 0)
 
     primaryStage
-      .setScene(Scene(
-        MainMenu(primaryStage, nextPane),
-        WINDOW_WIDTH,
-        WINDOW_HEIGHT
-      ))
+      .setScene(
+        Scene(
+          MainMenu(primaryStage, nextPane),
+          WINDOW_WIDTH,
+          WINDOW_HEIGHT
+        )
+      )
     primaryStage.show()
 
 object App:
-  def main(args: Array[String]): Unit = Application.launch(classOf[App], args: _*)
+  def main(args: Array[String]): Unit =
+    Application.launch(classOf[App], args: _*)
