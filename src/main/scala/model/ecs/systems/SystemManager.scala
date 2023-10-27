@@ -1,6 +1,6 @@
-package ecs.systems
+package model.ecs.systems
 
-import ecs.entities.EntityManager
+import model.ecs.entities.EntityManager
 
 trait SystemManager:
   protected type System = EntityManager => Unit

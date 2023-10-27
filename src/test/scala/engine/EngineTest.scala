@@ -1,25 +1,26 @@
 package engine
 
-import ecs.entities.EntityManager
-import ecs.systems.SystemManager
+import model.ecs.entities.EntityManager
+import model.ecs.systems.SystemManager
+import model.engine.{Engine, GameStatus}
 import org.junit.Test
 import org.junit.Assert.*
-/*
+
 class EngineTest {
 
-  val entityManager = EntityManager()
+  val entityManager: EntityManager = EntityManager()
   val systemManager: SystemManager = SystemManager(entityManager)
-  val engine: Engine = Engine(systemManager)
+  val engine: Engine = Engine()
 
   engine.start()
   @Test
-  def testStart() = {
+  def testStart(): Unit = {
     // Assert engine is running
     assertEquals(GameStatus.Running, engine.getStatus())
   }
 
   @Test
-  def testStop() = {
+  def testStop(): Unit = {
     engine.stop()
 
     // Assert engine is stopped
@@ -27,7 +28,7 @@ class EngineTest {
   }
 
   @Test
-  def testPause() = {
+  def testPause(): Unit = {
     engine.pause()
 
     // Assert engine is stopped
@@ -35,7 +36,7 @@ class EngineTest {
   }
 
   @Test
-  def testResume() = {
+  def testResume(): Unit = {
     engine.pause()
     engine.resume()
 
@@ -43,4 +44,4 @@ class EngineTest {
     assertEquals(GameStatus.Running, engine.getStatus())
   }
 
-}*/
+}

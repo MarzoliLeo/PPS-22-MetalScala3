@@ -1,6 +1,6 @@
-package engine
+package model.engine
 
-import engine.GameStatus._
+import GameStatus._
 
 trait GameLoop extends Thread {
   def fps: Int //get
@@ -35,7 +35,7 @@ private[engine] object GameLoop {
 
           //Wait for the next tick (calculating the time to wait).
           val tickTime = System.currentTimeMillis() - start
-          print("[Tick] Lo stato del sistema è: " + _status + "\n")
+          //print("[Tick] Lo stato del sistema è: " + _status + "\n")
           val deltaTime = (millisecond/fps) - tickTime
           if (deltaTime > 0) {
             Thread.sleep(deltaTime)

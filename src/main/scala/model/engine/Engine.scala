@@ -1,11 +1,12 @@
-package engine
+package model.engine
 
-import ecs.entities.{EntityManager, PlayerEntity}
-import ecs.systems
-import ecs.systems.SystemManager
-import ecs.systems.Systems.playerMovementSystem
-import engine.GameStatus.*
-import ecs.components.PositionComponent
+import model.ecs.systems.Systems.playerMovementSystem
+import GameStatus.*
+import javafx.scene.paint.Color
+import model.ecs.components.{ColorComponent, PositionComponent}
+import model.ecs.entities.{BoxEntity, EntityManager, PlayerEntity}
+import model.ecs.systems.SystemManager
+import model.systemManager
 import view.menu.MainMenu
 
 trait Engine extends GameEngine {
@@ -22,8 +23,15 @@ object Engine {
   private class EngineImpl() extends Engine {
     private val Fps = 60
     private val gameLoop = GameLoop(Fps, this)
-    private val entityManager = EntityManager()
-    private val systemManager = SystemManager(entityManager)
+    // added to package.scala for Singleton pattern
+    /*private val entityManager = EntityManager()
+      .addEntity(
+        BoxEntity()
+          .addComponent(PositionComponent(100, 100))
+          .addComponent(ColorComponent(Color.BLACK))
+      )
+    private val systemManager =
+      SystemManager(entityManager).addSystem(playerMovementSystem)*/
     override def tick(): Unit =
       systemManager.updateAll()
 
@@ -34,7 +42,7 @@ object Engine {
     }*/
 
     override def start(): Unit = {
-      //init()
+      // init()
       gameLoop.status match {
         case Stopped =>
           gameLoop.start() // .start() its because gameloop is a thread.
