@@ -1,7 +1,7 @@
 package ecs.systems
 
-import ecs.components.PositionComponent
-import ecs.entities.{EntityManager, PlayerEntity}
+import model.ecs.components.PositionComponent
+import model.ecs.entities.{EntityManager, PlayerEntity}
 import org.scalatest.flatspec.AnyFlatSpec
 
 class PlayerMovementSystemTest extends AnyFlatSpec:

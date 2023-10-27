@@ -1,4 +1,4 @@
-package engine
+package model.engine
 
 trait GameEngine {
   /**

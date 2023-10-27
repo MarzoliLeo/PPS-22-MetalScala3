@@ -1,5 +1,5 @@
-package ecs.entities
+package model.ecs.entities
 
-import ecs.components.Component
+import model.ecs.components.Component
 
 case class PlayerEntity(components: Component*) extends Entity(components: _*)

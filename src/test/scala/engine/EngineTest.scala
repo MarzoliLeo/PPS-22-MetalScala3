@@ -1,7 +1,7 @@
 package engine
 
-import ecs.entities.EntityManager
-import ecs.systems.SystemManager
+import model.ecs.entities.EntityManager
+import model.ecs.systems.SystemManager
 import org.junit.Test
 import org.junit.Assert.*
 /*

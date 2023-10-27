@@ -1,8 +1,8 @@
 package view
 
-import ecs.components.{ColorComponent, PositionComponent, VisibleComponent}
-import ecs.entities.{BoxEntity, EntityManager}
 import javafx.scene.paint.Color
+import model.ecs.components.{ColorComponent, PositionComponent, VisibleComponent}
+import model.ecs.entities.{BoxEntity, EntityManager}
 
 trait BuildEntitiesForTheGame:
   def build(entityManager: EntityManager): EntityManager
@@ -16,7 +16,7 @@ object BuildEntitiesForTheGame:
           BoxEntity()
             .addComponent(PositionComponent(100, 100))
             .addComponent(VisibleComponent())
-            .addComponent(ColorComponent(Color.YELLOW))
+            .addComponent(ColorComponent(Color.RED))
         )
       // TODO qui andranno tutte le entità che andranno mostrate nella view assieme alle loro components.
       entityManager

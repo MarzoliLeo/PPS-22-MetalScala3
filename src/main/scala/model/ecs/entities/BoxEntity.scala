@@ -1,3 +1,3 @@
-package ecs.entities
+package model.ecs.entities
 
 case class BoxEntity() extends Entity()

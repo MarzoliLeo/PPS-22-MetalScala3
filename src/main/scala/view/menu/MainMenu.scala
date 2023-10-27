@@ -1,8 +1,5 @@
 package view.menu
 
-import ecs.components.PositionComponent
-import ecs.entities.Entity
-import engine.Engine
 import javafx.event.{ActionEvent, EventHandler}
 import javafx.fxml.FXMLLoader
 import javafx.scene.control.Button
@@ -11,6 +8,9 @@ import javafx.scene.shape.Box
 import javafx.stage.Stage
 import view.View
 import javafx.scene.paint.{Color, PhongMaterial}
+import model.ecs.components.PositionComponent
+import model.ecs.entities.Entity
+import model.engine.Engine
 
 trait MainMenu extends View:
   def getButton(root: Pane, buttonText: String): Button =

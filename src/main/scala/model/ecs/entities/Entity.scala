@@ -1,20 +1,27 @@
-package ecs.entities
+package model.ecs.entities
 
-import ecs.components.Component
+import java.util.UUID
+import model.ecs.components.Component
+import model.ecs.observer.Observable
 
-trait Entity(components: Component*) {
+trait Entity(components: Component*) extends Observable[Component]:
   private final type ComponentType = Class[_ <: Component]
   private var signature: Map[ComponentType, Component] = Map()
+  val id: UUID = UUID.randomUUID()
 
   components.foreach(addComponent)
 
   def addComponent(component: Component): Entity = {
     signature = signature + (component.getClass -> component)
+    notifyObservers(component)
     this
   }
 
   def removeComponent(componentType: ComponentType): Entity = {
-    signature = signature - componentType
+    signature.get(componentType).foreach { component =>
+      signature = signature - componentType
+      notifyObservers(component)
+    }
     this
   }
 
@@ -30,4 +37,5 @@ trait Entity(components: Component*) {
 
   def hasComponent(componentType: ComponentType): Boolean =
     signature.contains(componentType)
-}
+
+  def isSameEntity(entity: Entity): Boolean = entity.id == id

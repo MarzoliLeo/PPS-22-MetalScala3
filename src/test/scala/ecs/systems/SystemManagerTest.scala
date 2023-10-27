@@ -1,8 +1,8 @@
 package ecs.systems
 
+import model.ecs.entities.EntityManager
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import ecs.entities.EntityManager
 import org.mockito.Mockito._
 /*
 class SystemManagerTest extends AnyFlatSpec with Matchers {
