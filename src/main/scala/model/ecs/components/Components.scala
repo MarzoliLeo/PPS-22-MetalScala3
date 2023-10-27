@@ -5,7 +5,7 @@ import javafx.scene.paint.Color
 import java.util.UUID
 
 sealed trait Component {
-    val uuid: UUID = UUID.randomUUID()
+    private val uuid: UUID = UUID.randomUUID()
 
     // check the uuid of the component
     def isSameComponent(component: Component): Boolean = {

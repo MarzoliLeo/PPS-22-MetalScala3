@@ -7,7 +7,7 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class EntityTest extends AnyFunSuite {
 
-  val player: Entity = PlayerEntity(PositionComponent(0, 0))
+  val player: Entity = PlayerEntity().addComponent(PositionComponent(0, 0))
 
   test("entity has position component") {
     assert(player.hasComponent(classOf[PositionComponent]))

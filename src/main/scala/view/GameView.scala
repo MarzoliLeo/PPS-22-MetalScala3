@@ -15,7 +15,7 @@ trait GameView extends View
 
 private class GameViewImpl(entities: EntityManager)
     extends GameView
-    with Observer[Component] {
+    with Observer[Component]:
 
   val root: FlowPane = FlowPane()
 
@@ -33,20 +33,10 @@ private class GameViewImpl(entities: EntityManager)
   boxes.foreach(_.addObserver(this))
 
   for (box <- boxes) {
-    createBox(box)
+    createBoxView(box)
   }
 
   override def getContent: Pane = root
-
-  private def updateView(): Unit = {
-    Platform.runLater(() =>
-      entityIdToView.foreach((*, view) => {
-        if (!root.getChildren.contains(view)) {
-          root.getChildren.add(view)
-        }
-      })
-    )
-  }
 
   override def update(component: Component): Unit = {
     removeOldView() {
@@ -61,7 +51,7 @@ private class GameViewImpl(entities: EntityManager)
                     .isSameComponent(position) =>
                 box
             }
-            .foreach(createBox)
+            .foreach(createBoxView)
           updateView()
         case color: ColorComponent =>
           boxes
@@ -73,14 +63,24 @@ private class GameViewImpl(entities: EntityManager)
                     .isSameComponent(color) =>
                 box
             }
-            .foreach(createBox)
+            .foreach(createBoxView)
           updateView()
         case _ => ()
       }
     }
   }
 
-  private def createBox(entity: Entity): Unit = {
+  private def updateView(): Unit = {
+    Platform.runLater(() =>
+      entityIdToView.foreach((_, view) => {
+        if (!root.getChildren.contains(view)) {
+          root.getChildren.add(view)
+        }
+      })
+    )
+  }
+
+  private def createBoxView(entity: Entity): Unit = {
     val box = Box(100, 100, 100)
     val position = getPosition(entity)
     val color = getColor(entity)
@@ -109,7 +109,6 @@ private class GameViewImpl(entities: EntityManager)
       f
     })
   }
-}
 
 object GameView {
   def apply(entities: EntityManager): GameView = GameViewImpl(

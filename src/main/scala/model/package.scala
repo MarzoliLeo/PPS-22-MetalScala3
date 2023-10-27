@@ -5,7 +5,7 @@ import model.ecs.systems.SystemManager
 import model.ecs.systems.Systems.playerMovementSystem
 
 package object model:
-  val entityManager = EntityManager()
+  val entityManager: EntityManager = EntityManager()
     .addEntity(
       BoxEntity()
         .addComponent(PositionComponent(100, 100))

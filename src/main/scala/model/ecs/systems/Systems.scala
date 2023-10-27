@@ -7,10 +7,6 @@ object Systems {
 
   val playerMovementSystem: EntityManager => Unit =
     manager =>
-      /*val boxEntity = manager.getEntitiesByClass(classOf[BoxEntity]).head.asInstanceOf[BoxEntity]
-      println("Box Entity Position: " +
-        boxEntity.getComponent(classOf[PositionComponent]))*/
-
       manager
         .getEntitiesByClass(classOf[BoxEntity])
         .foreach(entity => {

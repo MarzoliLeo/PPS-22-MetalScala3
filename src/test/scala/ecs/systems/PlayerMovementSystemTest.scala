@@ -6,7 +6,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 
 class PlayerMovementSystemTest extends AnyFlatSpec:
   val entityManager: EntityManager = EntityManager()
-  private val playerEntity: PlayerEntity = PlayerEntity(PositionComponent(0, 0))
+  private val playerEntity = PlayerEntity().addComponent(PositionComponent(0, 0))
   entityManager.addEntity(playerEntity)
 
 //  "PlayerMovementSystem"

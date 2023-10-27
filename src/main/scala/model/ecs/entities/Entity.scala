@@ -4,12 +4,11 @@ import java.util.UUID
 import model.ecs.components.Component
 import model.ecs.observer.Observable
 
-trait Entity(components: Component*) extends Observable[Component]:
+trait Entity() extends Observable[Component]:
   private final type ComponentType = Class[_ <: Component]
   private var signature: Map[ComponentType, Component] = Map()
   val id: UUID = UUID.randomUUID()
 
-  components.foreach(addComponent)
 
   def addComponent(component: Component): Entity = {
     signature = signature + (component.getClass -> component)

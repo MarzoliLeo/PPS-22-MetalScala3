@@ -2,4 +2,4 @@ package model.ecs.entities
 
 import model.ecs.components.Component
 
-case class PlayerEntity(components: Component*) extends Entity(components: _*)
+case class PlayerEntity() extends Entity()

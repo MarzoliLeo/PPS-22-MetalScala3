@@ -30,7 +30,7 @@ private case class EntityManagerImpl(entities: List[Entity] = List.empty)
     EntityManagerImpl(entity :: entities)
 
   override def removeEntity(entity: Entity): EntityManager =
-    EntityManagerImpl(entities.filterNot(_ == entity))
+    EntityManagerImpl(entities.filterNot(_ eq entity))
 
 object EntityManager {
   def apply(): EntityManager = EntityManagerImpl()
