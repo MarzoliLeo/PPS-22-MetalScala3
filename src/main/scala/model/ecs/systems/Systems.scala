@@ -14,13 +14,17 @@ object Systems {
             .getComponent(classOf[PositionComponent])
             .getOrElse(PositionComponent(0, 0))
             .asInstanceOf[PositionComponent]
+
           // for immutability
-          entity.replaceComponent(
-            /*if (currentPosition.x < 0) {
-              PositionComponent.x = 0
-            } else if (currentPosition.x + positionComponent.width > windowWidth) {
-              PositionComponent.x = windowWidth - positionComponent.width
-            }*/
+          if (currentPosition.x < 0) {
+            entity.replaceComponent(
+              PositionComponent(0, currentPosition.y)
+            )
+          } else if (currentPosition.x + 100 /*Dimensione del Box*/ > model.GUIWIDTH) {
+            entity.replaceComponent(
+              PositionComponent(model.GUIWIDTH - 100 , currentPosition.y /*Dimensione del Box*/)
+            )
+          } else entity.replaceComponent(
             PositionComponent(currentPosition.x + 1, currentPosition.y)
           )
         })
@@ -46,17 +50,14 @@ object Systems {
               )
           } else if (currentPosition.y + 100 /*Dimensione del Box*/ > model.GUIHEIGHT) {
             entity.replaceComponent(
-              PositionComponent(currentPosition.x, model.GUIHEIGHT - 100)
+              PositionComponent(currentPosition.x, model.GUIHEIGHT - 100 /*Dimensione del Box*/)
             )
           } else entity.replaceComponent(
             PositionComponent(currentPosition.x, currentPosition.y + gravityToApply.gravity)
           )
 
-          print("Applying gravity to entity\n")
-          print("Y Position: " + currentPosition.y + "\n")
+          /*print("Applying gravity to entity\n")
+          print("Y Position: " + currentPosition.y + "\n")*/
         })
-
-
-
 
 }
