@@ -16,6 +16,11 @@ object Systems {
             .asInstanceOf[PositionComponent]
           // for immutability
           entity.replaceComponent(
+            /*if (currentPosition.x < 0) {
+              PositionComponent.x = 0
+            } else if (currentPosition.x + positionComponent.width > windowWidth) {
+              PositionComponent.x = windowWidth - positionComponent.width
+            }*/
             PositionComponent(currentPosition.x + 1, currentPosition.y)
           )
         })
@@ -35,9 +40,18 @@ object Systems {
             .getOrElse(GravityComponent(1))
             .asInstanceOf[GravityComponent]
 
-          entity.replaceComponent(
+          if (currentPosition.y < 0) {
+              entity.replaceComponent(
+                PositionComponent(currentPosition.x, 0)
+              )
+          } else if (currentPosition.y + 100 /*Dimensione del Box*/ > model.GUIHEIGHT) {
+            entity.replaceComponent(
+              PositionComponent(currentPosition.x, model.GUIHEIGHT - 100)
+            )
+          } else entity.replaceComponent(
             PositionComponent(currentPosition.x, currentPosition.y + gravityToApply.gravity)
           )
+
           print("Applying gravity to entity\n")
           print("Y Position: " + currentPosition.y + "\n")
         })

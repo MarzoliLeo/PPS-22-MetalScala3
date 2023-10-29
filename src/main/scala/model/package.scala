@@ -5,6 +5,9 @@ import model.ecs.systems.SystemManager
 import model.ecs.systems.Systems.{gravitySystem, playerMovementSystem}
 
 package object model:
+  val GUIWIDTH: Int = 1500
+  val GUIHEIGHT: Int = 800
+
   val entityManager: EntityManager = EntityManager()
     .addEntity(
       BoxEntity()
@@ -12,6 +15,7 @@ package object model:
         .addComponent(ColorComponent(Color.RED))
         .addComponent(VisibleComponent())
     )
+
   val systemManager: SystemManager =
     SystemManager(entityManager)
       .addSystem(playerMovementSystem)

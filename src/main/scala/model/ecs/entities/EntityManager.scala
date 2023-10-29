@@ -13,15 +13,11 @@ trait EntityManager:
 private case class EntityManagerImpl(entities: List[Entity] = List.empty)
     extends EntityManager:
 
-  override def getEntitiesWithComponent[T <: Component](
-      componentClass: Class[T]
-  ): List[Entity] = {
+  override def getEntitiesWithComponent[T <: Component](componentClass: Class[T]): List[Entity] = {
     entities.filter(_.getComponent(componentClass).isDefined)
   }
 
-  override def getEntitiesByClass[T <: Entity](
-      entityClass: Class[T]
-  ): List[Entity] =
+  override def getEntitiesByClass[T <: Entity](entityClass: Class[T]): List[Entity] =
     entities.filter(_.getClass == entityClass)
 
   override def addEntity(entity: Entity): EntityManager =
