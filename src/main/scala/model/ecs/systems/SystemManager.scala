@@ -10,7 +10,8 @@ trait SystemManager:
   def removeSystem(system: System): SystemManager
   def updateAll(): Unit
 
-private class SystemManagerImpl(var entityManager: EntityManager ) extends SystemManager:
+private class SystemManagerImpl(var entityManager: EntityManager)
+    extends SystemManager:
   var systems: List[System] = List()
 
   override def addSystem(system: System): SystemManager =
@@ -23,7 +24,6 @@ private class SystemManagerImpl(var entityManager: EntityManager ) extends Syste
 
   override def updateAll(): Unit =
     systems.foreach(_(entityManager))
-
 
 object SystemManager:
   def apply(entityManager: EntityManager): SystemManager = SystemManagerImpl(
