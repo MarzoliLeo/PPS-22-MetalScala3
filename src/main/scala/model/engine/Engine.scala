@@ -23,23 +23,9 @@ object Engine {
   private class EngineImpl() extends Engine {
     private val Fps = 60
     private val gameLoop = GameLoop(Fps, this)
-    // added to package.scala for Singleton pattern
-    /*private val entityManager = EntityManager()
-      .addEntity(
-        BoxEntity()
-          .addComponent(PositionComponent(100, 100))
-          .addComponent(ColorComponent(Color.BLACK))
-      )
-    private val systemManager =
-      SystemManager(entityManager).addSystem(playerMovementSystem)*/
+
     override def tick(): Unit =
       systemManager.updateAll()
-
-    /* QUESTO E' STATO SPOSTATO DENTRO BUILDENTITIESFORTHEGAME class.
-    private def init(): Unit = {
-      entityManager.addEntity(PlayerEntity(PositionComponent(50, 50)))
-      systemManager.addSystem(playerMovementSystem)
-    }*/
 
     override def start(): Unit = {
       // init()
@@ -52,10 +38,11 @@ object Engine {
 
     override def stop(): Unit = {
       gameLoop.halt()
-      // TODO mediator.unsubscribe(this)
     }
-    override def pause(): Unit = gameLoop.pause()
-    override def resume(): Unit = gameLoop.unPause()
+    override def pause(): Unit =
+      gameLoop.pause()
+    override def resume(): Unit =
+      gameLoop.unPause()
 
     // Method for testing purposes
     def getStatus(): GameStatus = gameLoop.status

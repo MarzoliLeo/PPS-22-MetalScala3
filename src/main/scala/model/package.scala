@@ -2,7 +2,7 @@ import javafx.scene.paint.Color
 import model.ecs.components.{ColorComponent, PositionComponent, VisibleComponent}
 import model.ecs.entities.{BoxEntity, EntityManager}
 import model.ecs.systems.SystemManager
-import model.ecs.systems.Systems.playerMovementSystem
+import model.ecs.systems.Systems.{gravitySystem, playerMovementSystem}
 
 package object model:
   val entityManager: EntityManager = EntityManager()
@@ -13,4 +13,6 @@ package object model:
         .addComponent(VisibleComponent())
     )
   val systemManager: SystemManager =
-    SystemManager(entityManager).addSystem(playerMovementSystem)
+    SystemManager(entityManager)
+      .addSystem(playerMovementSystem)
+      .addSystem(gravitySystem)

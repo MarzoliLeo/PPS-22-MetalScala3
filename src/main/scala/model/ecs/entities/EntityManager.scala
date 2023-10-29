@@ -7,9 +7,7 @@ trait EntityManager:
   def entities: List[Entity]
   def addEntity(entity: Entity): EntityManager
   def removeEntity(entity: Entity): EntityManager
-  def getEntitiesWithComponent[T <: Component](
-      componentClass: Class[T]
-  ): List[Entity]
+  def getEntitiesWithComponent[T <: Component](componentClass: Class[T]): List[Entity]
   def getEntitiesByClass[T <: Entity](entityClass: Class[T]): List[Entity]
 
 private case class EntityManagerImpl(entities: List[Entity] = List.empty)

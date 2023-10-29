@@ -11,7 +11,7 @@ import model.ecs.entities.{BoxEntity, EntityManager}
 import model.ecs.systems.SystemManager
 import model.engine.Engine
 import model.entityManager
-import view.{BuildEntitiesForTheGame, GameView}
+import view.{GameView}
 import view.menu.MainMenu
 
 class App extends Application:
