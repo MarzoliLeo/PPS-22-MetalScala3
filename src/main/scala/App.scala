@@ -22,11 +22,6 @@ class App extends Application:
     val WINDOW_HEIGHT = 600
     primaryStage.setTitle(GAME_TITLE)
 
-    //references useful for modularity.
-    //val buildEntitiesForTheGame : BuildEntitiesForTheGame = BuildEntitiesForTheGame()
-
-    //Creation of the entities to be displayed in the game.
-    //val gameView = GameView(buildEntitiesForTheGame.build(entityManager))
     val gameView = GameView(entityManager)
 
     val mainMenu = MainMenu(primaryStage, gameView)
