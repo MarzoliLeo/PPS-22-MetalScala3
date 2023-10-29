@@ -1,10 +1,10 @@
 package view
 
-import javafx.scene.layout.Pane
+import javafx.scene.layout.{FlowPane, Pane}
 
 trait View:
-  def getContent: Pane
+  def root: Pane
 
 object View:
-  given Conversion[View, Pane] = _.getContent
+  given Conversion[View, Pane] = _.root
 
