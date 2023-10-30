@@ -11,7 +11,6 @@ import model.ecs.entities.{BoxEntity, Entity, EntityManager}
 import model.ecs.observer.{Observable, Observer}
 import model.entityManager
 import model.input.BasicInputHandler
-
 import java.util.UUID
 
 trait GameView extends View
