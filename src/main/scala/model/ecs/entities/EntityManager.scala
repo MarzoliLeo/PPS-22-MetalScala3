@@ -1,11 +1,13 @@
 package model.ecs.entities
 
-import model.ecs.components.Component
+import model.ecs.components.{Component, PositionComponent}
+import model.event.Event
+import model.event.Event.Spawn
 import model.event.observer.Observable
 
 import scala.collection.immutable.{AbstractSeq, LinearSeq}
 
-trait EntityManager:
+trait EntityManager extends Observable[Event]:
   def entities: List[Entity]
   def addEntity(entity: Entity): EntityManager
   def removeEntity(entity: Entity): EntityManager
@@ -22,6 +24,15 @@ private case class EntityManagerImpl(entities: List[Entity] = List.empty)
     entities.filter(_.getClass == entityClass)
 
   override def addEntity(entity: Entity): EntityManager =
+    notifyObservers {
+      Spawn (
+        entity.id,
+        entity.getClass,
+        entity.getComponent(classOf[PositionComponent])
+          .getOrElse(PositionComponent(0,0))
+          .asInstanceOf[PositionComponent]
+      )
+    }
     EntityManagerImpl(entity :: entities)
 
   override def removeEntity(entity: Entity): EntityManager =
