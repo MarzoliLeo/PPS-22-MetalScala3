@@ -19,11 +19,12 @@ import view.menu.MainMenu
 class App extends Application:
   override def start(primaryStage: Stage): Unit =
     val GAME_TITLE = "Metal Scala 3"
-    val WINDOW_WIDTH = 800
-    val WINDOW_HEIGHT = 600
+    val WINDOW_WIDTH = model.GUIWIDTH
+    val WINDOW_HEIGHT = model.GUIHEIGHT
     primaryStage.setTitle(GAME_TITLE)
 
-    val mainMenu = MainMenu(primaryStage)
+    val gameView = GameView(model.entityManager)
+    val mainMenu = MainMenu(primaryStage, gameView)
 
     primaryStage
       .setScene(

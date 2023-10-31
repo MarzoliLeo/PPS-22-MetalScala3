@@ -73,6 +73,7 @@ private[engine] object GameLoop {
     def status: GameStatus = this.synchronized {
       _status
     }
+
   }
 }
 
