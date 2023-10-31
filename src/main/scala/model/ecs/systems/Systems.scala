@@ -2,9 +2,9 @@ package model.ecs.systems
 import javafx.scene.input.KeyCode
 import model.ecs.components.{Component, GravityComponent, PositionComponent}
 import model.ecs.entities.{Entity, EntityManager, PlayerEntity}
-import model.ecs.observer.Observable
 import model.event.Event
 import model.event.Event.Move
+import model.event.observer.Observable
 import model.inputsQueue
 import model.utilities.Empty
 

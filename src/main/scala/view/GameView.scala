@@ -8,10 +8,10 @@ import javafx.scene.{Node, Scene}
 import javafx.stage.Stage
 import model.ecs.components.*
 import model.ecs.entities.{Entity, EntityManager}
-import model.ecs.observer.{Observable, Observer}
 import model.entityManager
 import model.event.Event
 import model.event.Event.{Move, Spawn, Tick}
+import model.event.observer.{Observable, Observer}
 import model.input.BasicInputHandler
 
 import java.util.UUID

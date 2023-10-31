@@ -1,7 +1,7 @@
 package model.ecs.entities
 
 import model.ecs.components.Component
-import model.ecs.observer.Observable
+import model.event.observer.Observable
 
 import scala.collection.immutable.{AbstractSeq, LinearSeq}
 

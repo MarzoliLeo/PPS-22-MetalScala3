@@ -2,7 +2,7 @@ package model.ecs.entities
 
 import java.util.UUID
 import model.ecs.components.Component
-import model.ecs.observer.Observable
+import model.event.observer.Observable
 
 trait Entity():
   private final type ComponentType = Class[_ <: Component]
