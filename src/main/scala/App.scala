@@ -10,24 +10,18 @@ import model.ecs.components.{ColorComponent, PositionComponent, VisibleComponent
 import model.ecs.entities.{BoxEntity, EntityManager}
 import model.ecs.systems.SystemManager
 import model.engine.Engine
-import model.entityManager
-import view.{BuildEntitiesForTheGame, GameView}
+import view.{GameView}
 import view.menu.MainMenu
 
 class App extends Application:
   @Override
   def start(primaryStage: Stage): Unit =
     val GAME_TITLE = "Metal Scala 3"
-    val WINDOW_WIDTH = 800
-    val WINDOW_HEIGHT = 600
+    val WINDOW_WIDTH = model.GUIWIDTH
+    val WINDOW_HEIGHT = model.GUIHEIGHT
     primaryStage.setTitle(GAME_TITLE)
 
-    //references useful for modularity.
-    //val buildEntitiesForTheGame : BuildEntitiesForTheGame = BuildEntitiesForTheGame()
-
-    //Creation of the entities to be displayed in the game.
-    //val gameView = GameView(buildEntitiesForTheGame.build(entityManager))
-    val gameView = GameView(entityManager)
+    val gameView = GameView(model.entityManager)
 
     val mainMenu = MainMenu(primaryStage, gameView)
 

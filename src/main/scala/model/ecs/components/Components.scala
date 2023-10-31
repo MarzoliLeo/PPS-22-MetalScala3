@@ -13,8 +13,10 @@ sealed trait Component {
     }
 }
 
-case class PositionComponent(x: Int, y: Int) extends Component
+case class PositionComponent(x: Double, y: Double) extends Component
 
 case class VisibleComponent() extends Component
 
 case class ColorComponent(color: Color) extends Component
+
+case class GravityComponent(gravity: Double) extends Component
