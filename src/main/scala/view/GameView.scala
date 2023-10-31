@@ -10,12 +10,17 @@ import model.ecs.components.*
 import model.ecs.entities.{BoxEntity, Entity, EntityManager}
 import model.ecs.observer.{Observable, Observer}
 import model.entityManager
+import model.event.Event
+import model.event.Event.{Move, Spawn, Tick}
 import model.input.BasicInputHandler
+
 import java.util.UUID
 
 trait GameView extends View
 
-private class GameViewImpl(primaryStage: Stage) extends GameView with BasicInputHandler with Observer[Component] {
+
+// TODO: subscribe to Observable[Event]
+private class GameViewImpl(primaryStage: Stage) extends GameView with BasicInputHandler with Observer[Event] {
   val root: FlowPane = FlowPane()
   private var entityIdToView: Map[UUID, Node] = Map()
 
@@ -24,44 +29,73 @@ private class GameViewImpl(primaryStage: Stage) extends GameView with BasicInput
   scene.setOnKeyPressed(handleInput)
   primaryStage.setScene(scene)
 
+  override def update(subject: Event): Unit =
+    subject match
+      case Spawn(entity, ofType, position) =>
+        entityIdToView = entityIdToView + (entity -> createBoxView(position))
+      case Move(entity, position) =>
+        entityIdToView.updatedWith(entity) {
+          case Some(_) => Some(createBoxView(position))
+          case None => None
+        }
+      case Tick() =>
+        Platform.runLater { () =>
+          entityIdToView.foreach((_, view) => root.getChildren.remove(view))
+          entityIdToView.foreach((_, view) => root.getChildren.add(view))
+        }
 
-  private val boxes: List[BoxEntity] = entityManager
-    .getEntitiesWithComponent(classOf[VisibleComponent])
-    .filter(_.hasComponent(classOf[PositionComponent]))
-    .collect { case box: BoxEntity => box }
-
-  boxes.foreach(box => {
-    box.addObserver(this)
-    createBoxView(box)
-  })
+  private def createBoxView(position: PositionComponent): Node =
+    val box = Box(100, 100, 100)
+    box.setTranslateX(position.x)
+    box.setTranslateY(position.y)
+    box.setMaterial(PhongMaterial(Color.BLACK))
+    box
 
 
-  private def removeOldView()(f: => Unit): Unit =
-    Platform.runLater(() => {
-      entityIdToView
-        .foreach((_, view) => root.getChildren.remove(view))
-      f
-    })
+  /*
+     private val boxes: List[BoxEntity] = entityManager
+     .getEntitiesWithComponent(classOf[VisibleComponent])
+     .filter(_.hasComponent(classOf[PositionComponent]))
+     .collect { case box: BoxEntity => box }
+   */
 
-  override def update(component: Component): Unit =
-    removeOldView() {
-      component match {
-        case position: PositionComponent =>
-          boxes
-            .filter(
-              _.getComponent(classOf[PositionComponent]).contains(position)
-            )
-            .foreach(createBoxView)
-        case color: ColorComponent =>
-          boxes
-            .filter(_.getComponent(classOf[ColorComponent]).contains(color))
-            .foreach(createBoxView)
-        case _ => ()
-      }
-      updateView()
-    }
+  /*
+     boxes.foreach(box => {
+     box.addObserver(this)
+     createBoxView(box)
+   })
+   */
 
-  private def updateView(): Unit =
+
+  /* private def removeOldView()(f: => Unit): Unit =
+     Platform.runLater(() => {
+       entityIdToView
+         .foreach((_, view) => root.getChildren.remove(view))
+       f
+     })
+
+   */
+
+  /* override def update(component: Component): Unit =
+     removeOldView() {
+       component match {
+         case position: PositionComponent =>
+           boxes
+             .filter(
+               _.getComponent(classOf[PositionComponent]).contains(position)
+             )
+             .foreach(createBoxView)
+         case color: ColorComponent =>
+           boxes
+             .filter(_.getComponent(classOf[ColorComponent]).contains(color))
+             .foreach(createBoxView)
+         case _ => ()
+       }
+       updateView()
+     }
+   */
+
+  /* private def updateView(): Unit =
     Platform.runLater(() =>
       entityIdToView.foreach((_, view) => {
         if (!root.getChildren.contains(view)) {
@@ -70,21 +104,10 @@ private class GameViewImpl(primaryStage: Stage) extends GameView with BasicInput
       })
     )
 
-  private def createBoxView(entity: Entity): Unit = {
-    val box = Box(100, 100, 100)
-    val position = entity
-      .getComponent(classOf[PositionComponent])
-      .get
-      .asInstanceOf[PositionComponent]
-    val color = entity
-      .getComponent(classOf[ColorComponent])
-      .fold(Color.BLACK)(_.asInstanceOf[ColorComponent].color)
-    box.setTranslateX(position.x)
-    box.setTranslateY(position.y)
-    box.setMaterial(PhongMaterial(color))
-    entityIdToView = entityIdToView + (entity.id -> box)
-    updateView()
-  }
+   */
+
+
+
 
 }
 
