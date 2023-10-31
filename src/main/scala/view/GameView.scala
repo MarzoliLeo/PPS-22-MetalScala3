@@ -36,7 +36,6 @@ private class GameViewImpl(primaryStage: Stage) extends GameView with BasicInput
   })
 
 
-
   private def removeOldView()(f: => Unit): Unit =
     Platform.runLater(() => {
       entityIdToView
