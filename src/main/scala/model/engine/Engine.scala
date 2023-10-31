@@ -1,6 +1,6 @@
 package model.engine
 
-import model.ecs.systems.Systems.playerMovementSystem
+import model.ecs.systems.Systems.passiveMovementSystem
 import GameStatus.*
 import javafx.scene.paint.Color
 import model.ecs.components.{ColorComponent, PositionComponent}

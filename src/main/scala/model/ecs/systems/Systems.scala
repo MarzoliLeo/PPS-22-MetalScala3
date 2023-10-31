@@ -1,34 +1,51 @@
 package model.ecs.systems
-
-import model.ecs.components.{Component, GravityComponent, PositionComponent}
-import model.ecs.entities.{BoxEntity, EntityManager, PlayerEntity}
+import javafx.scene.input.KeyCode
+import model.ecs.components.{Component, PositionComponent, GravityComponent}
+import model.ecs.entities.{BoxEntity, Entity, EntityManager, PlayerEntity}
+import model.inputsQueue
+import model.utilities.Empty
 
 object Systems {
 
-  val playerMovementSystem: EntityManager => Unit =
-    manager =>
-      manager
-        .getEntitiesByClass(classOf[BoxEntity])
-        .foreach(entity => {
-          val currentPosition: PositionComponent = entity
-            .getComponent(classOf[PositionComponent])
-            .getOrElse(PositionComponent(0, 0))
-            .asInstanceOf[PositionComponent]
+  private def moveEntity(entity: Entity, dx: Int, dy: Int): Unit = {
+    val currentPosition = entity
+      .getComponent(classOf[PositionComponent])
+      .getOrElse(PositionComponent(0, 0))
+      .asInstanceOf[PositionComponent]
+      // for immutability
+    if (currentPosition.x < 0) {
+      entity.replaceComponent(
+        PositionComponent(0, currentPosition.y)
+      )
+    } else if (currentPosition.x + 100 /*Dimensione del Box (Sarà poi quella del player)*/ > model.GUIWIDTH) {
+      entity.replaceComponent(
+        PositionComponent(model.GUIWIDTH - 100 /*Dimensione del Box (Sarà poi quella del player)*/, currentPosition.y )
+      )
+    } else entity.replaceComponent(
+        PositionComponent(currentPosition.x + dx, currentPosition.y + dy)
+    )
+  }
 
-          // for immutability
-          if (currentPosition.x < 0) {
-            entity.replaceComponent(
-              PositionComponent(0, currentPosition.y)
-            )
-          } else if (currentPosition.x + 100 /*Dimensione del Box*/ > model.GUIWIDTH) {
-            entity.replaceComponent(
-              PositionComponent(model.GUIWIDTH - 100 , currentPosition.y /*Dimensione del Box*/)
-            )
-          } else entity.replaceComponent(
-            PositionComponent(currentPosition.x + 1, currentPosition.y)
-          )
-        })
+  val passiveMovementSystem: EntityManager => Unit = manager =>
+    manager
+      .getEntitiesByClass(classOf[BoxEntity])
+      .foreach(entity => moveEntity(entity, 1, 0))
 
+  val inputMovementSystem: EntityManager => Unit = manager =>
+    manager.getEntitiesByClass(classOf[BoxEntity]).foreach { entity =>
+      inputsQueue.peek match {
+        case Some(command) =>
+          command match {
+            case KeyCode.W => moveEntity(entity, 0, -1)
+            case KeyCode.A => moveEntity(entity, -1, 0)
+            case KeyCode.S => moveEntity(entity, 0, 1)
+            case KeyCode.D => moveEntity(entity, 1, 0)
+          }
+        case None => ()
+      }
+      inputsQueue = inputsQueue.pop.getOrElse(Empty)
+    }
+  
   val gravitySystem: EntityManager => Unit =
     manager =>
       manager

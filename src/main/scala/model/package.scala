@@ -1,8 +1,11 @@
+import javafx.scene.input.KeyCode
 import javafx.scene.paint.Color
 import model.ecs.components.{ColorComponent, PositionComponent, VisibleComponent}
 import model.ecs.entities.{BoxEntity, EntityManager}
 import model.ecs.systems.SystemManager
-import model.ecs.systems.Systems.{gravitySystem, playerMovementSystem}
+import model.ecs.systems.Systems.{inputMovementSystem, passiveMovementSystem, gravitySystem}
+import model.utilities.{Cons, Empty, Stack}
+import scala.collection.mutable
 
 package object model:
   val GUIWIDTH: Int = 1500
@@ -18,5 +21,7 @@ package object model:
 
   val systemManager: SystemManager =
     SystemManager(entityManager)
-      .addSystem(playerMovementSystem)
+      .addSystem(inputMovementSystem)
       .addSystem(gravitySystem)
+  var inputsQueue: Stack[KeyCode] = Empty
+
