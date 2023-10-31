@@ -7,7 +7,7 @@ import javafx.scene.shape.Box
 import javafx.scene.{Node, Scene}
 import javafx.stage.Stage
 import model.ecs.components.*
-import model.ecs.entities.{BoxEntity, Entity, EntityManager}
+import model.ecs.entities.{Entity, EntityManager}
 import model.ecs.observer.{Observable, Observer}
 import model.entityManager
 import model.event.Event

@@ -4,7 +4,7 @@ import model.ecs.systems.Systems.passiveMovementSystem
 import GameStatus.*
 import javafx.scene.paint.Color
 import model.ecs.components.{ColorComponent, PositionComponent}
-import model.ecs.entities.{BoxEntity, EntityManager, PlayerEntity}
+import model.ecs.entities.{EntityManager, PlayerEntity}
 import model.ecs.systems.SystemManager
 import model.systemManager
 import view.menu.MainMenu

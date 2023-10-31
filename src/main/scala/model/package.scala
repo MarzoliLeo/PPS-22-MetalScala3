@@ -1,10 +1,11 @@
 import javafx.scene.input.KeyCode
 import javafx.scene.paint.Color
 import model.ecs.components.{ColorComponent, PositionComponent, VisibleComponent}
-import model.ecs.entities.{BoxEntity, EntityManager}
+import model.ecs.entities.{EntityManager, PlayerEntity}
 import model.ecs.systems.SystemManager
-import model.ecs.systems.Systems.{inputMovementSystem, passiveMovementSystem, gravitySystem}
+import model.ecs.systems.Systems.{gravitySystem, inputMovementSystem, passiveMovementSystem}
 import model.utilities.{Cons, Empty, Stack}
+
 import scala.collection.mutable
 
 package object model:
@@ -17,7 +18,7 @@ package object model:
 
   val entityManager: EntityManager = EntityManager()
     .addEntity(
-      BoxEntity()
+      PlayerEntity()
         .addComponent(PositionComponent(100, 100))
         .addComponent(ColorComponent(Color.RED))
         .addComponent(VisibleComponent())

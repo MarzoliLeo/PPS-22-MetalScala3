@@ -1,7 +1,7 @@
 package model.ecs.systems
 
 import model.ecs.components.GravityComponent
-import model.ecs.entities.{BoxEntity, EntityManager}
+import model.ecs.entities.EntityManager
 
 trait SystemManager:
   protected type System = EntityManager => Unit

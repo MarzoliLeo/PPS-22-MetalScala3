@@ -1,7 +1,7 @@
 package model.ecs.systems
 import javafx.scene.input.KeyCode
 import model.ecs.components.{Component, GravityComponent, PositionComponent}
-import model.ecs.entities.{BoxEntity, Entity, EntityManager, PlayerEntity}
+import model.ecs.entities.{Entity, EntityManager, PlayerEntity}
 import model.ecs.observer.Observable
 import model.event.Event
 import model.event.Event.Move
@@ -9,12 +9,13 @@ import model.inputsQueue
 import model.utilities.Empty
 
 // TODO: notify Observers when updates are done
+// TODO: apply DRY principle when possible
 object Systems extends Observable[Event] {
 
   private def moveEntity(entity: Entity, dx: Int, dy: Int): Unit =
     val currentPosition = entity
       .getComponent(classOf[PositionComponent])
-      .getOrElse(PositionComponent(0, 0))
+      .get
       .asInstanceOf[PositionComponent]
       // for immutability
     if (currentPosition.x < 0) {
@@ -32,11 +33,11 @@ object Systems extends Observable[Event] {
 
   val passiveMovementSystem: EntityManager => Unit = manager =>
     manager
-      .getEntitiesByClass(classOf[BoxEntity])
+      .getEntitiesWithComponent(classOf[PositionComponent])
       .foreach(entity => moveEntity(entity, 1, 0))
 
   val inputMovementSystem: EntityManager => Unit = manager =>
-    manager.getEntitiesByClass(classOf[BoxEntity]).foreach { entity =>
+    manager.getEntitiesByClass(classOf[PlayerEntity]).foreach { entity =>
       inputsQueue.peek match {
         case Some(command) =>
           command match {
@@ -53,16 +54,16 @@ object Systems extends Observable[Event] {
   val gravitySystem: EntityManager => Unit =
     manager =>
       manager
-        .getEntitiesByClass(classOf[BoxEntity])
+        .getEntitiesWithComponent(classOf[PositionComponent], classOf[GravityComponent])
         .foreach(entity => {
           val currentPosition: PositionComponent = entity
             .getComponent(classOf[PositionComponent])
-            .getOrElse(PositionComponent(0, 0))
+            .get
             .asInstanceOf[PositionComponent]
 
           val gravityToApply: GravityComponent = entity
             .getComponent(classOf[GravityComponent])
-            .getOrElse(GravityComponent(model.GRAVITY_VELOCITY))
+            .get
             .asInstanceOf[GravityComponent]
 
           if (currentPosition.y < 0) {
