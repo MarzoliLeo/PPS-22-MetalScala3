@@ -7,7 +7,7 @@ import model.utilities.Empty
 
 object Systems {
 
-  private def moveEntity(entity: Entity, dx: Int, dy: Int): Unit = {
+  private def moveEntity(entity: Entity, dx: Int, dy: Int): Unit =
     val currentPosition = entity
       .getComponent(classOf[PositionComponent])
       .getOrElse(PositionComponent(0, 0))
@@ -17,14 +17,14 @@ object Systems {
       entity.replaceComponent(
         PositionComponent(0, currentPosition.y)
       )
-    } else if (currentPosition.x + 100 /*Dimensione del Box (Sarà poi quella del player)*/ > model.GUIWIDTH) {
+    } else if (currentPosition.x + 100 + model.INPUT_MOVEMENT_VELOCITY/*Dimensione del Box (Sarà poi quella del player)*/ > model.GUIWIDTH) {
       entity.replaceComponent(
-        PositionComponent(model.GUIWIDTH - 100 /*Dimensione del Box (Sarà poi quella del player)*/, currentPosition.y )
+        PositionComponent(model.GUIWIDTH - 100 -model.INPUT_MOVEMENT_VELOCITY/*Dimensione del Box (Sarà poi quella del player)*/, currentPosition.y )
       )
     } else entity.replaceComponent(
         PositionComponent(currentPosition.x + dx, currentPosition.y + dy)
     )
-  }
+
 
   val passiveMovementSystem: EntityManager => Unit = manager =>
     manager
@@ -36,10 +36,10 @@ object Systems {
       inputsQueue.peek match {
         case Some(command) =>
           command match {
-            case KeyCode.W => moveEntity(entity, 0, -1)
-            case KeyCode.A => moveEntity(entity, -1, 0)
-            case KeyCode.S => moveEntity(entity, 0, 1)
-            case KeyCode.D => moveEntity(entity, 1, 0)
+            case KeyCode.W => moveEntity(entity, 0, -model.JUMP_MOVEMENT_VELOCITY)
+            case KeyCode.A => moveEntity(entity, -model.INPUT_MOVEMENT_VELOCITY, 0)
+            case KeyCode.S => moveEntity(entity, 0, model.INPUT_MOVEMENT_VELOCITY)
+            case KeyCode.D => moveEntity(entity, model.INPUT_MOVEMENT_VELOCITY, 0)
           }
         case None => ()
       }
@@ -58,7 +58,7 @@ object Systems {
 
           val gravityToApply: GravityComponent = entity
             .getComponent(classOf[GravityComponent])
-            .getOrElse(GravityComponent(1))
+            .getOrElse(GravityComponent(model.GRAVITY_VELOCITY))
             .asInstanceOf[GravityComponent]
 
           if (currentPosition.y < 0) {
@@ -73,8 +73,6 @@ object Systems {
             PositionComponent(currentPosition.x, currentPosition.y + gravityToApply.gravity)
           )
 
-          /*print("Applying gravity to entity\n")
-          print("Y Position: " + currentPosition.y + "\n")*/
         })
 
 }

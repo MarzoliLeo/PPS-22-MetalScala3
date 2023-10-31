@@ -17,14 +17,15 @@ import view.GameView
 import view.menu.MainMenu
 
 class App extends Application:
-  override def start(primaryStage: Stage): Unit =
+  @Override
+  def start(primaryStage: Stage): Unit =
     val GAME_TITLE = "Metal Scala 3"
     val WINDOW_WIDTH = model.GUIWIDTH
     val WINDOW_HEIGHT = model.GUIHEIGHT
     primaryStage.setTitle(GAME_TITLE)
 
-    val gameView = GameView(model.entityManager)
-    val mainMenu = MainMenu(primaryStage, gameView)
+    //La creazione della GameView avviene dentro il pulsante start di Main Menu.
+    val mainMenu = MainMenu(primaryStage)
 
     primaryStage
       .setScene(

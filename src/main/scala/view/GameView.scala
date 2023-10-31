@@ -15,12 +15,15 @@ import java.util.UUID
 
 trait GameView extends View
 
-private class GameViewImpl(primaryStage: Stage)
-    extends GameView
-    with BasicInputHandler
-    with Observer[Component] {
+private class GameViewImpl(primaryStage: Stage) extends GameView with BasicInputHandler with Observer[Component] {
   val root: FlowPane = FlowPane()
   private var entityIdToView: Map[UUID, Node] = Map()
+
+  //Creazione della scena di gioco (Diversa da quella del Menù).
+  private val scene: Scene = Scene(root, model.GUIWIDTH, model.GUIHEIGHT)
+  scene.setOnKeyPressed(handleInput)
+  primaryStage.setScene(scene)
+
 
   private val boxes: List[BoxEntity] = entityManager
     .getEntitiesWithComponent(classOf[VisibleComponent])
@@ -32,9 +35,8 @@ private class GameViewImpl(primaryStage: Stage)
     createBoxView(box)
   })
 
-  private val scene: Scene = Scene(root, 800, 600)
-  scene.setOnKeyPressed(handleInput)
-  primaryStage.setScene(scene)
+
+
   private def removeOldView()(f: => Unit): Unit =
     Platform.runLater(() => {
       entityIdToView
@@ -84,6 +86,7 @@ private class GameViewImpl(primaryStage: Stage)
     entityIdToView = entityIdToView + (entity.id -> box)
     updateView()
   }
+
 }
 
 object GameView {

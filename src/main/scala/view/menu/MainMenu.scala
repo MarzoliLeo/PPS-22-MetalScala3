@@ -9,12 +9,7 @@ import javafx.scene.layout.{GridPane, Pane}
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.Box
 import javafx.stage.Stage
-import jdk.internal.vm.ThreadContainers.root
-import model.ecs.components.PositionComponent
-import model.ecs.entities.{BoxEntity, Entity}
 import model.engine.Engine
-import model.entityManager
-import model.input.InputHandler
 import view.{GameView, View}
 
 trait MainMenu extends View:

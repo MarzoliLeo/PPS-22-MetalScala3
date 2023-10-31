@@ -11,6 +11,10 @@ package object model:
   val GUIWIDTH: Int = 1500
   val GUIHEIGHT: Int = 800
 
+  val INPUT_MOVEMENT_VELOCITY = 35
+  val JUMP_MOVEMENT_VELOCITY = 250
+  val GRAVITY_VELOCITY = 10
+
   val entityManager: EntityManager = EntityManager()
     .addEntity(
       BoxEntity()
@@ -23,5 +27,6 @@ package object model:
     SystemManager(entityManager)
       .addSystem(inputMovementSystem)
       .addSystem(gravitySystem)
+
   var inputsQueue: Stack[KeyCode] = Empty
 
