@@ -1,11 +1,15 @@
 package model.ecs.systems
 import javafx.scene.input.KeyCode
-import model.ecs.components.{Component, PositionComponent, GravityComponent}
+import model.ecs.components.{Component, GravityComponent, PositionComponent}
 import model.ecs.entities.{BoxEntity, Entity, EntityManager, PlayerEntity}
+import model.ecs.observer.Observable
+import model.event.Event
+import model.event.Event.Move
 import model.inputsQueue
 import model.utilities.Empty
 
-object Systems {
+// TODO: notify Observers when updates are done
+object Systems extends Observable[Event] {
 
   private def moveEntity(entity: Entity, dx: Int, dy: Int): Unit =
     val currentPosition = entity
@@ -72,7 +76,6 @@ object Systems {
           } else entity.replaceComponent(
             PositionComponent(currentPosition.x, currentPosition.y + gravityToApply.gravity)
           )
-
         })
 
 }
