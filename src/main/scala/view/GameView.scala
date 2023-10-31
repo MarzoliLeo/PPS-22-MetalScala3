@@ -51,64 +51,6 @@ private class GameViewImpl(primaryStage: Stage) extends GameView with BasicInput
     box.setMaterial(PhongMaterial(Color.BLACK))
     box
 
-
-  /*
-     private val boxes: List[BoxEntity] = entityManager
-     .getEntitiesWithComponent(classOf[VisibleComponent])
-     .filter(_.hasComponent(classOf[PositionComponent]))
-     .collect { case box: BoxEntity => box }
-   */
-
-  /*
-     boxes.foreach(box => {
-     box.addObserver(this)
-     createBoxView(box)
-   })
-   */
-
-
-  /* private def removeOldView()(f: => Unit): Unit =
-     Platform.runLater(() => {
-       entityIdToView
-         .foreach((_, view) => root.getChildren.remove(view))
-       f
-     })
-
-   */
-
-  /* override def update(component: Component): Unit =
-     removeOldView() {
-       component match {
-         case position: PositionComponent =>
-           boxes
-             .filter(
-               _.getComponent(classOf[PositionComponent]).contains(position)
-             )
-             .foreach(createBoxView)
-         case color: ColorComponent =>
-           boxes
-             .filter(_.getComponent(classOf[ColorComponent]).contains(color))
-             .foreach(createBoxView)
-         case _ => ()
-       }
-       updateView()
-     }
-   */
-
-  /* private def updateView(): Unit =
-    Platform.runLater(() =>
-      entityIdToView.foreach((_, view) => {
-        if (!root.getChildren.contains(view)) {
-          root.getChildren.add(view)
-        }
-      })
-    )
-
-   */
-
-
-
-
 }
 
 object GameView {
