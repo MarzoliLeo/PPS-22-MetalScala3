@@ -1,6 +1,6 @@
 import javafx.scene.input.KeyCode
 import javafx.scene.paint.Color
-import model.ecs.components.PositionComponent
+import model.ecs.components.{GravityComponent, PositionComponent}
 import model.ecs.entities.{EntityManager, PlayerEntity}
 import model.ecs.systems.SystemManager
 import model.ecs.systems.Systems.{gravitySystem, inputMovementSystem, passiveMovementSystem}
@@ -20,6 +20,7 @@ package object model:
     .addEntity(
       PlayerEntity()
         .addComponent(PositionComponent(100, 100))
+        .addComponent(GravityComponent(GRAVITY_VELOCITY))
     )
 
   val systemManager: SystemManager =
