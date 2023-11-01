@@ -7,7 +7,7 @@ import javafx.scene.layout.*
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.Box
 import javafx.stage.Stage
-import model.ecs.components.{ColorComponent, PositionComponent, VisibleComponent}
+import model.ecs.components.PositionComponent
 import model.ecs.entities.EntityManager
 import model.ecs.systems.SystemManager
 import model.engine.Engine
