@@ -42,7 +42,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
   getButton(root, "Exit").setOnAction((_: ActionEvent) => handleExitButton())
 
   def handleStartButton(): Unit =
-    val gameView = GameView(parentStage, Set(entityManager, Systems))
+    val gameView = GameView(parentStage, Set(entityManager, Systems, gameEngine))
     parentStage.getScene.setRoot(gameView)
     gameEngine.start()
 

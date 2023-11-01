@@ -6,10 +6,13 @@ import javafx.scene.paint.Color
 import model.ecs.components.PositionComponent
 import model.ecs.entities.{EntityManager, PlayerEntity}
 import model.ecs.systems.SystemManager
+import model.event.Event
+import model.event.Event.Tick
+import model.event.observer.Observable
 import model.systemManager
 import view.menu.MainMenu
 
-trait Engine extends GameEngine {
+trait Engine extends GameEngine with Observable[Event]{
   def start(): Unit
   def stop(): Unit
   def pause(): Unit
@@ -26,6 +29,7 @@ object Engine {
 
     override def tick(): Unit =
       systemManager.updateAll()
+      notifyObservers(Tick())
 
     override def start(): Unit = {
       // init()
