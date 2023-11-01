@@ -20,8 +20,6 @@ package object model:
     .addEntity(
       PlayerEntity()
         .addComponent(PositionComponent(100, 100))
-        .addComponent(ColorComponent(Color.RED))
-        .addComponent(VisibleComponent())
     )
 
   val systemManager: SystemManager =
