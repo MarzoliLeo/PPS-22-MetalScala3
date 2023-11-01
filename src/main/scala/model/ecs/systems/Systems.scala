@@ -8,27 +8,29 @@ import model.event.observer.Observable
 import model.inputsQueue
 import model.utilities.Empty
 
-// TODO: notify Observers when updates are done
+import java.awt.Component
+
 // TODO: apply DRY principle when possible
 object Systems extends Observable[Event] {
-
+  
   private def moveEntity(entity: Entity, dx: Int, dy: Int): Unit =
     val currentPosition = entity
       .getComponent(classOf[PositionComponent])
       .get
       .asInstanceOf[PositionComponent]
-      // for immutability
-    if (currentPosition.x < 0) {
-      entity.replaceComponent(
-        PositionComponent(0, currentPosition.y)
-      )
-    } else if (currentPosition.x + 100 + model.INPUT_MOVEMENT_VELOCITY/*Dimensione del Box (Sarà poi quella del player)*/ > model.GUIWIDTH) {
-      entity.replaceComponent(
-        PositionComponent(model.GUIWIDTH - 100 -model.INPUT_MOVEMENT_VELOCITY/*Dimensione del Box (Sarà poi quella del player)*/, currentPosition.y )
-      )
-    } else entity.replaceComponent(
-        PositionComponent(currentPosition.x + dx, currentPosition.y + dy)
-    )
+    currentPosition.x match
+      case x if x < 0 =>
+        val pos = PositionComponent(0, currentPosition.y)
+        entity.replaceComponent(pos)
+        notifyObservers(Move(entity.id, pos))
+      case x if x + 100 + model.INPUT_MOVEMENT_VELOCITY > model.GUIWIDTH =>
+        val pos = PositionComponent(model.GUIWIDTH - 100 - model.INPUT_MOVEMENT_VELOCITY, currentPosition.y)
+        entity.replaceComponent(pos)
+        notifyObservers(Move(entity.id, pos))
+      case _ => 
+        val pos = PositionComponent(currentPosition.x + dx, currentPosition.y + dy)
+        entity.replaceComponent(pos)
+        notifyObservers(Move(entity.id, pos))
 
 
   val passiveMovementSystem: EntityManager => Unit = manager =>
@@ -55,28 +57,30 @@ object Systems extends Observable[Event] {
     manager =>
       manager
         .getEntitiesWithComponent(classOf[PositionComponent], classOf[GravityComponent])
-        .foreach(entity => {
-          val currentPosition: PositionComponent = entity
+        .foreach( entity => 
+          val currentPosition = entity
             .getComponent(classOf[PositionComponent])
             .get
             .asInstanceOf[PositionComponent]
 
-          val gravityToApply: GravityComponent = entity
+          val gravityToApply = entity
             .getComponent(classOf[GravityComponent])
             .get
             .asInstanceOf[GravityComponent]
 
-          if (currentPosition.y < 0) {
-              entity.replaceComponent(
-                PositionComponent(currentPosition.x, 0)
-              )
-          } else if (currentPosition.y + 100 /*Dimensione del Box*/ > model.GUIHEIGHT) {
-            entity.replaceComponent(
-              PositionComponent(currentPosition.x, model.GUIHEIGHT - 100 /*Dimensione del Box*/)
-            )
-          } else entity.replaceComponent(
-            PositionComponent(currentPosition.x, currentPosition.y + gravityToApply.gravity)
-          )
-        })
+          currentPosition.y match
+            case y if y < 0 =>
+              val pos = PositionComponent(currentPosition.x, 0)
+              entity.replaceComponent(pos)
+              notifyObservers(Move(entity.id, pos))
+            case y if y + 100 > model.GUIHEIGHT =>
+              val pos = PositionComponent(currentPosition.x, model.GUIHEIGHT - 100)
+              entity.replaceComponent(pos)
+              notifyObservers(Move(entity.id, pos))
+            case _ =>
+              val pos = PositionComponent(currentPosition.x, currentPosition.y + gravityToApply.gravity)
+              entity.replaceComponent(pos)
+              notifyObservers(Move(entity.id, pos))
+        )
 
 }

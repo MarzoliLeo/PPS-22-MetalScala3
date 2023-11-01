@@ -11,7 +11,6 @@ import model.ecs.components.PositionComponent
 import model.ecs.entities.EntityManager
 import model.ecs.systems.SystemManager
 import model.engine.Engine
-import model.entityManager
 import model.input.InputHandler
 import view.GameView
 import view.menu.MainMenu

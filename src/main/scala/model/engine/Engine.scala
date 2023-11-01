@@ -9,7 +9,6 @@ import model.ecs.systems.SystemManager
 import model.event.Event
 import model.event.Event.Tick
 import model.event.observer.Observable
-import model.systemManager
 import view.menu.MainMenu
 
 trait Engine extends GameEngine with Observable[Event]{
@@ -22,11 +21,12 @@ trait Engine extends GameEngine with Observable[Event]{
 }
 
 object Engine {
-  def apply(): Engine = new EngineImpl()
-  private class EngineImpl() extends Engine {
+  def apply(systemManager: SystemManager): Engine = new EngineImpl(systemManager)
+  private class EngineImpl(systemManager: SystemManager) extends Engine {
     private val Fps = 60
     private val gameLoop = GameLoop(Fps, this)
 
+    // TODO: delete debug print
     override def tick(): Unit =
       systemManager.updateAll()
       notifyObservers(Tick())

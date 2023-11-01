@@ -40,5 +40,11 @@ private case class EntityManagerImpl() extends EntityManager:
     this
 
 object EntityManager {
-  def apply(): EntityManager = EntityManagerImpl()
+  private var singleton: Option[EntityManager] = None
+  def apply(): EntityManager =
+    if(singleton.isEmpty){
+      singleton = Some(EntityManagerImpl())
+    }
+    singleton.get
+    
 }

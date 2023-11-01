@@ -8,7 +8,6 @@ import javafx.scene.{Node, Scene}
 import javafx.stage.Stage
 import model.ecs.components.*
 import model.ecs.entities.{Entity, EntityManager}
-import model.entityManager
 import model.event.Event
 import model.event.Event.{Move, Spawn, Tick}
 import model.event.observer.{Observable, Observer}
@@ -29,19 +28,18 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
   observables.foreach(_.addObserver(this))
 
   override def update(subject: Event): Unit =
-    subject match
-      case Spawn(entity, ofType, position) =>
-        entityIdToView = entityIdToView + (entity -> createBoxView(position))
-      case Move(entity, position) =>
-        entityIdToView.updatedWith(entity) {
-          case Some(_) => Some(createBoxView(position))
-          case None => None
-        }
-      case Tick() =>
-        Platform.runLater { () =>
+    Platform.runLater { () =>
+      subject match
+        case Spawn(entity, ofType, position) =>
+          entityIdToView = entityIdToView + (entity -> createBoxView(position))
+        case Move(entity, position) =>
+          val box = entityIdToView(entity)
+          box.setTranslateX(position.x)
+          box.setTranslateY(position.y)
+        case Tick() =>
           entityIdToView.foreach((_, view) => root.getChildren.remove(view))
           entityIdToView.foreach((_, view) => root.getChildren.add(view))
-        }
+    }
 
   private def createBoxView(position: PositionComponent): Node =
     val box = Box(100, 100, 100)
