@@ -18,9 +18,7 @@ import java.util.UUID
 
 trait GameView extends View
 
-
-// TODO: subscribe to Observable[Event]
-private class GameViewImpl(primaryStage: Stage) extends GameView with BasicInputHandler with Observer[Event] {
+private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Event]]) extends GameView with BasicInputHandler with Observer[Event] {
   val root: FlowPane = FlowPane()
   private var entityIdToView: Map[UUID, Node] = Map()
 
@@ -28,6 +26,7 @@ private class GameViewImpl(primaryStage: Stage) extends GameView with BasicInput
   private val scene: Scene = Scene(root, model.GUIWIDTH, model.GUIHEIGHT)
   scene.setOnKeyPressed(handleInput)
   primaryStage.setScene(scene)
+  observables.foreach(_.addObserver(this))
 
   override def update(subject: Event): Unit =
     subject match
@@ -54,5 +53,6 @@ private class GameViewImpl(primaryStage: Stage) extends GameView with BasicInput
 }
 
 object GameView {
-  def apply(primaryStage: Stage): GameView = new GameViewImpl(primaryStage)
+  def apply(primaryStage: Stage, observables: Set[Observable[Event]]): GameView =
+    new GameViewImpl(primaryStage, observables)
 }
