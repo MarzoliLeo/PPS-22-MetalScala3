@@ -10,6 +10,8 @@ import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.Box
 import javafx.stage.Stage
 import model.engine.Engine
+import model.entityManager
+import model.ecs.systems.Systems
 import view.{GameView, View}
 
 trait MainMenu extends View:
@@ -40,7 +42,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
   getButton(root, "Exit").setOnAction((_: ActionEvent) => handleExitButton())
 
   def handleStartButton(): Unit =
-    val gameView = GameView(parentStage)
+    val gameView = GameView(parentStage, Set(entityManager, Systems))
     parentStage.getScene.setRoot(gameView)
     gameEngine.start()
 
