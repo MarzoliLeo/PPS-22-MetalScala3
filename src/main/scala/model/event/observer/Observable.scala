@@ -1,4 +1,4 @@
-package model.ecs.observer
+package model.event.observer
 
 /** A trait that defines an observable object that can be observed by observers
   * of type [[Observer]] with type parameter T.

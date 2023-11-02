@@ -2,9 +2,9 @@ package model.ecs.entities
 
 import java.util.UUID
 import model.ecs.components.Component
-import model.ecs.observer.Observable
+import model.event.observer.Observable
 
-trait Entity() extends Observable[Component]:
+trait Entity():
   private final type ComponentType = Class[_ <: Component]
   private var signature: Map[ComponentType, Component] = Map()
   val id: UUID = UUID.randomUUID()
@@ -12,14 +12,12 @@ trait Entity() extends Observable[Component]:
 
   def addComponent(component: Component): Entity = {
     signature = signature + (component.getClass -> component)
-    notifyObservers(component)
     this
   }
 
   def removeComponent(componentType: ComponentType): Entity = {
     signature.get(componentType).foreach { component =>
       signature = signature - componentType
-      notifyObservers(component)
     }
     this
   }
