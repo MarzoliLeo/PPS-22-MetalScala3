@@ -48,14 +48,13 @@ object Systems extends Observable[Event] {
           notifyObservers(Move(entity.id, pos))
         //}
 
-        //CODICE ORIGINALE
-        /*val pos = PositionComponent(currentPosition.x + dx, currentPosition.y + dy)
-        entity.replaceComponent(pos)
-        notifyObservers(Move(entity.id, pos))*/
-
   private def jumpEntity(entity: Entity, duration: Double): Unit =
-    notifyObservers(Jump(entity.id, model.JUMP_MOVEMENT_VELOCITY, duration))
-    model.isGravityEnabled = false
+    try {
+      model.isGravityEnabled = false
+      notifyObservers(Jump(entity.id, model.JUMP_MOVEMENT_VELOCITY, duration))
+    } finally {
+      model.isGravityEnabled = true
+    }
 
   val passiveMovementSystem: EntityManager => Unit = manager =>
     manager
@@ -72,8 +71,7 @@ object Systems extends Observable[Event] {
             case KeyCode.S => moveEntity(entity, 0, model.INPUT_MOVEMENT_VELOCITY)
             case KeyCode.D => moveEntity(entity, model.INPUT_MOVEMENT_VELOCITY, 0)
           }
-        case None =>
-            model.isGravityEnabled = true
+        case None => ()
       }
       inputsQueue = inputsQueue.pop.getOrElse(Empty)
     }

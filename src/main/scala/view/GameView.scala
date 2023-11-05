@@ -69,9 +69,10 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
   }
 
   private def jumpAnimation(entity: Node, startYPosition: Double, jumpHeight: Double, durationSeconds: Double): TranslateTransition= {
+    val numerOfCyclesPerAnimation = 2
     val translateYTransition = new TranslateTransition(Duration.seconds(durationSeconds), entity)
     translateYTransition.setToY(startYPosition - jumpHeight)
-    translateYTransition.setCycleCount(1)
+    translateYTransition.setCycleCount(numerOfCyclesPerAnimation)
     translateYTransition.setAutoReverse(true)
     translateYTransition
     }

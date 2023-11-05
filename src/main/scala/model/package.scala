@@ -18,7 +18,7 @@ package object model:
 
   val INPUT_MOVEMENT_VELOCITY = 35
   val JUMP_MOVEMENT_VELOCITY = 250.0
-  val JUMP_DURATION = 0.15
+  val JUMP_DURATION = 0.3
   val GRAVITY_VELOCITY = 10
   var isGravityEnabled = true
 
