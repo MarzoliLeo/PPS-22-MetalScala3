@@ -1,7 +1,8 @@
 package view
 
-import javafx.animation.{PathTransition, TranslateTransition}
+import javafx.animation.{ParallelTransition, PathTransition, TranslateTransition}
 import javafx.application.Platform
+import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.scene.image.{Image, ImageView}
 import javafx.scene.layout.FlowPane
 import javafx.scene.paint.{Color, PhongMaterial}
@@ -23,6 +24,8 @@ trait GameView extends View
 private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Event]]) extends GameView with BasicInputHandler with Observer[Event] {
   val root: FlowPane = FlowPane()
   private var entityIdToView: Map[UUID, Node] = Map()
+  private var isMoving = false
+
 
   //Creazione della scena di gioco (Diversa da quella del Menù).
   private val scene: Scene = Scene(root, model.GUIWIDTH, model.GUIHEIGHT)
@@ -35,9 +38,15 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
       subject match
         case Spawn(entity, ofType, sprite, position) =>
           entityIdToView = entityIdToView + (entity -> createSpriteView(sprite, position))
-        case Move(entity, position) =>
+        case Move(entity, position, duration) =>
           val entityToShow = entityIdToView(entity)
-          entityToShow.setTranslateX(position.x)
+          if (!isMoving) {
+            val moveTransition = moveAnimation(entityToShow, position, duration)
+            moveTransition.setOnFinished(_ => isMoving = false)
+            moveTransition.play()
+            isMoving = true
+          }
+          //entityToShow.setTranslateX(position.x)
           entityToShow.setTranslateY(position.y)
         case Tick() =>
           entityIdToView.foreach((_, view) => root.getChildren.remove(view))
@@ -45,8 +54,8 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
         case Jump(entity, jumpHeight, duration) =>
           val entityToShow = entityIdToView(entity)
           val startY = entityToShow.getTranslateY
-          val transition = jumpAnimation(entityToShow, startY, jumpHeight, duration)
-          transition.play()
+          val jumpTransition = jumpAnimation(entityToShow, startY, jumpHeight, duration)
+          jumpTransition.play()
 
     }
 
@@ -76,6 +85,17 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
     translateYTransition.setAutoReverse(true)
     translateYTransition
     }
+
+  private def moveAnimation(entity: Node, positionComponent: PositionComponent, durationSeconds: Double): TranslateTransition = {
+    val translateTransition = new TranslateTransition(Duration.seconds(durationSeconds), entity)
+    translateTransition.setFromX(entity.getTranslateX)
+    translateTransition.setToX(positionComponent.x)
+    //translateTransition.setFromY(entity.getTranslateY)
+    //translateTransition.setToY(positionComponent.y)
+    translateTransition.setCycleCount(1)
+    translateTransition.setAutoReverse(false)
+    translateTransition
+  }
 
 }
 

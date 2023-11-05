@@ -22,31 +22,15 @@ object Systems extends Observable[Event] {
       case x if x < 0 =>
         val pos = PositionComponent(0, currentPosition.y)
         entity.replaceComponent(pos)
-        notifyObservers(Move(entity.id, pos))
+        notifyObservers(Move(entity.id, pos, model.MOVEMENT_DURATION))
       case x if x + 100 + model.INPUT_MOVEMENT_VELOCITY > model.GUIWIDTH =>
         val pos = PositionComponent(model.GUIWIDTH - 100 - model.INPUT_MOVEMENT_VELOCITY, currentPosition.y)
         entity.replaceComponent(pos)
-        notifyObservers(Move(entity.id, pos))
+        notifyObservers(Move(entity.id, pos, model.MOVEMENT_DURATION))
       case _ =>
-        //se sto saltando...
-        /*if(dy < 0) {
-          val jumpDuration = 4000 // La durata del salto
-          val initialVerticalVelocity = model.JUMP_MOVEMENT_VELOCITY
-          for (t <- 0 to jumpDuration) {
-            // Calcola l'interpolazione quadratica
-            val timeFraction = t.toDouble / jumpDuration
-            val interpolatedY = currentPosition.y - initialVerticalVelocity * timeFraction + 0.05 * model.GRAVITY_VELOCITY * timeFraction * timeFraction
-
-            val pos = PositionComponent(currentPosition.x + dx, interpolatedY)
-            entity.replaceComponent(pos)
-            notifyObservers(Move(entity.id, pos))
-          }
-        }
-        else {*/
-          val pos = PositionComponent(currentPosition.x + dx, currentPosition.y + dy)
-          entity.replaceComponent(pos)
-          notifyObservers(Move(entity.id, pos))
-        //}
+        val pos = PositionComponent(currentPosition.x + dx, currentPosition.y + dy)
+        entity.replaceComponent(pos)
+        notifyObservers(Move(entity.id, pos, model.MOVEMENT_DURATION))
 
   private def jumpEntity(entity: Entity, duration: Double): Unit =
     try {
@@ -96,15 +80,15 @@ object Systems extends Observable[Event] {
               case y if y < 0 =>
                 val pos = PositionComponent(currentPosition.x, 0)
                 entity.replaceComponent(pos)
-                notifyObservers(Move(entity.id, pos))
+                notifyObservers(Move(entity.id, pos, model.MOVEMENT_DURATION))
               case y if y + 100 + gravityToApply.gravity > model.GUIHEIGHT =>
                 val pos = PositionComponent(currentPosition.x, model.GUIHEIGHT - 100)
                 entity.replaceComponent(pos)
-                notifyObservers(Move(entity.id, pos))
+                notifyObservers(Move(entity.id, pos, model.MOVEMENT_DURATION))
               case _ =>
                 val pos = PositionComponent(currentPosition.x, currentPosition.y + gravityToApply.gravity)
                 entity.replaceComponent(pos)
-                notifyObservers(Move(entity.id, pos))
+                notifyObservers(Move(entity.id, pos, model.MOVEMENT_DURATION))
           )
     }
 
