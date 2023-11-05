@@ -1,11 +1,11 @@
 package model.ecs.systems
 import javafx.scene.input.KeyCode
-import model.ecs.components.{Component, GravityComponent, PositionComponent}
+import model.ecs.components.*
 import model.ecs.entities.{Entity, EntityManager, PlayerEntity}
 import model.event.Event
-import model.event.Event.Move
+import model.event.Event.{Jump, Move}
 import model.event.observer.Observable
-import model.inputsQueue
+import model.{JUMP_DURATION, inputsQueue}
 import model.utilities.Empty
 
 import java.awt.Component
@@ -27,11 +27,35 @@ object Systems extends Observable[Event] {
         val pos = PositionComponent(model.GUIWIDTH - 100 - model.INPUT_MOVEMENT_VELOCITY, currentPosition.y)
         entity.replaceComponent(pos)
         notifyObservers(Move(entity.id, pos))
-      case _ => 
-        val pos = PositionComponent(currentPosition.x + dx, currentPosition.y + dy)
-        entity.replaceComponent(pos)
-        notifyObservers(Move(entity.id, pos))
+      case _ =>
+        //se sto saltando...
+        /*if(dy < 0) {
+          val jumpDuration = 4000 // La durata del salto
+          val initialVerticalVelocity = model.JUMP_MOVEMENT_VELOCITY
+          for (t <- 0 to jumpDuration) {
+            // Calcola l'interpolazione quadratica
+            val timeFraction = t.toDouble / jumpDuration
+            val interpolatedY = currentPosition.y - initialVerticalVelocity * timeFraction + 0.05 * model.GRAVITY_VELOCITY * timeFraction * timeFraction
 
+            val pos = PositionComponent(currentPosition.x + dx, interpolatedY)
+            entity.replaceComponent(pos)
+            notifyObservers(Move(entity.id, pos))
+          }
+        }
+        else {*/
+          val pos = PositionComponent(currentPosition.x + dx, currentPosition.y + dy)
+          entity.replaceComponent(pos)
+          notifyObservers(Move(entity.id, pos))
+        //}
+
+        //CODICE ORIGINALE
+        /*val pos = PositionComponent(currentPosition.x + dx, currentPosition.y + dy)
+        entity.replaceComponent(pos)
+        notifyObservers(Move(entity.id, pos))*/
+
+  private def jumpEntity(entity: Entity, duration: Double): Unit =
+    notifyObservers(Jump(entity.id, model.JUMP_MOVEMENT_VELOCITY, duration))
+    model.isGravityEnabled = false
 
   val passiveMovementSystem: EntityManager => Unit = manager =>
     manager
@@ -43,44 +67,47 @@ object Systems extends Observable[Event] {
       inputsQueue.peek match {
         case Some(command) =>
           command match {
-            case KeyCode.W => moveEntity(entity, 0, -model.JUMP_MOVEMENT_VELOCITY)
+            case KeyCode.W => jumpEntity(entity, model.JUMP_DURATION)
             case KeyCode.A => moveEntity(entity, -model.INPUT_MOVEMENT_VELOCITY, 0)
             case KeyCode.S => moveEntity(entity, 0, model.INPUT_MOVEMENT_VELOCITY)
             case KeyCode.D => moveEntity(entity, model.INPUT_MOVEMENT_VELOCITY, 0)
           }
-        case None => ()
+        case None =>
+            model.isGravityEnabled = true
       }
       inputsQueue = inputsQueue.pop.getOrElse(Empty)
     }
   
   val gravitySystem: EntityManager => Unit =
     manager =>
-      manager
-        .getEntitiesWithComponent(classOf[PositionComponent], classOf[GravityComponent])
-        .foreach( entity => 
-          val currentPosition = entity
-            .getComponent(classOf[PositionComponent])
-            .get
-            .asInstanceOf[PositionComponent]
+      if (model.isGravityEnabled) {
+        manager
+          .getEntitiesWithComponent(classOf[PositionComponent], classOf[GravityComponent])
+          .foreach(entity =>
+            val currentPosition = entity
+              .getComponent(classOf[PositionComponent])
+              .get
+              .asInstanceOf[PositionComponent]
 
-          val gravityToApply = entity
-            .getComponent(classOf[GravityComponent])
-            .get
-            .asInstanceOf[GravityComponent]
+            val gravityToApply = entity
+              .getComponent(classOf[GravityComponent])
+              .get
+              .asInstanceOf[GravityComponent]
 
-          currentPosition.y match
-            case y if y < 0 =>
-              val pos = PositionComponent(currentPosition.x, 0)
-              entity.replaceComponent(pos)
-              notifyObservers(Move(entity.id, pos))
-            case y if y + 100 + gravityToApply.gravity > model.GUIHEIGHT=>
-              val pos = PositionComponent(currentPosition.x, model.GUIHEIGHT - 100)
-              entity.replaceComponent(pos)
-              notifyObservers(Move(entity.id, pos))
-            case _ =>
-              val pos = PositionComponent(currentPosition.x, currentPosition.y + gravityToApply.gravity)
-              entity.replaceComponent(pos)
-              notifyObservers(Move(entity.id, pos))
-        )
+            currentPosition.y match
+              case y if y < 0 =>
+                val pos = PositionComponent(currentPosition.x, 0)
+                entity.replaceComponent(pos)
+                notifyObservers(Move(entity.id, pos))
+              case y if y + 100 + gravityToApply.gravity > model.GUIHEIGHT =>
+                val pos = PositionComponent(currentPosition.x, model.GUIHEIGHT - 100)
+                entity.replaceComponent(pos)
+                notifyObservers(Move(entity.id, pos))
+              case _ =>
+                val pos = PositionComponent(currentPosition.x, currentPosition.y + gravityToApply.gravity)
+                entity.replaceComponent(pos)
+                notifyObservers(Move(entity.id, pos))
+          )
+    }
 
 }

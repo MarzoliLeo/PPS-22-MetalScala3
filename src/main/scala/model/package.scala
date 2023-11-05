@@ -17,8 +17,10 @@ package object model:
   val fixedSpriteHeight = 100.0 // Desired fixed height
 
   val INPUT_MOVEMENT_VELOCITY = 35
-  val JUMP_MOVEMENT_VELOCITY = 250
+  val JUMP_MOVEMENT_VELOCITY = 250.0
+  val JUMP_DURATION = 0.15
   val GRAVITY_VELOCITY = 10
+  var isGravityEnabled = true
 
   var inputsQueue: Stack[KeyCode] = Empty
 

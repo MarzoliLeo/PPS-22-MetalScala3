@@ -1,16 +1,18 @@
 package view
 
+import javafx.animation.{PathTransition, TranslateTransition}
 import javafx.application.Platform
 import javafx.scene.image.{Image, ImageView}
 import javafx.scene.layout.FlowPane
 import javafx.scene.paint.{Color, PhongMaterial}
-import javafx.scene.shape.Box
+import javafx.scene.shape.*
 import javafx.scene.{Node, Scene}
 import javafx.stage.Stage
+import javafx.util.Duration
 import model.ecs.components.*
 import model.ecs.entities.{Entity, EntityManager}
 import model.event.Event
-import model.event.Event.{Move, Spawn, Tick}
+import model.event.Event.{Jump, Move, Spawn, Tick}
 import model.event.observer.{Observable, Observer}
 import model.input.BasicInputHandler
 
@@ -34,12 +36,18 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
         case Spawn(entity, ofType, sprite, position) =>
           entityIdToView = entityIdToView + (entity -> createSpriteView(sprite, position))
         case Move(entity, position) =>
-          val box = entityIdToView(entity)
-          box.setTranslateX(position.x)
-          box.setTranslateY(position.y)
+          val entityToShow = entityIdToView(entity)
+          entityToShow.setTranslateX(position.x)
+          entityToShow.setTranslateY(position.y)
         case Tick() =>
           entityIdToView.foreach((_, view) => root.getChildren.remove(view))
           entityIdToView.foreach((_, view) => root.getChildren.add(view))
+        case Jump(entity, jumpHeight, duration) =>
+          val entityToShow = entityIdToView(entity)
+          val startY = entityToShow.getTranslateY
+          val transition = jumpAnimation(entityToShow, startY, jumpHeight, duration)
+          transition.play()
+
     }
 
   //TODO lo userò per creare il terreno di gioco.
@@ -57,9 +65,16 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
     imageView.setPreserveRatio(true)
     imageView.setTranslateX(position.x)
     imageView.setTranslateY(position.y)
-
     imageView
   }
+
+  private def jumpAnimation(entity: Node, startYPosition: Double, jumpHeight: Double, durationSeconds: Double): TranslateTransition= {
+    val translateYTransition = new TranslateTransition(Duration.seconds(durationSeconds), entity)
+    translateYTransition.setToY(startYPosition - jumpHeight)
+    translateYTransition.setCycleCount(1)
+    translateYTransition.setAutoReverse(true)
+    translateYTransition
+    }
 
 }
 

@@ -9,7 +9,7 @@ import model.ecs.systems.SystemManager
 import model.event.Event
 import model.event.Event.Tick
 import model.event.observer.Observable
-import view.menu.MainMenu
+import view.MainMenu
 
 trait Engine extends GameEngine with Observable[Event]{
   def start(): Unit

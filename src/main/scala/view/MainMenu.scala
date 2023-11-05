@@ -1,4 +1,4 @@
-package view.menu
+package view
 
 import javafx.event.{ActionEvent, EventHandler}
 import javafx.fxml.FXMLLoader
@@ -12,8 +12,8 @@ import javafx.stage.Stage
 import model.ecs.components.{GravityComponent, PositionComponent, SpriteComponent}
 import model.ecs.entities.{EntityManager, PlayerEntity}
 import model.ecs.systems.Systems.{gravitySystem, inputMovementSystem}
-import model.engine.Engine
 import model.ecs.systems.{SystemManager, Systems}
+import model.engine.Engine
 import view.{GameView, View}
 
 trait MainMenu extends View:
