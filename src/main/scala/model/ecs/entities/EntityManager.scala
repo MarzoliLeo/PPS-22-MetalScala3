@@ -1,9 +1,10 @@
 package model.ecs.entities
 
-import model.ecs.components.{Component, PositionComponent}
+import model.ecs.components.{Component, PositionComponent, SpriteComponent}
 import model.event.Event
 import model.event.Event.Spawn
 import model.event.observer.Observable
+
 import scala.collection.immutable.{AbstractSeq, LinearSeq}
 
 trait EntityManager extends Observable[Event]:
@@ -27,6 +28,9 @@ private case class EntityManagerImpl() extends EntityManager:
       Spawn (
         entity.id,
         entity.getClass,
+        entity.getComponent(classOf[SpriteComponent])
+            .getOrElse(SpriteComponent("sprites/MarcoRossi.png"))
+            .asInstanceOf[SpriteComponent],
         entity.getComponent(classOf[PositionComponent])
           .getOrElse(PositionComponent(0,0))
           .asInstanceOf[PositionComponent]

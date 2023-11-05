@@ -9,7 +9,7 @@ import javafx.scene.layout.{GridPane, Pane}
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.Box
 import javafx.stage.Stage
-import model.ecs.components.{GravityComponent, PositionComponent}
+import model.ecs.components.{GravityComponent, PositionComponent, SpriteComponent}
 import model.ecs.entities.{EntityManager, PlayerEntity}
 import model.ecs.systems.Systems.{gravitySystem, inputMovementSystem}
 import model.engine.Engine
@@ -50,6 +50,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
     entityManager.addEntity(
       PlayerEntity()
         .addComponent(PositionComponent(100, 100))
+        .addComponent(SpriteComponent("sprites/MarcoRossi.png"))
         .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
     )
     systemManager

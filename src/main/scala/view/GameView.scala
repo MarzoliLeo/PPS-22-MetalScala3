@@ -1,6 +1,7 @@
 package view
 
 import javafx.application.Platform
+import javafx.scene.image.{Image, ImageView}
 import javafx.scene.layout.FlowPane
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.Box
@@ -30,8 +31,8 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
   override def update(subject: Event): Unit =
     Platform.runLater { () =>
       subject match
-        case Spawn(entity, ofType, position) =>
-          entityIdToView = entityIdToView + (entity -> createBoxView(position))
+        case Spawn(entity, ofType, sprite, position) =>
+          entityIdToView = entityIdToView + (entity -> createSpriteView(sprite, position))
         case Move(entity, position) =>
           val box = entityIdToView(entity)
           box.setTranslateX(position.x)
@@ -49,6 +50,12 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
     box
 
 }
+  private def createSpriteView(spriteComponent: SpriteComponent, position: PositionComponent): Node = {
+    val imageView = new ImageView(new Image(spriteComponent.spritePath))
+    imageView.setTranslateX(position.x)
+    imageView.setTranslateY(position.y)
+    imageView
+  }
 
 object GameView {
   def apply(primaryStage: Stage, observables: Set[Observable[Event]]): GameView =
