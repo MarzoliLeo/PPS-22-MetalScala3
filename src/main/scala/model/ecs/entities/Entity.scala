@@ -4,7 +4,7 @@ import java.util.UUID
 import model.ecs.components.Component
 import model.event.observer.Observable
 
-trait Entity():
+trait Entity:
   private final type ComponentType = Class[_ <: Component]
   private var signature: Map[ComponentType, Component] = Map()
   val id: UUID = UUID.randomUUID()

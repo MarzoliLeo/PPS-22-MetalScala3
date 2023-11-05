@@ -73,7 +73,7 @@ object Systems extends Observable[Event] {
               val pos = PositionComponent(currentPosition.x, 0)
               entity.replaceComponent(pos)
               notifyObservers(Move(entity.id, pos))
-            case y if y + 100 > model.GUIHEIGHT =>
+            case y if y + 100 + gravityToApply.gravity > model.GUIHEIGHT=>
               val pos = PositionComponent(currentPosition.x, model.GUIHEIGHT - 100)
               entity.replaceComponent(pos)
               notifyObservers(Move(entity.id, pos))
