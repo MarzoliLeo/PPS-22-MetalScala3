@@ -13,6 +13,9 @@ package object model:
   val GUIWIDTH: Int = 1500
   val GUIHEIGHT: Int = 800
 
+  val fixedSpriteWidth = 100.0 // Desired fixed width
+  val fixedSpriteHeight = 100.0 // Desired fixed height
+
   val INPUT_MOVEMENT_VELOCITY = 35
   val JUMP_MOVEMENT_VELOCITY = 250
   val GRAVITY_VELOCITY = 10
