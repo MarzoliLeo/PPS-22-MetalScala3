@@ -47,10 +47,11 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
 
   def handleStartButton(): Unit =
     val gameView = GameView(parentStage, Set(entityManager, Systems, gameEngine))
+    //Imposta il backend ECS.
     entityManager.addEntity(
       PlayerEntity()
         .addComponent(PositionComponent(100, 100))
-        .addComponent(SpriteComponent("sprites/MarcoRossi.png"))
+        .addComponent(SpriteComponent(model.playerSpriteList))
         .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
     )
     systemManager

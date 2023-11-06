@@ -22,6 +22,11 @@ package object model:
   val JUMP_DURATION = 0.3
   val GRAVITY_VELOCITY = 10
   var isGravityEnabled = true
+  var isTouchingGround = false
+
+  val playerSpriteList = List("sprites/MarcoRossi.png",
+                              "sprites/MarcoRossiMove.png",
+                              "sprites/MarcoRossiJump.png")
 
   var inputsQueue: Stack[KeyCode] = Empty
 

@@ -24,12 +24,13 @@ private case class EntityManagerImpl() extends EntityManager:
     entities.filter(_.getClass == entityClass)
 
   override def addEntity(entity: Entity): EntityManager =
+    //Imposto il Frontend (View).
     notifyObservers {
       Spawn (
         entity.id,
         entity.getClass,
         entity.getComponent(classOf[SpriteComponent])
-            .getOrElse(SpriteComponent("sprites/MarcoRossi.png"))
+            .getOrElse(SpriteComponent(model.playerSpriteList))
             .asInstanceOf[SpriteComponent],
         entity.getComponent(classOf[PositionComponent])
           .getOrElse(PositionComponent(0,0))

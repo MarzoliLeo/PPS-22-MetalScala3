@@ -17,4 +17,4 @@ case class PositionComponent(x: Double, y: Double) extends Component
 
 case class GravityComponent(gravity: Double) extends Component
 
-case class SpriteComponent(spritePath: String) extends Component
+case class SpriteComponent(spritePath: List[String]) extends Component
