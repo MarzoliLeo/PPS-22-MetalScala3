@@ -37,8 +37,8 @@ object Systems extends Observable[Event] {
     val pos = shooter.getComponent(classOf[PositionComponent]).get.asInstanceOf[PositionComponent]
     val dir = shooter.getComponent(classOf[DirectionComponent]).get.asInstanceOf[DirectionComponent]
     val xVelocity = dir.d match
-      case RIGHT => 1
-      case LEFT => -1
+      case RIGHT => 20
+      case LEFT => -20
     manager.addEntity(
       BulletEntity()
         .addComponent(PositionComponent(pos.x, pos.y))

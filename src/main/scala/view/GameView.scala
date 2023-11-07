@@ -1,7 +1,7 @@
 package view
 
 import javafx.application.Platform
-import javafx.scene.layout.FlowPane
+import javafx.scene.layout.{Border, BorderStroke, BorderStrokeStyle, FlowPane, Pane}
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.Box
 import javafx.scene.{Node, Scene}
@@ -18,7 +18,7 @@ import java.util.UUID
 trait GameView extends View
 
 private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Event]]) extends GameView with BasicInputHandler with Observer[Event] {
-  val root: FlowPane = FlowPane()
+  val root: Pane = Pane()
   private var entityIdToView: Map[UUID, Node] = Map()
 
   //Creazione della scena di gioco (Diversa da quella del Menù).
