@@ -9,11 +9,11 @@ import javafx.scene.layout.{GridPane, Pane}
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.Box
 import javafx.stage.Stage
-import model.ecs.components.{GravityComponent, PositionComponent}
+import model.ecs.components.{ColliderComponent, GravityComponent, PositionComponent, Size}
 import model.ecs.entities.{EntityManager, PlayerEntity}
 import model.ecs.systems.Systems.{gravitySystem, inputMovementSystem}
+import model.ecs.systems.{CollisionSystem, SystemManager, Systems}
 import model.engine.Engine
-import model.ecs.systems.{SystemManager, Systems}
 import view.{GameView, View}
 
 trait MainMenu extends View:
@@ -46,15 +46,25 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
   getButton(root, "Exit").setOnAction((_: ActionEvent) => handleExitButton())
 
   def handleStartButton(): Unit =
-    val gameView = GameView(parentStage, Set(entityManager, Systems, gameEngine))
-    entityManager.addEntity(
-      PlayerEntity()
-        .addComponent(PositionComponent(100, 100))
-        .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
-    )
+    val gameView =
+      GameView(parentStage, Set(entityManager, Systems, gameEngine))
+    entityManager
+      .addEntity(
+        PlayerEntity()
+          .addComponent(PositionComponent(100, 100))
+          .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
+          .addComponent(ColliderComponent(Size(50, 50)))
+      )
+      .addEntity(
+        PlayerEntity()
+          .addComponent(PositionComponent(200, 100))
+          .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
+          .addComponent(ColliderComponent(Size(50, 50)))
+      )
     systemManager
       .addSystem(inputMovementSystem)
       .addSystem(gravitySystem)
+      .addSystem(entityManager => CollisionSystem(entityManager))
     parentStage.getScene.setRoot(gameView)
     gameEngine.start()
 
@@ -65,7 +75,6 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
   override def startButton: Button = getButton(root, "Start")
 
   override def exitButton: Button = getButton(root, "Exit")
-
 
 object MainMenu:
   def apply(parentStage: Stage): MainMenu =

@@ -1,13 +1,14 @@
 import javafx.scene.input.KeyCode
 import javafx.scene.paint.Color
-import model.ecs.components.{GravityComponent, PositionComponent}
-import model.ecs.entities.{EntityManager, PlayerEntity}
+import model.ecs.components.{Component, GravityComponent, PositionComponent}
+import model.ecs.entities.{Entity, EntityManager, PlayerEntity}
 import model.ecs.systems.SystemManager
 import model.ecs.systems.Systems.{gravitySystem, inputMovementSystem, passiveMovementSystem}
 import model.event.observer.Observable
 import model.utilities.{Cons, Empty, Stack}
 
 import scala.collection.mutable
+import scala.reflect.{ClassTag, classTag}
 
 package object model:
   val GUIWIDTH: Int = 1500
