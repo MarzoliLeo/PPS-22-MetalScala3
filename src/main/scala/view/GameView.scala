@@ -4,7 +4,7 @@ import javafx.animation.{ParallelTransition, PathTransition, TranslateTransition
 import javafx.application.Platform
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.scene.image.{Image, ImageView}
-import javafx.scene.layout.FlowPane
+import javafx.scene.layout.Pane
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.*
 import javafx.scene.{Node, Scene}
@@ -22,7 +22,7 @@ import java.util.UUID
 trait GameView extends View
 
 private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Event]]) extends GameView with BasicInputHandler with Observer[Event] {
-  val root: FlowPane = FlowPane()
+  val root: Pane = Pane()
   private var entityIdToView: Map[UUID, Node] = Map()
   private var isAnimationMovingOn = false
   private var isAnimationJumpingOn = false
