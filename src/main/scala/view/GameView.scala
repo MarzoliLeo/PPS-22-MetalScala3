@@ -25,6 +25,7 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
   val root: FlowPane = FlowPane()
   private var entityIdToView: Map[UUID, Node] = Map()
   private var isAnimationMovingOn = false
+  private var isAnimationJumpingOn = false
 
   //Creazione della scena di gioco (Diversa da quella del Menù).
   private val scene: Scene = Scene(root, model.GUIWIDTH, model.GUIHEIGHT)
@@ -40,7 +41,6 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
         case Move(entityID, sprite, position, duration) =>
           val entityToShow = entityIdToView(entityID)
           if (!isAnimationMovingOn && model.isTouchingGround) {
-            // Remove the old player image
             reUpdateView(entityID, sprite, 1, position)
             val moveTransition = moveAnimation(entityToShow, position, duration)
             moveTransition.setOnFinished(_ =>
@@ -51,17 +51,27 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
             isAnimationMovingOn = true
             model.isTouchingGround = false
           }
-
+          //CODICE ORIGINALE: lo tengo perché così faccio il paragone fra l'animazione e non.
           //entityToShow.setTranslateX(position.x)
           //entityToShow.setTranslateY(position.y)
         case Tick() =>
           entityIdToView.foreach((_, view) => root.getChildren.remove(view))
           entityIdToView.foreach((_, view) => root.getChildren.add(view))
-        case Jump(entityID, jumpHeight, duration) =>
-          val entityToShow = entityIdToView(entityID)
-          val startY = entityToShow.getTranslateY
-          val jumpTransition = jumpAnimation(entityToShow, startY, jumpHeight, duration)
-          jumpTransition.play()
+        case Jump(entityID, sprite, position, jumpHeight, duration) =>
+          reUpdateView(entityID, sprite, 2, position)
+          // Ricordarsi che la jump animation prende il nuovo sprite che ho appena creato (dentro reUpdateView),
+          // e non quello originale.
+          val entityToMakeJump = entityIdToView(entityID)
+          if(!isAnimationJumpingOn && model.isTouchingGround) {
+            val jumpTransition = jumpAnimation(entityToMakeJump, position.y, jumpHeight, duration)
+            jumpTransition.setOnFinished(_ =>
+              isAnimationJumpingOn = false
+              reUpdateView(entityID, sprite, 0, position)
+            )
+            jumpTransition.play()
+            isAnimationJumpingOn = true
+            model.isTouchingGround = false
+          }
         case Gravity(entityID, position) =>
           val entityToShow = entityIdToView(entityID)
           entityToShow.setTranslateY(position.y)
@@ -77,18 +87,18 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
     box
 
 
-  private def jumpAnimation(entity: Node, startYPosition: Double, jumpHeight: Double, durationSeconds: Double): TranslateTransition= {
+  private def jumpAnimation(node: Node, startYPosition: Double, jumpHeight: Double, durationSeconds: Double): TranslateTransition= {
     val numerOfCyclesPerAnimation = 2
-    val translateYTransition = new TranslateTransition(Duration.seconds(durationSeconds), entity)
+    val translateYTransition = new TranslateTransition(Duration.seconds(durationSeconds), node)
     translateYTransition.setToY(startYPosition - jumpHeight)
     translateYTransition.setCycleCount(numerOfCyclesPerAnimation)
     translateYTransition.setAutoReverse(true)
     translateYTransition
     }
 
-  private def moveAnimation(entity: Node, positionComponent: PositionComponent, durationSeconds: Double): TranslateTransition = {
-    val translateTransition = new TranslateTransition(Duration.seconds(durationSeconds), entity)
-    translateTransition.setFromX(entity.getTranslateX)
+  private def moveAnimation(node: Node, positionComponent: PositionComponent, durationSeconds: Double): TranslateTransition = {
+    val translateTransition = new TranslateTransition(Duration.seconds(durationSeconds), node)
+    translateTransition.setFromX(node.getTranslateX)
     translateTransition.setToX(positionComponent.x)
     translateTransition.setCycleCount(1)
     translateTransition.setAutoReverse(false)

@@ -39,9 +39,19 @@ object Systems extends Observable[Event] {
         notifyObservers(Move(entity.id, currentSprite, pos, model.MOVEMENT_DURATION))
 
   private def jumpEntity(entity: Entity, duration: Double): Unit =
+    val currentPosition = entity
+      .getComponent(classOf[PositionComponent])
+      .get
+      .asInstanceOf[PositionComponent]
+
+    val currentSprite = entity
+      .getComponent(classOf[SpriteComponent])
+      .get
+      .asInstanceOf[SpriteComponent]
+
     try {
       model.isGravityEnabled = false
-      notifyObservers(Jump(entity.id, model.JUMP_MOVEMENT_VELOCITY, duration))
+      notifyObservers(Jump(entity.id, currentSprite, currentPosition, model.JUMP_MOVEMENT_VELOCITY, duration))
     } finally {
       model.isGravityEnabled = true
     }
