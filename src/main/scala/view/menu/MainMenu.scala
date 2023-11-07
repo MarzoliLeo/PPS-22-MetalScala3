@@ -9,9 +9,9 @@ import javafx.scene.layout.{GridPane, Pane}
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.Box
 import javafx.stage.Stage
-import model.ecs.components.{GravityComponent, PositionComponent}
+import model.ecs.components.{DirectionComponent, GravityComponent, PositionComponent, RIGHT}
 import model.ecs.entities.{EntityManager, PlayerEntity}
-import model.ecs.systems.Systems.{gravitySystem, inputMovementSystem}
+import model.ecs.systems.Systems.{bulletMovementSystem, gravitySystem, inputMovementSystem}
 import model.engine.Engine
 import model.ecs.systems.{SystemManager, Systems}
 import view.{GameView, View}
@@ -49,12 +49,14 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
     val gameView = GameView(parentStage, Set(entityManager, Systems, gameEngine))
     entityManager.addEntity(
       PlayerEntity()
-        .addComponent(PositionComponent(100, 100))
+        .addComponent(PositionComponent(0, 0))
         .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
+        .addComponent(DirectionComponent(RIGHT))
     )
     systemManager
       .addSystem(inputMovementSystem)
       .addSystem(gravitySystem)
+      .addSystem(bulletMovementSystem)
     parentStage.getScene.setRoot(gameView)
     gameEngine.start()
 

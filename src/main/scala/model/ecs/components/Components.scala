@@ -16,3 +16,7 @@ sealed trait Component {
 case class PositionComponent(x: Double, y: Double) extends Component
 
 case class GravityComponent(gravity: Double) extends Component
+
+case class DirectionComponent(d: Direction) extends Component
+
+case class VelocityComponent(x: Double, y: Double) extends Component

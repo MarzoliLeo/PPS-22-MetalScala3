@@ -1,7 +1,7 @@
 package model.ecs.systems
 import javafx.scene.input.KeyCode
-import model.ecs.components.{Component, GravityComponent, PositionComponent}
-import model.ecs.entities.{Entity, EntityManager, PlayerEntity}
+import model.ecs.components.{Component, Direction, DirectionComponent, GravityComponent, LEFT, PositionComponent, RIGHT, VelocityComponent}
+import model.ecs.entities.{BulletEntity, Entity, EntityManager, PlayerEntity}
 import model.event.Event
 import model.event.Event.Move
 import model.event.observer.Observable
@@ -9,6 +9,7 @@ import model.inputsQueue
 import model.utilities.Empty
 
 import java.awt.Component
+import scala.runtime.Nothing$
 
 // TODO: apply DRY principle when possible
 object Systems extends Observable[Event] {
@@ -32,6 +33,26 @@ object Systems extends Observable[Event] {
         entity.replaceComponent(pos)
         notifyObservers(Move(entity.id, pos))
 
+  private def shootBullet(shooter: Entity, manager: EntityManager): Unit =
+    val pos = shooter.getComponent(classOf[PositionComponent]).get.asInstanceOf[PositionComponent]
+    val dir = shooter.getComponent(classOf[DirectionComponent]).get.asInstanceOf[DirectionComponent]
+    val xVelocity = dir.d match
+      case RIGHT => 1
+      case LEFT => -1
+    manager.addEntity(
+      BulletEntity()
+        .addComponent(PositionComponent(pos.x, pos.y))
+        .addComponent(VelocityComponent(xVelocity, 0))
+    )
+
+  val bulletMovementSystem: EntityManager => Unit = manager =>
+    manager.getEntitiesByClass(classOf[BulletEntity]).foreach { bullet =>
+      val pos = bullet.getComponent(classOf[PositionComponent]).get.asInstanceOf[PositionComponent]
+      val vel = bullet.getComponent(classOf[VelocityComponent]).get.asInstanceOf[VelocityComponent]
+      val nextPos = PositionComponent(pos.x + vel.x, pos.y + vel.y)
+      bullet.replaceComponent(nextPos)
+      notifyObservers(Move(bullet.id, nextPos))
+    }
 
   val passiveMovementSystem: EntityManager => Unit = manager =>
     manager
@@ -44,9 +65,14 @@ object Systems extends Observable[Event] {
         case Some(command) =>
           command match {
             case KeyCode.W => moveEntity(entity, 0, -model.JUMP_MOVEMENT_VELOCITY)
-            case KeyCode.A => moveEntity(entity, -model.INPUT_MOVEMENT_VELOCITY, 0)
+            case KeyCode.A =>
+              moveEntity(entity, -model.INPUT_MOVEMENT_VELOCITY, 0)
+              entity.replaceComponent(DirectionComponent(LEFT))
             case KeyCode.S => moveEntity(entity, 0, model.INPUT_MOVEMENT_VELOCITY)
-            case KeyCode.D => moveEntity(entity, model.INPUT_MOVEMENT_VELOCITY, 0)
+            case KeyCode.D =>
+              moveEntity(entity, model.INPUT_MOVEMENT_VELOCITY, 0)
+              entity.replaceComponent(DirectionComponent(RIGHT))
+            case KeyCode.SPACE => shootBullet(entity, manager)
           }
         case None => ()
       }

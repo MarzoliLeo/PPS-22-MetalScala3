@@ -36,6 +36,7 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
           val box = entityIdToView(entity)
           box.setTranslateX(position.x)
           box.setTranslateY(position.y)
+         // print(entity.toString + " " + box.getLayoutX + "\n")
         case Tick() =>
           entityIdToView.foreach((_, view) => root.getChildren.remove(view))
           entityIdToView.foreach((_, view) => root.getChildren.add(view))
