@@ -1,7 +1,7 @@
 package view
 
 import javafx.application.Platform
-import javafx.scene.layout.FlowPane
+import javafx.scene.layout.{FlowPane, Pane}
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.Box
 import javafx.scene.{Node, Scene}
@@ -18,7 +18,7 @@ import java.util.UUID
 trait GameView extends View
 
 private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Event]]) extends GameView with BasicInputHandler with Observer[Event] {
-  val root: FlowPane = FlowPane()
+  val root: Pane = Pane()
   private var entityIdToView: Map[UUID, Node] = Map()
 
   //Creazione della scena di gioco (Diversa da quella del Menù).
@@ -30,7 +30,7 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
   override def update(subject: Event): Unit =
     Platform.runLater { () =>
       subject match
-        case Spawn(entity, ofType, position) =>
+        case Spawn(entity, _, position) =>
           entityIdToView = entityIdToView + (entity -> createBoxView(position))
         case Move(entity, position) =>
           val box = entityIdToView(entity)

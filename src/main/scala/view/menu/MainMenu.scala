@@ -9,7 +9,8 @@ import javafx.scene.layout.{GridPane, Pane}
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.Box
 import javafx.stage.Stage
-import model.ecs.components.{ColliderComponent, GravityComponent, PositionComponent, Size}
+import model.COLLISION_SIZE
+import model.ecs.components.{ColliderComponent, GravityComponent, PlayerComponent, PositionComponent, Size}
 import model.ecs.entities.{EntityManager, PlayerEntity}
 import model.ecs.systems.Systems.{gravitySystem, inputMovementSystem}
 import model.ecs.systems.{CollisionSystem, SystemManager, Systems}
@@ -51,20 +52,20 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
     entityManager
       .addEntity(
         PlayerEntity()
+          .addComponent(PlayerComponent())
           .addComponent(PositionComponent(100, 100))
           .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
-          .addComponent(ColliderComponent(Size(50, 50)))
+          .addComponent(ColliderComponent(Size(COLLISION_SIZE, COLLISION_SIZE)))
       )
       .addEntity(
         PlayerEntity()
-          .addComponent(PositionComponent(200, 100))
+          .addComponent(PositionComponent(400, 100))
           .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
-          .addComponent(ColliderComponent(Size(50, 50)))
+          .addComponent(ColliderComponent(Size(COLLISION_SIZE, COLLISION_SIZE)))
       )
     systemManager
       .addSystem(inputMovementSystem)
       .addSystem(gravitySystem)
-      .addSystem(entityManager => CollisionSystem(entityManager))
     parentStage.getScene.setRoot(gameView)
     gameEngine.start()
 

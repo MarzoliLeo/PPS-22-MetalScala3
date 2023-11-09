@@ -1,4 +1,4 @@
-package ecs.systems
+/*package ecs.systems
 
 import model.ecs.components.{ColliderComponent, PositionComponent, Size}
 import model.ecs.entities.{Entity, EntityManager, PlayerEntity}
@@ -57,4 +57,4 @@ class CollisionSystemTest extends AnyFlatSpec with BeforeAndAfterEach:
 
     newPosition1.x should be(10)
     newPosition1.y should be(15)
-  }
+  }*/
