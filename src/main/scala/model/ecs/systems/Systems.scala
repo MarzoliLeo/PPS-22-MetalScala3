@@ -9,6 +9,7 @@ import model.event.Event.Move
 import model.event.observer.Observable
 import model.inputsQueue
 import model.utilities.Empty
+import model.ecs.systems.CollisionSystem.wouldCollide
 
 // TODO: apply DRY principle when possible
 object Systems extends Observable[Event]:
@@ -41,7 +42,7 @@ object Systems extends Observable[Event]:
         PositionComponent(currentPosition.x + dx, currentPosition.y + dy)
     }
 
-    if (!CollisionSystem.wouldCollide(entity, proposedPosition)) {
+    if (!(entity wouldCollide proposedPosition)) {
       updatePositionAndNotify(
         entity,
         proposedPosition,
@@ -108,7 +109,7 @@ object Systems extends Observable[Event]:
                 )
             }
 
-            if (!CollisionSystem.wouldCollide(entity, newPosition)) {
+            if (!(entity wouldCollide newPosition)) {
               updatePositionAndNotify(
                 entity,
                 newPosition,
