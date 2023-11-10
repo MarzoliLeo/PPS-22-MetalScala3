@@ -1,119 +1,124 @@
 package model.ecs.systems
 
 import javafx.scene.input.KeyCode
-import javafx.util.Pair
 import model.ecs.components.*
-import model.ecs.entities.{Entity, EntityManager, PlayerEntity}
+import model.ecs.entities.{Entity, EntityManager}
+import model.ecs.systems.CollisionSystem.{MovementAxis, wouldCollide}
 import model.event.Event
 import model.event.Event.Move
 import model.event.observer.Observable
 import model.inputsQueue
 import model.utilities.Empty
-import model.ecs.systems.CollisionSystem.wouldCollide
 
-// TODO: apply DRY principle when possible
 object Systems extends Observable[Event]:
 
   private def updatePositionAndNotify(
       entity: Entity,
-      positionComponent: PositionComponent,
-      eventType: Event
+      positionComponent: PositionComponent
   ): Unit = {
     entity.replaceComponent(positionComponent)
-    notifyObservers(eventType)
+    notifyObservers(Move(entity.id, positionComponent))
   }
 
-  private def moveEntity(entity: Entity, dx: Int, dy: Int): Unit = {
-    val currentPosition: PositionComponent = entity
+  /** Applies a boundary check to a position value, ensuring it stays within the
+    * bounds of the system.
+    * @param pos
+    *   The position value to check.
+    * @param max
+    *   The maximum value allowed for the position.
+    * @param size
+    *   The size of the object being checked.
+    * @return
+    *   The new position value after the boundary check has been applied.
+    */
+  def boundaryCheck(pos: Double, max: Double, size: Double): Double =
+    math.max(0.0, math.min(pos, max - size))
+
+
+  private def moveEntity(entity: Entity, dx: Double, dy: Double): Unit = {
+    val currentPosition = entity
       .getComponent(classOf[PositionComponent])
       .get
       .asInstanceOf[PositionComponent]
+    val collider = entity
+      .getComponent(classOf[ColliderComponent])
+      .get
+      .asInstanceOf[ColliderComponent]
 
-    val proposedPosition = currentPosition.x match {
-      case x if x < 0 =>
-        PositionComponent(0, currentPosition.y)
-
-      case x if x + 100 + model.INPUT_MOVEMENT_VELOCITY > model.GUIWIDTH =>
-        PositionComponent(
-          model.GUIWIDTH - 100 - model.INPUT_MOVEMENT_VELOCITY,
-          currentPosition.y
-        )
-      case _ =>
-        PositionComponent(currentPosition.x + dx, currentPosition.y + dy)
-    }
-
-    if (!(entity wouldCollide proposedPosition)) {
-      updatePositionAndNotify(
-        entity,
-        proposedPosition,
-        Move(entity.id, proposedPosition)
+    val movementAxis =
+      if (dx != 0) MovementAxis.Horizontal else MovementAxis.Vertical
+    val proposedPosition = PositionComponent(
+      boundaryCheck(
+        currentPosition.x + dx,
+        model.GUIWIDTH,
+        collider.size.width
+      ),
+      boundaryCheck(
+        currentPosition.y + dy,
+        model.GUIHEIGHT,
+        collider.size.height
       )
+    )
+
+    if (!entity.wouldCollide(proposedPosition, movementAxis)) {
+      updatePositionAndNotify(entity, proposedPosition)
     } else {
       // Handle the collision case here if needed
     }
   }
 
+  private def handleInput(command: KeyCode, entity: Entity): Unit =
+    command match {
+      case KeyCode.W => moveEntity(entity, 0, -model.JUMP_MOVEMENT_VELOCITY)
+      case KeyCode.A => moveEntity(entity, -model.INPUT_MOVEMENT_VELOCITY, 0)
+      case KeyCode.S => moveEntity(entity, 0, model.INPUT_MOVEMENT_VELOCITY)
+      case KeyCode.D => moveEntity(entity, model.INPUT_MOVEMENT_VELOCITY, 0)
+      case _         => println("[INPUT] Invalid key")
+    }
+
   val passiveMovementSystem: EntityManager => Unit = manager =>
     manager
       .getEntitiesWithComponent(classOf[PositionComponent])
-      .foreach(entity => moveEntity(entity, 1, 0))
+      .foreach(entity => moveEntity(entity, 1.0, 0))
 
   val inputMovementSystem: EntityManager => Unit = manager =>
     manager.getEntitiesWithComponent(classOf[PlayerComponent]).foreach {
       entity =>
-        inputsQueue.peek match {
-          case Some(command) =>
-            command match {
-              case KeyCode.W =>
-                moveEntity(entity, 0, -model.JUMP_MOVEMENT_VELOCITY)
-              case KeyCode.A =>
-                moveEntity(entity, -model.INPUT_MOVEMENT_VELOCITY, 0)
-              case KeyCode.S =>
-                moveEntity(entity, 0, model.INPUT_MOVEMENT_VELOCITY)
-              case KeyCode.D =>
-                moveEntity(entity, model.INPUT_MOVEMENT_VELOCITY, 0)
-            }
-          case None => ()
-        }
+        inputsQueue.peek.foreach(command => handleInput(command, entity))
         inputsQueue = inputsQueue.pop.getOrElse(Empty)
     }
 
-  val gravitySystem: EntityManager => Unit =
-      manager =>
-        manager
-          .getEntitiesWithComponent(
-            classOf[PositionComponent],
-            classOf[GravityComponent],
-            classOf[ColliderComponent]
+  val gravitySystem: EntityManager => Unit = manager =>
+    manager
+      .getEntitiesWithComponent(
+        classOf[PositionComponent],
+        classOf[GravityComponent],
+        classOf[ColliderComponent]
+      )
+      .foreach { entity =>
+        val currentPosition = entity
+          .getComponent(classOf[PositionComponent])
+          .get
+          .asInstanceOf[PositionComponent]
+        val gravityComp = entity
+          .getComponent(classOf[GravityComponent])
+          .get
+          .asInstanceOf[GravityComponent]
+        val collider = entity
+          .getComponent(classOf[ColliderComponent])
+          .get
+          .asInstanceOf[ColliderComponent]
+
+        val newPosition = PositionComponent(
+          currentPosition.x,
+          boundaryCheck(
+            currentPosition.y + gravityComp.gravity,
+            model.GUIHEIGHT,
+            collider.size.height
           )
-          .foreach { entity =>
-            val currentPosition = entity
-              .getComponent(classOf[PositionComponent])
-              .get
-              .asInstanceOf[PositionComponent]
+        )
 
-            val gravityToApply = entity
-              .getComponent(classOf[GravityComponent])
-              .get
-              .asInstanceOf[GravityComponent]
-
-            val newPosition = currentPosition.y match {
-              case y if y < 0 =>
-                PositionComponent(currentPosition.x, 0)
-              case y if y + 100 + gravityToApply.gravity > model.GUIHEIGHT =>
-                PositionComponent(currentPosition.x, model.GUIHEIGHT - 100)
-              case _ =>
-                PositionComponent(
-                  currentPosition.x,
-                  currentPosition.y + gravityToApply.gravity
-                )
-            }
-
-            if (!(entity wouldCollide newPosition)) {
-              updatePositionAndNotify(
-                entity,
-                newPosition,
-                Move(entity.id, newPosition)
-              )
-            }
-          }
+        if (!entity.wouldCollide(newPosition, MovementAxis.Vertical)) {
+          updatePositionAndNotify(entity, newPosition)
+        }
+      }

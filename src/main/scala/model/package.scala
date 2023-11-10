@@ -18,7 +18,8 @@ package object model:
   val JUMP_MOVEMENT_VELOCITY = 250
   val GRAVITY_VELOCITY = 10
 
-  val COLLISION_SIZE = 100
+  val VERTICAL_COLLISION_SIZE = 100
+  val HORIZONTAL_COLLISION_SIZE = 100
 
   var inputsQueue: Stack[KeyCode] = Empty
 

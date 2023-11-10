@@ -9,8 +9,8 @@ import javafx.scene.layout.{GridPane, Pane}
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.Box
 import javafx.stage.Stage
-import model.COLLISION_SIZE
-import model.ecs.components.{ColliderComponent, GravityComponent, PlayerComponent, PositionComponent, Size}
+import model.{HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
+import model.ecs.components.{ColliderComponent, ColorComponent, GravityComponent, PlayerComponent, PositionComponent, Size}
 import model.ecs.entities.{EntityManager, PlayerEntity}
 import model.ecs.systems.Systems.{gravitySystem, inputMovementSystem}
 import model.ecs.systems.{CollisionSystem, SystemManager, Systems}
@@ -54,24 +54,27 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
         PlayerEntity()
           .addComponent(PlayerComponent())
           .addComponent(PositionComponent(100, 100))
+          .addComponent(ColorComponent(Color.BLUE))
           .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
-          .addComponent(ColliderComponent(Size(COLLISION_SIZE, COLLISION_SIZE)))
+          .addComponent(ColliderComponent(Size(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)))
       )
       .addEntity(
         PlayerEntity()
           .addComponent(PositionComponent(400, 100))
+          .addComponent(ColorComponent(Color.RED))
           .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
-          .addComponent(ColliderComponent(Size(COLLISION_SIZE, COLLISION_SIZE)))
+          .addComponent(ColliderComponent(Size(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)))
       )
     systemManager
       .addSystem(inputMovementSystem)
-      .addSystem(gravitySystem)
+      //.addSystem(gravitySystem)
     parentStage.getScene.setRoot(gameView)
     gameEngine.start()
 
   def handleExitButton(): Unit =
     parentStage.close()
     gameEngine.stop()
+    System.exit(0)
 
   override def startButton: Button = getButton(root, "Start")
 
