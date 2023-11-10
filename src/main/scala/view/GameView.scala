@@ -34,9 +34,9 @@ private class GameViewImpl(
   observables.foreach(_.addObserver(this))
 
   // FOR DEBUG
-  private var entityIdToBoundingBox: Map[UUID, Rectangle] = Map()
+//  private var entityIdToBoundingBox: Map[UUID, Rectangle] = Map()
 
-  // FOR DEBUG
+/*  // FOR DEBUG
   private def createBoundingBox(
       entity: Entity,
       position: PositionComponent
@@ -61,7 +61,7 @@ private class GameViewImpl(
     rectangle.setTranslateY(position.y)
     rectangle
   }
-
+*/
   override def update(subject: Event): Unit =
     Platform.runLater { () =>
       subject match
@@ -76,11 +76,11 @@ private class GameViewImpl(
             .color
           entityIdToView =
             entityIdToView + (entityId -> createBoxView(position, entityColor))
-          entityIdToBoundingBox =
-            entityIdToBoundingBox + (entityId -> createBoundingBox(
-              targetEntity,
-              position
-            ))
+//          entityIdToBoundingBox =
+//            entityIdToBoundingBox + (entityId -> createBoundingBox(
+//              targetEntity,
+//              position
+//            ))
         case Move(entityId, position) =>
           val targetEntity = EntityManager().entities
             .filter(_.id == entityId)
@@ -89,16 +89,16 @@ private class GameViewImpl(
           box.setTranslateX(position.x)
           box.setTranslateY(position.y)
 
-          val boundingBox = entityIdToBoundingBox(entityId)
+          /*val boundingBox = entityIdToBoundingBox(entityId)
           boundingBox.setTranslateX(position.x)
-          boundingBox.setTranslateY(position.y)
+          boundingBox.setTranslateY(position.y)*/
         case Tick() =>
           entityIdToView.foreach((_, view) => root.getChildren.remove(view))
-          entityIdToBoundingBox.foreach((_, view) =>
+          entityIdToView.foreach((_, view) => root.getChildren.add(view))
+          /*entityIdToBoundingBox.foreach((_, view) =>
             root.getChildren.remove(view)
           )
-          entityIdToView.foreach((_, view) => root.getChildren.add(view))
-          entityIdToBoundingBox.foreach((_, view) => root.getChildren.add(view))
+          entityIdToBoundingBox.foreach((_, view) => root.getChildren.add(view))*/
     }
 
   private def createBoxView(position: PositionComponent, color: Color): Node =
