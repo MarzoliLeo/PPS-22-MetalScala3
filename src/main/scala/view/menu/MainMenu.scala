@@ -13,9 +13,8 @@ import model.{HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
 import model.ecs.components.{ColliderComponent, ColorComponent, GravityComponent, PlayerComponent, PositionComponent, Size}
 import model.ecs.components.{DirectionComponent, GravityComponent, PositionComponent, RIGHT}
 import model.ecs.entities.{EntityManager, PlayerEntity}
-import model.ecs.systems.Systems.{gravitySystem, inputMovementSystem}
-import model.ecs.systems.{CollisionSystem, SystemManager, Systems}
 import model.ecs.systems.Systems.{bulletMovementSystem, gravitySystem, inputMovementSystem}
+import model.ecs.systems.{CollisionSystem, SystemManager, Systems}
 import model.engine.Engine
 import view.{GameView, View}
 

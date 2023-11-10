@@ -12,6 +12,7 @@ import model.event.Event.Move
 import model.event.observer.Observable
 import model.inputsQueue
 import model.utilities.Empty
+import java.awt.Component
 
 object Systems extends Observable[Event]:
 
@@ -22,8 +23,7 @@ object Systems extends Observable[Event]:
     entity.replaceComponent(positionComponent)
     notifyObservers(Move(entity.id, positionComponent))
   }
-import java.awt.Component
-import scala.runtime.Nothing$
+
 
   /** Applies a boundary check to a position value, ensuring it stays within the
     * bounds of the system.
@@ -64,6 +64,25 @@ import scala.runtime.Nothing$
         collider.size.height
       )
     )
+
+    if (!entity.wouldCollide(proposedPosition, movementAxis)) {
+      updatePositionAndNotify(entity, proposedPosition)
+    } else {
+      // Handle the collision case here if needed
+    }
+
+  }
+
+  val bulletMovementSystem: EntityManager => Unit = manager =>
+    manager.getEntitiesByClass(classOf[BulletEntity]).foreach { bullet =>
+      val pos = bullet.getComponent(classOf[PositionComponent]).get.asInstanceOf[PositionComponent]
+      val vel = bullet.getComponent(classOf[VelocityComponent]).get.asInstanceOf[VelocityComponent]
+      val nextPos = PositionComponent(pos.x + vel.x, pos.y + vel.y)
+      bullet.replaceComponent(nextPos)
+      notifyObservers(Move(bullet.id, nextPos))
+    }
+
+
   private def shootBullet(shooter: Entity, manager: EntityManager): Unit =
     val pos = shooter.getComponent(classOf[PositionComponent]).get.asInstanceOf[PositionComponent]
     val dir = shooter.getComponent(classOf[DirectionComponent]).get.asInstanceOf[DirectionComponent]
@@ -76,32 +95,6 @@ import scala.runtime.Nothing$
         .addComponent(VelocityComponent(xVelocity, 0))
     )
 
-  val bulletMovementSystem: EntityManager => Unit = manager =>
-    manager.getEntitiesByClass(classOf[BulletEntity]).foreach { bullet =>
-      val pos = bullet.getComponent(classOf[PositionComponent]).get.asInstanceOf[PositionComponent]
-      val vel = bullet.getComponent(classOf[VelocityComponent]).get.asInstanceOf[VelocityComponent]
-      val nextPos = PositionComponent(pos.x + vel.x, pos.y + vel.y)
-      bullet.replaceComponent(nextPos)
-      notifyObservers(Move(bullet.id, nextPos))
-    }
-
-    if (!entity.wouldCollide(proposedPosition, movementAxis)) {
-      updatePositionAndNotify(entity, proposedPosition)
-    } else {
-      // Handle the collision case here if needed
-    }
-  }
-
-  private def handleInput(command: KeyCode, entity: Entity): Unit =
-    command match {
-      case KeyCode.W => moveEntity(entity, 0, -model.JUMP_MOVEMENT_VELOCITY)
-      case KeyCode.A => moveEntity(entity, -model.INPUT_MOVEMENT_VELOCITY, 0)
-      case KeyCode.S => moveEntity(entity, 0, model.INPUT_MOVEMENT_VELOCITY)
-      case KeyCode.D => moveEntity(entity, model.INPUT_MOVEMENT_VELOCITY, 0)
-      case KeyCode.SPACE => shootBullet(entity, manager)
-      case _         => println("[INPUT] Invalid key")
-    }
-
   val passiveMovementSystem: EntityManager => Unit = manager =>
     manager
       .getEntitiesWithComponent(classOf[PositionComponent])
@@ -110,7 +103,14 @@ import scala.runtime.Nothing$
   val inputMovementSystem: EntityManager => Unit = manager =>
     manager.getEntitiesWithComponent(classOf[PlayerComponent]).foreach {
       entity =>
-        inputsQueue.peek.foreach(command => handleInput(command, entity))
+        inputsQueue.peek.foreach {
+          case KeyCode.W => moveEntity(entity, 0, -model.JUMP_MOVEMENT_VELOCITY)
+          case KeyCode.A => moveEntity(entity, -model.INPUT_MOVEMENT_VELOCITY, 0)
+          case KeyCode.S => moveEntity(entity, 0, model.INPUT_MOVEMENT_VELOCITY)
+          case KeyCode.D => moveEntity(entity, model.INPUT_MOVEMENT_VELOCITY, 0)
+          case KeyCode.SPACE => shootBullet(entity, manager)
+          case _ => println("[INPUT] Invalid key")
+        }
         inputsQueue = inputsQueue.pop.getOrElse(Empty)
     }
 

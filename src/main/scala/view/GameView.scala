@@ -34,80 +34,26 @@ private class GameViewImpl(
   primaryStage.setScene(scene)
   observables.foreach(_.addObserver(this))
 
-  // FOR DEBUG
-//  private var entityIdToBoundingBox: Map[UUID, Rectangle] = Map()
 
-/*  // FOR DEBUG
-  private def createBoundingBox(
-      entity: Entity,
-      position: PositionComponent
-  ): Rectangle = {
-
-    val boundingBox =
-      entity.getBoundingBox // Assuming getBoundingBox is accessible
-
-    // first argument is width, second is height, third is x offset, fourth is y offset
-    val rectangle = Rectangle(
-      boundingBox.width,
-      boundingBox.height,
-      position.x,
-      position.y
-    )
-
-    rectangle.setStroke(Color.BLACK)
-    rectangle.setFill(Color.TRANSPARENT)
-    rectangle.toFront() // Brings the rectangle to the front
-
-    rectangle.setTranslateX(position.x)
-    rectangle.setTranslateY(position.y)
-    rectangle
-  }
-*/
   override def update(subject: Event): Unit =
     Platform.runLater { () =>
       subject match
         case Spawn(entityId, _, position) =>
-          val targetEntity = EntityManager().entities
-            .filter(_.id == entityId)
-            .head
-          val entityColor = targetEntity
-            .getComponent(classOf[ColorComponent])
-            .get
-            .asInstanceOf[ColorComponent]
-            .color
-          entityIdToView =
-            entityIdToView + (entityId -> createBoxView(position, entityColor))
-//          entityIdToBoundingBox =
-//            entityIdToBoundingBox + (entityId -> createBoundingBox(
-//              targetEntity,
-//              position
-//            ))
+          entityIdToView = entityIdToView + (entityId -> createBoxView(position))
         case Move(entityId, position) =>
-          val targetEntity = EntityManager().entities
-            .filter(_.id == entityId)
-            .head
           val box = entityIdToView(entityId)
           box.setTranslateX(position.x)
           box.setTranslateY(position.y)
-         // print(entity.toString + " " + box.getLayoutX + "\n")
-
-          /*val boundingBox = entityIdToBoundingBox(entityId)
-          boundingBox.setTranslateX(position.x)
-          boundingBox.setTranslateY(position.y)*/
         case Tick() =>
           entityIdToView.foreach((_, view) => root.getChildren.remove(view))
           entityIdToView.foreach((_, view) => root.getChildren.add(view))
-          /*entityIdToBoundingBox.foreach((_, view) =>
-            root.getChildren.remove(view)
-          )
-          entityIdToBoundingBox.foreach((_, view) => root.getChildren.add(view))*/
     }
 
-  private def createBoxView(position: PositionComponent, color: Color): Node =
+  private def createBoxView(position: PositionComponent): Node =
     val box = Box(100, 100, 100)
     box.setTranslateX(position.x)
     box.setTranslateY(position.y)
-    box.setMaterial(PhongMaterial(color))
+    box.setMaterial(PhongMaterial(Color.RED))
     box
 }
 

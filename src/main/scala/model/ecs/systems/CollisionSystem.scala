@@ -79,7 +79,9 @@ object CollisionSystem {
 
     private def getCollidingEntities: List[Entity] =
       val boundingBox = entity.getBoundingBox
-      EntityManager().entities.filter { otherEntity =>
+      EntityManager().entities
+        .filter(_.hasComponent(classOf[ColliderComponent]))
+        .filter { otherEntity =>
         !entity.isSameEntity(otherEntity) && isIntersecting(
           boundingBox,
           otherEntity.getBoundingBox
