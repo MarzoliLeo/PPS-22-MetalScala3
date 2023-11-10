@@ -12,8 +12,7 @@ import model.ecs.entities.EntityManager
 import model.ecs.systems.SystemManager
 import model.engine.Engine
 import model.input.InputHandler
-import view.GameView
-import view.menu.MainMenu
+import view.{GameView, MainMenu}
 
 class App extends Application:
   @Override

@@ -8,9 +8,9 @@ import model.ecs.components.{Component, Direction, DirectionComponent, GravityCo
 import model.ecs.entities.{BulletEntity, Entity, EntityManager, PlayerEntity}
 import model.ecs.systems.Systems.shootBullet
 import model.event.Event
-import model.event.Event.Move
+import model.event.Event.*
 import model.event.observer.Observable
-import model.inputsQueue
+import model.{JUMP_DURATION, inputsQueue}
 import model.utilities.Empty
 import java.awt.Component
 
@@ -65,6 +65,11 @@ object Systems extends Observable[Event]:
       )
     )
 
+    val currentSprite = entity
+      .getComponent(classOf[SpriteComponent])
+      .get
+      .asInstanceOf[SpriteComponent]
+
     if (!entity.wouldCollide(proposedPosition, movementAxis)) {
       updatePositionAndNotify(entity, proposedPosition)
     } else {
@@ -72,6 +77,24 @@ object Systems extends Observable[Event]:
     }
 
   }
+
+  private def jumpEntity(entity: Entity, duration: Double): Unit =
+    val currentPosition = entity
+      .getComponent(classOf[PositionComponent])
+      .get
+      .asInstanceOf[PositionComponent]
+
+    val currentSprite = entity
+      .getComponent(classOf[SpriteComponent])
+      .get
+      .asInstanceOf[SpriteComponent]
+
+    try {
+      model.isGravityEnabled = false
+      notifyObservers(Jump(entity.id, currentSprite, currentPosition, model.JUMP_MOVEMENT_VELOCITY, duration))
+    } finally {
+      model.isGravityEnabled = true
+    }
 
   val bulletMovementSystem: EntityManager => Unit = manager =>
     manager.getEntitiesByClass(classOf[BulletEntity]).foreach { bullet =>
@@ -104,7 +127,7 @@ object Systems extends Observable[Event]:
     manager.getEntitiesWithComponent(classOf[PlayerComponent]).foreach {
       entity =>
         inputsQueue.peek.foreach {
-          case KeyCode.W => moveEntity(entity, 0, -model.JUMP_MOVEMENT_VELOCITY)
+          case KeyCode.W => jumpEntity(entity, model.JUMP_DURATION)
           case KeyCode.A => moveEntity(entity, -model.INPUT_MOVEMENT_VELOCITY, 0)
           case KeyCode.S => moveEntity(entity, 0, model.INPUT_MOVEMENT_VELOCITY)
           case KeyCode.D => moveEntity(entity, model.INPUT_MOVEMENT_VELOCITY, 0)
@@ -115,11 +138,11 @@ object Systems extends Observable[Event]:
     }
 
   val gravitySystem: EntityManager => Unit = manager =>
-    manager
+    if (model.isGravityEnabled) {manager
       .getEntitiesWithComponent(
         classOf[PositionComponent],
         classOf[GravityComponent],
-        classOf[ColliderComponent]
+          classOf[ColliderComponent]
       )
       .foreach { entity =>
         val currentPosition = entity

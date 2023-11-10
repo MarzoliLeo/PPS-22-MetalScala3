@@ -1,4 +1,4 @@
-package view.menu
+package view
 
 import javafx.event.{ActionEvent, EventHandler}
 import javafx.fxml.FXMLLoader
@@ -12,6 +12,7 @@ import javafx.stage.Stage
 import model.{HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
 import model.ecs.components.{ColliderComponent, ColorComponent, GravityComponent, PlayerComponent, PositionComponent, Size}
 import model.ecs.components.{DirectionComponent, GravityComponent, PositionComponent, RIGHT}
+import model.ecs.components.{GravityComponent, PositionComponent, SpriteComponent}
 import model.ecs.entities.{EntityManager, PlayerEntity}
 import model.ecs.systems.Systems.{bulletMovementSystem, gravitySystem, inputMovementSystem}
 import model.ecs.systems.{CollisionSystem, SystemManager, Systems}
@@ -50,11 +51,13 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
   def handleStartButton(): Unit =
     val gameView =
       GameView(parentStage, Set(entityManager, Systems, gameEngine))
+    //Imposta il backend ECS.
     entityManager
       .addEntity(
         PlayerEntity()
           .addComponent(PlayerComponent())
           .addComponent(PositionComponent(100, 100))
+        .addComponent(SpriteComponent(model.playerSpriteList))
           .addComponent(ColorComponent(Color.BLUE))
           .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
           .addComponent(ColliderComponent(Size(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)))
