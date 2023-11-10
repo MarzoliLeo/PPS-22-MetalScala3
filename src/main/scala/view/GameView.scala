@@ -1,6 +1,7 @@
 package view
 
 import javafx.application.Platform
+import javafx.scene.layout.{Border, BorderStroke, BorderStrokeStyle, FlowPane, Pane}
 import javafx.scene.layout.{FlowPane, Pane}
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.{Box, Rectangle}
@@ -88,6 +89,7 @@ private class GameViewImpl(
           val box = entityIdToView(entityId)
           box.setTranslateX(position.x)
           box.setTranslateY(position.y)
+         // print(entity.toString + " " + box.getLayoutX + "\n")
 
           /*val boundingBox = entityIdToBoundingBox(entityId)
           boundingBox.setTranslateX(position.x)

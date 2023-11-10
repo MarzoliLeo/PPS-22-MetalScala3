@@ -36,3 +36,6 @@ trait Entity():
     signature.contains(componentType)
 
   def isSameEntity(entity: Entity): Boolean = entity.id == id
+
+  override def toString: String =
+    signature.toString()

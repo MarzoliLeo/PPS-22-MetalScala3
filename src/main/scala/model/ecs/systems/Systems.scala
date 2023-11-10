@@ -4,6 +4,9 @@ import javafx.scene.input.KeyCode
 import model.ecs.components.*
 import model.ecs.entities.{Entity, EntityManager}
 import model.ecs.systems.CollisionSystem.{MovementAxis, wouldCollide}
+import model.ecs.components.{Component, Direction, DirectionComponent, GravityComponent, LEFT, PositionComponent, RIGHT, VelocityComponent}
+import model.ecs.entities.{BulletEntity, Entity, EntityManager, PlayerEntity}
+import model.ecs.systems.Systems.shootBullet
 import model.event.Event
 import model.event.Event.Move
 import model.event.observer.Observable
@@ -19,6 +22,8 @@ object Systems extends Observable[Event]:
     entity.replaceComponent(positionComponent)
     notifyObservers(Move(entity.id, positionComponent))
   }
+import java.awt.Component
+import scala.runtime.Nothing$
 
   /** Applies a boundary check to a position value, ensuring it stays within the
     * bounds of the system.
@@ -59,6 +64,26 @@ object Systems extends Observable[Event]:
         collider.size.height
       )
     )
+  private def shootBullet(shooter: Entity, manager: EntityManager): Unit =
+    val pos = shooter.getComponent(classOf[PositionComponent]).get.asInstanceOf[PositionComponent]
+    val dir = shooter.getComponent(classOf[DirectionComponent]).get.asInstanceOf[DirectionComponent]
+    val xVelocity = dir.d match
+      case RIGHT => 20
+      case LEFT => -20
+    manager.addEntity(
+      BulletEntity()
+        .addComponent(PositionComponent(pos.x, pos.y))
+        .addComponent(VelocityComponent(xVelocity, 0))
+    )
+
+  val bulletMovementSystem: EntityManager => Unit = manager =>
+    manager.getEntitiesByClass(classOf[BulletEntity]).foreach { bullet =>
+      val pos = bullet.getComponent(classOf[PositionComponent]).get.asInstanceOf[PositionComponent]
+      val vel = bullet.getComponent(classOf[VelocityComponent]).get.asInstanceOf[VelocityComponent]
+      val nextPos = PositionComponent(pos.x + vel.x, pos.y + vel.y)
+      bullet.replaceComponent(nextPos)
+      notifyObservers(Move(bullet.id, nextPos))
+    }
 
     if (!entity.wouldCollide(proposedPosition, movementAxis)) {
       updatePositionAndNotify(entity, proposedPosition)
@@ -73,6 +98,7 @@ object Systems extends Observable[Event]:
       case KeyCode.A => moveEntity(entity, -model.INPUT_MOVEMENT_VELOCITY, 0)
       case KeyCode.S => moveEntity(entity, 0, model.INPUT_MOVEMENT_VELOCITY)
       case KeyCode.D => moveEntity(entity, model.INPUT_MOVEMENT_VELOCITY, 0)
+      case KeyCode.SPACE => shootBullet(entity, manager)
       case _         => println("[INPUT] Invalid key")
     }
 

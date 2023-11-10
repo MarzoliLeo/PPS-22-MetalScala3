@@ -11,9 +11,11 @@ import javafx.scene.shape.Box
 import javafx.stage.Stage
 import model.{HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
 import model.ecs.components.{ColliderComponent, ColorComponent, GravityComponent, PlayerComponent, PositionComponent, Size}
+import model.ecs.components.{DirectionComponent, GravityComponent, PositionComponent, RIGHT}
 import model.ecs.entities.{EntityManager, PlayerEntity}
 import model.ecs.systems.Systems.{gravitySystem, inputMovementSystem}
 import model.ecs.systems.{CollisionSystem, SystemManager, Systems}
+import model.ecs.systems.Systems.{bulletMovementSystem, gravitySystem, inputMovementSystem}
 import model.engine.Engine
 import view.{GameView, View}
 
@@ -57,6 +59,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
           .addComponent(ColorComponent(Color.BLUE))
           .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
           .addComponent(ColliderComponent(Size(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)))
+          .addComponent(DirectionComponent(RIGHT))
       )
       .addEntity(
         PlayerEntity()
@@ -68,6 +71,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
     systemManager
       .addSystem(inputMovementSystem)
       .addSystem(gravitySystem)
+      .addSystem(bulletMovementSystem)
     parentStage.getScene.setRoot(gameView)
     gameEngine.start()
 
