@@ -57,7 +57,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
         PlayerEntity()
           .addComponent(PlayerComponent())
           .addComponent(PositionComponent(100, 100))
-        .addComponent(SpriteComponent(model.playerSpriteList))
+          .addComponent(SpriteComponent(model.playerSpriteList))
           .addComponent(ColorComponent(Color.BLUE))
           .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
           .addComponent(ColliderComponent(Size(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)))

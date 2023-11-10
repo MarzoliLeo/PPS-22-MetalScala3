@@ -47,20 +47,20 @@ private class GameViewImpl(
           entityIdToView = entityIdToView + (entityID -> createSpriteView(sprite,0, position))
         case Move(entityID, sprite, position, duration) =>
           val entityToShow = entityIdToView(entityID)
-          if (!isAnimationMovingOn && model.isTouchingGround) {
-            reUpdateView(entityID, sprite, 1, position)
-            val moveTransition = moveAnimation(entityToShow, position, duration)
-            moveTransition.setOnFinished(_ =>
-              isAnimationMovingOn = false
-              reUpdateView(entityID, sprite, 0, position)
-            )
-            moveTransition.play()
-            isAnimationMovingOn = true
-            model.isTouchingGround = false
-          }
+//          if (!isAnimationMovingOn && model.isTouchingGround) {
+//            reUpdateView(entityID, sprite, 1, position)
+//            val moveTransition = moveAnimation(entityToShow, position, duration)
+//            moveTransition.setOnFinished(_ =>
+//              isAnimationMovingOn = false
+//              reUpdateView(entityID, sprite, 0, position)
+//            )
+//            moveTransition.play()
+//            isAnimationMovingOn = true
+//            model.isTouchingGround = false
+//          }
           //CODICE ORIGINALE: lo tengo perché così faccio il paragone fra l'animazione e non.
-          //entityToShow.setTranslateX(position.x)
-          //entityToShow.setTranslateY(position.y)
+          entityToShow.setTranslateX(position.x)
+          entityToShow.setTranslateY(position.y)
         case Tick() =>
           entityIdToView.foreach((_, view) => root.getChildren.remove(view))
           entityIdToView.foreach((_, view) => root.getChildren.add(view))
@@ -69,16 +69,17 @@ private class GameViewImpl(
           // Ricordarsi che la jump animation prende il nuovo sprite che ho appena creato (dentro reUpdateView),
           // e non quello originale.
           val entityToMakeJump = entityIdToView(entityID)
-          if(!isAnimationJumpingOn && model.isTouchingGround) {
-            val jumpTransition = jumpAnimation(entityToMakeJump, position.y, jumpHeight, duration)
-            jumpTransition.setOnFinished(_ =>
-              isAnimationJumpingOn = false
-              reUpdateView(entityID, sprite, 0, position)
-            )
-            jumpTransition.play()
-            isAnimationJumpingOn = true
-            model.isTouchingGround = false
-          }
+//          if(!isAnimationJumpingOn && model.isTouchingGround) {
+//            val jumpTransition = jumpAnimation(entityToMakeJump, position.y, jumpHeight, duration)
+//            jumpTransition.setOnFinished(_ =>
+//              isAnimationJumpingOn = false
+//              reUpdateView(entityID, sprite, 0, position)
+//            )
+//            jumpTransition.play()
+//            isAnimationJumpingOn = true
+//            model.isTouchingGround = false
+//          }
+          entityToMakeJump.setTranslateY(position.y - jumpHeight)
         case Gravity(entityID, position) =>
           val entityToShow = entityIdToView(entityID)
           entityToShow.setTranslateY(position.y)
