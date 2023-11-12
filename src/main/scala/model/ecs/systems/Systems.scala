@@ -8,6 +8,7 @@ import model.ecs.systems.Systems.shootBullet
 import model.event.Event
 import model.event.Event.*
 import model.event.observer.Observable
+import model.input.commands.*
 import model.utilities.Empty
 import model.{JUMP_DURATION, inputsQueue}
 
@@ -30,81 +31,6 @@ object Systems extends Observable[Event]:
   def boundaryCheck(pos: Double, max: Double, size: Double): Double =
     math.max(0.0, math.min(pos, max - size))
 
-  private def moveEntity(entity: Entity, dx: Double, dy: Double): Unit = {
-    val currentPosition = entity
-      .getComponent(classOf[PositionComponent])
-      .get
-      .asInstanceOf[PositionComponent]
-    val collider = entity
-      .getComponent(classOf[ColliderComponent])
-      .get
-      .asInstanceOf[ColliderComponent]
-
-    val movementAxis =
-      if (dx != 0) MovementAxis.Horizontal else MovementAxis.Vertical
-    val proposedPosition = PositionComponent(
-      boundaryCheck(
-        currentPosition.x + dx,
-        model.GUIWIDTH,
-        collider.size.width
-      ),
-      boundaryCheck(
-        currentPosition.y + dy,
-        model.GUIHEIGHT,
-        collider.size.height
-      )
-    )
-
-    val currentSprite = entity
-      .getComponent(classOf[SpriteComponent])
-      .get
-      .asInstanceOf[SpriteComponent]
-
-    if (!entity.wouldCollide(proposedPosition, movementAxis)) {
-      if currentSprite.spritePath.nonEmpty then
-        entity.replaceComponent(proposedPosition)
-        notifyObservers(
-          Move(
-            entity.id,
-            currentSprite,
-            proposedPosition,
-            model.MOVEMENT_DURATION
-          )
-        )
-    } else {
-      // Handle the collision case here if needed
-    }
-
-  }
-
-  private def jumpEntity(entity: Entity, duration: Double): Unit =
-    val currentPosition = entity
-      .getComponent(classOf[PositionComponent])
-      .get
-      .asInstanceOf[PositionComponent]
-
-    val currentSprite = entity
-      .getComponent(classOf[SpriteComponent])
-      .get
-      .asInstanceOf[SpriteComponent]
-
-    entity.replaceComponent(PositionComponent(currentPosition.x, currentPosition.y - model.JUMP_MOVEMENT_VELOCITY))
-
-    try {
-      model.isGravityEnabled = false
-      notifyObservers(
-        Jump(
-          entity.id,
-          currentSprite,
-          currentPosition,
-          model.JUMP_MOVEMENT_VELOCITY,
-          duration
-        )
-      )
-    } finally {
-      model.isGravityEnabled = true
-    }
-
   val bulletMovementSystem: EntityManager => Unit = manager =>
     manager.getEntitiesByClass(classOf[BulletEntity]).foreach { bullet =>
       val pos = bullet
@@ -116,7 +42,6 @@ object Systems extends Observable[Event]:
         .get
         .asInstanceOf[VelocityComponent]
       val nextPos = PositionComponent(pos.x + vel.x, pos.y + vel.y)
-      // bullet.replaceComponent(nextPos)
 
       val currentSprite = bullet
         .getComponent(classOf[SpriteComponent])
@@ -133,8 +58,6 @@ object Systems extends Observable[Event]:
             model.MOVEMENT_DURATION
           )
         )
-
-      // notifyObservers(Move(bullet.id, currentSprite, nextPos))
     }
 
   private def shootBullet(shooter: Entity, manager: EntityManager): Unit =
@@ -155,22 +78,16 @@ object Systems extends Observable[Event]:
         .addComponent(VelocityComponent(xVelocity, 0))
     )
 
-  val passiveMovementSystem: EntityManager => Unit = manager =>
-    manager
-      .getEntitiesWithComponent(classOf[PositionComponent])
-      .foreach(entity => moveEntity(entity, 1.0, 0))
-
   val inputMovementSystem: EntityManager => Unit = manager =>
     manager.getEntitiesWithComponent(classOf[PlayerComponent]).foreach {
       entity =>
         inputsQueue.peek.foreach {
-          case KeyCode.W => jumpEntity(entity, model.JUMP_DURATION)
-          case KeyCode.A =>
-            moveEntity(entity, -model.INPUT_MOVEMENT_VELOCITY, 0)
-          case KeyCode.S => moveEntity(entity, 0, model.INPUT_MOVEMENT_VELOCITY)
-          case KeyCode.D => moveEntity(entity, model.INPUT_MOVEMENT_VELOCITY, 0)
-          case KeyCode.SPACE => shootBullet(entity, manager)
-          case _             => println("[INPUT] Invalid key")
+          case KeyCode.W => JumpCommand(model.JUMP_DURATION).execute(entity, manager)
+          case KeyCode.A => MoveCommand(-model.INPUT_MOVEMENT_VELOCITY, 0).execute(entity, manager)
+          case KeyCode.S => MoveCommand(0, model.INPUT_MOVEMENT_VELOCITY).execute(entity, manager)
+          case KeyCode.D => MoveCommand(model.INPUT_MOVEMENT_VELOCITY, 0).execute(entity, manager)
+          case KeyCode.SPACE => ShootCommand().execute(entity, manager)
+          case _ => InvalidCommand.execute(entity, manager)
         }
         inputsQueue = inputsQueue.pop.getOrElse(Empty)
     }
