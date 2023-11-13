@@ -26,8 +26,8 @@ object Engine {
     private val gameLoop = GameLoop(Fps, this)
 
     // TODO: delete debug print
-    override def tick(): Unit =
-      systemManager.updateAll()
+    override def tick(elapsedTime: Long): Unit =
+      systemManager.updateAll(elapsedTime)
       notifyObservers(Tick())
 
     override def start(): Unit = {

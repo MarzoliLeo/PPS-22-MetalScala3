@@ -21,6 +21,7 @@ private[engine] object GameLoop {
 
     override def run(): Unit = {
       _status = Running
+        var lastTime = System.currentTimeMillis()
         while (_status != Stopped) {
           if (_status == Paused) {
             this.synchronized {
@@ -28,18 +29,20 @@ private[engine] object GameLoop {
               wait()
             }
           }
-          val start = System.currentTimeMillis()
+          val currentTime: Long = System.currentTimeMillis()
+          var elapsedTime: Long = currentTime - lastTime
 
           //Update all the systems.
-          gameEngine.tick()
+          gameEngine.tick(elapsedTime)
 
           //Wait for the next tick (calculating the time to wait).
-          val tickTime = System.currentTimeMillis() - start
+          val tickTime = System.currentTimeMillis() - currentTime
           //print("[Tick] Lo stato del sistema è: " + _status + "\n")
-          val deltaTime = (millisecond/fps) - tickTime
-          if (deltaTime > 0) {
-            Thread.sleep(deltaTime)
+          val timeTaken: Long = (millisecond/fps) - tickTime
+          if (timeTaken > 0) {
+            Thread.sleep(timeTaken)
           } else print("Slowing tickness\n")
+          lastTime = currentTime
         }
       }
 

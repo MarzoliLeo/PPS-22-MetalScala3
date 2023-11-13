@@ -10,7 +10,7 @@ import model.event.Event.*
 import model.event.observer.Observable
 import model.input.commands.*
 import model.utilities.Empty
-import model.{JUMP_DURATION, inputsQueue}
+import model.{GRAVITY_VELOCITY, JUMP_DURATION, inputsQueue}
 
 import java.awt.Component
 
@@ -18,8 +18,8 @@ object Systems extends Observable[Event]:
 
   /** Applies a boundary check to a position value, ensuring it stays within the
     * bounds of the system.
-   *
-   * @param pos
+    *
+    * @param pos
     *   The position value to check.
     * @param max
     *   The maximum value allowed for the position.
@@ -78,57 +78,120 @@ object Systems extends Observable[Event]:
         .addComponent(VelocityComponent(xVelocity, 0))
     )
 
-  val inputMovementSystem: EntityManager => Unit = manager =>
-    manager.getEntitiesWithComponent(classOf[PlayerComponent]).foreach {
+  val inputMovementSystem: Long => Unit = elapsedTime =>
+    EntityManager().getEntitiesWithComponent(classOf[PlayerComponent]).foreach {
       entity =>
         inputsQueue.peek.foreach {
-          case KeyCode.W => JumpCommand(model.JUMP_DURATION).execute(entity, manager)
-          case KeyCode.A => MoveCommand(-model.INPUT_MOVEMENT_VELOCITY, 0).execute(entity, manager)
-          case KeyCode.S => MoveCommand(0, model.INPUT_MOVEMENT_VELOCITY).execute(entity, manager)
-          case KeyCode.D => MoveCommand(model.INPUT_MOVEMENT_VELOCITY, 0).execute(entity, manager)
-          case KeyCode.SPACE => ShootCommand().execute(entity, manager)
-          case _ => InvalidCommand.execute(entity, manager)
+          case KeyCode.W =>
+            JumpCommand(model.JUMP_DURATION).execute(entity, elapsedTime)
+          case KeyCode.A =>
+            MoveCommand(-model.INPUT_MOVEMENT_VELOCITY, 0)
+              .execute(entity, elapsedTime)
+          case KeyCode.S =>
+            MoveCommand(0, model.INPUT_MOVEMENT_VELOCITY)
+              .execute(entity, elapsedTime)
+          case KeyCode.D =>
+            MoveCommand(model.INPUT_MOVEMENT_VELOCITY, 0)
+              .execute(entity, elapsedTime)
+          case KeyCode.SPACE => ShootCommand().execute(entity, elapsedTime)
+          case _             => InvalidCommand.execute(entity, elapsedTime)
         }
         inputsQueue = inputsQueue.pop.getOrElse(Empty)
     }
 
-  val gravitySystem: EntityManager => Unit = manager =>
+  val gravitySystem: Long => Unit = elapsedTime =>
     if (model.isGravityEnabled) {
-      manager
+      EntityManager()
         .getEntitiesWithComponent(
           classOf[PositionComponent],
           classOf[GravityComponent],
-          classOf[ColliderComponent]
+          classOf[ColliderComponent],
+          classOf[VelocityComponent]
         )
         .foreach { entity =>
           val currentPosition = entity
             .getComponent(classOf[PositionComponent])
             .get
             .asInstanceOf[PositionComponent]
-          val gravityComp = entity
-            .getComponent(classOf[GravityComponent])
-            .get
-            .asInstanceOf[GravityComponent]
           val collider = entity
             .getComponent(classOf[ColliderComponent])
             .get
             .asInstanceOf[ColliderComponent]
+          var velocity = entity
+            .getComponent(classOf[VelocityComponent])
+            .get
+            .asInstanceOf[VelocityComponent]
 
-          val newPosition = PositionComponent(
-            currentPosition.x,
-            boundaryCheck(
-              currentPosition.y + gravityComp.gravity,
-              model.GUIHEIGHT,
-              collider.size.height
-            )
+          // Check if the entity is colliding below
+          val collidingBelow =
+            currentPosition.y + collider.size.height >= model.GUIHEIGHT
+
+          // Set the gravity based on whether the entity is colliding below
+          val gravity = if (collidingBelow) 0 else model.GRAVITY_VELOCITY
+
+          // Update the vertical velocity
+          velocity = VelocityComponent(
+            velocity.x,
+            velocity.y + gravity * elapsedTime * 0.001
           )
 
-          entity.replaceComponent(newPosition)
-          notifyObservers(
-            Gravity(
-              entity.id,
-              newPosition,
-            )
-          )
+          // If the entity is at the bottom of the window, stop the fall
+          if (collidingBelow) {
+            velocity = VelocityComponent(velocity.x, 0)
+          }
+
+          entity.replaceComponent(velocity)
         }
     }
+
+  val FRICTION_FACTOR = 0.50 // Define a friction factor between 0 and 1
+  val VERTICAL_REDUCTION_FACTOR =
+    0.99 // Define a reduction factor for negative vertical velocity
+
+  val positionUpdateSystem: Long => Unit = elapsedTime =>
+    EntityManager()
+      .getEntitiesWithComponent(
+        classOf[PositionComponent],
+        classOf[VelocityComponent]
+      )
+      .foreach { entity =>
+        val currentPosition = entity
+          .getComponent(classOf[PositionComponent])
+          .get
+          .asInstanceOf[PositionComponent]
+        var velocity = entity
+          .getComponent(classOf[VelocityComponent])
+          .get
+          .asInstanceOf[VelocityComponent]
+
+        // Calculate the new position based on the velocity and elapsed time
+        val newPosition = PositionComponent(
+          currentPosition.x + velocity.x * elapsedTime * 0.001,
+          currentPosition.y + velocity.y * elapsedTime * 0.001
+        )
+        entity.replaceComponent(newPosition)
+
+        // Reduce the horizontal velocity by the friction factor
+        val newHorizontalVelocity = velocity.x * FRICTION_FACTOR
+
+        // Reduce the vertical velocity by the reduction factor if it's negative
+        val newVerticalVelocity =
+          if (velocity.y < 0) velocity.y * VERTICAL_REDUCTION_FACTOR
+          else velocity.y
+
+        velocity = VelocityComponent(newHorizontalVelocity, newVerticalVelocity)
+        entity.replaceComponent(velocity)
+
+        notifyObservers(
+          Move(
+            entity.id,
+            entity
+              .getComponent(classOf[SpriteComponent])
+              .get
+              .asInstanceOf[SpriteComponent],
+            newPosition,
+            model.MOVEMENT_DURATION
+          )
+        )
+
+      }

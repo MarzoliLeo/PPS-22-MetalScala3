@@ -12,6 +12,6 @@ trait GameEngine {
  * gameEngine.tick()
  * ```
  */
-  def tick(): Unit
+  def tick(elapsedTime: Long): Unit
 
 }
