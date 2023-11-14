@@ -14,24 +14,20 @@ trait Command {
 
 case class JumpCommand(duration: Double) extends Command {
   override def execute(entity: Entity, elapsedTime: Long): Unit = {
-    val velocity = entity
-      .getComponent(classOf[VelocityComponent])
-      .get
-      .asInstanceOf[VelocityComponent]
-    val position = entity
-      .getComponent(classOf[PositionComponent])
-      .get
-      .asInstanceOf[PositionComponent]
-
     // Only allow the entity to jump if it's not already jumping
-    val jumping = entity
+    val jumping: JumpingComponent = entity
       .getComponent(classOf[JumpingComponent])
-      .getOrElse(JumpingComponent(false))
+      .getOrElse(throw new Exception("Jumping component not found"))
       .asInstanceOf[JumpingComponent]
-
     if (!jumping.isJumping) {
+      val velocity: VelocityComponent = entity
+        .getComponent(classOf[VelocityComponent])
+        .get
+        .asInstanceOf[VelocityComponent]
+
       // Set the vertical velocity to the jump velocity
-      val newVelocity = VelocityComponent(velocity.x, -model.JUMP_MOVEMENT_VELOCITY)
+      val newVelocity =
+        VelocityComponent(velocity.x, -model.JUMP_MOVEMENT_VELOCITY)
       entity.replaceComponent(newVelocity)
 
       // Set the jumping component to true
@@ -39,36 +35,6 @@ case class JumpCommand(duration: Double) extends Command {
     }
   }
 }
-
-/* case class MoveCommand(dx: Double, dy: Double) extends Command {
-  override def execute(entity: Entity, elapsedTime: Long): Unit = {
-    val currentPosition = entity
-      .getComponent(classOf[PositionComponent])
-      .get
-      .asInstanceOf[PositionComponent]
-    val newVelocity = VelocityComponent(dx, dy)
-
-    val proposedPosition =
-      currentPosition + newVelocity * (elapsedTime / 100.0)
-
-    val currentSprite = entity
-      .getComponent(classOf[SpriteComponent])
-      .get
-      .asInstanceOf[SpriteComponent]
-
-    if currentSprite.spritePath.nonEmpty then
-        entity.replaceComponent(proposedPosition)
-        entity.replaceComponent(newVelocity)
-        notifyObservers(
-          Move(
-            entity.id,
-            currentSprite,
-            proposedPosition,
-            model.MOVEMENT_DURATION
-          )
-        )
-  }
-} */
 
 case class MoveCommand(dx: Double, dy: Double) extends Command {
   override def execute(entity: Entity, elapsedTime: Long): Unit = {

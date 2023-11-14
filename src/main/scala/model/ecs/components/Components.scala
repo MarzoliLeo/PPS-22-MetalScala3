@@ -18,7 +18,7 @@ case class DirectionComponent(d: Direction) extends Component
 case class ColliderComponent(size: Size) extends Component
 case class ColorComponent(color: Color) extends Component
 case class PlayerComponent() extends Component
-
+case class FallCountComponent(var count: Long) extends Component
 case class VelocityComponent(var x: Double, var y: Double) extends Component:
 
   def this(to: PositionComponent, from: PositionComponent) =
