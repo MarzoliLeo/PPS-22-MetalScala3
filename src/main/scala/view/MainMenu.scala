@@ -79,7 +79,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       .addSystem(gravitySystem)
       .addSystem(positionUpdateSystem)
     // .addSystem(collisionSystem)
-    // .addSystem(bulletMovementSystem)
+      .addSystem(bulletMovementSystem)
     parentStage.getScene.setRoot(gameView)
     gameEngine.start()
 

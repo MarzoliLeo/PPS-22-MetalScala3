@@ -50,7 +50,7 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
         case Tick(entities) =>
           entityIdToView.foreach((_, view) => root.getChildren.remove(view))
           entities.foreach(entity =>
-            if
+            if //1° Check - Se renderizzabile
               entity.hasComponent(classOf[PositionComponent])
               && entity.hasComponent(classOf[SpriteComponent])
               && entity.hasComponent(classOf[VelocityComponent])
@@ -64,8 +64,9 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
               entityToShow.setTranslateY(position.y)
               if velocity.x < 0 then
                 entityToShow.setScaleX(-1)
-              else
+              if velocity.x > 0 then
                 entityToShow.setScaleX(1)
+
           )
           entityIdToView.foreach((_, view) => root.getChildren.add(view))
     }
