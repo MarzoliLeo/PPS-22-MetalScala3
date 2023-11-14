@@ -25,8 +25,9 @@ package object model:
   var isGravityEnabled = true
   var isTouchingGround = false
   val playerSpriteList = List("sprites/MarcoRossi.png",
-                              "sprites/MarcoRossiMove.png",
-                              "sprites/MarcoRossiJump.png")
+                          "sprites/MarcoRossiMove.png",
+                          "sprites/MarcoRossiJump.png")
+  val bulletSpriteList = List("sprites/Bullet.png")
   val VERTICAL_COLLISION_SIZE = 100
   val HORIZONTAL_COLLISION_SIZE = 100
   var inputsQueue: Stack[Entity => Unit] = Empty
