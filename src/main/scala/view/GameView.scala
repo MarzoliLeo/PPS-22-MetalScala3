@@ -1,9 +1,10 @@
 package view
 
-import javafx.animation.{ParallelTransition, PathTransition, TranslateTransition}
+import javafx.animation.TranslateTransition
 import javafx.application.Platform
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.scene.image.{Image, ImageView}
+import javafx.scene.input.KeyCode
 import javafx.scene.layout.Pane
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.*
@@ -17,6 +18,7 @@ import model.event.Event
 import model.event.Event.*
 import model.event.observer.{Observable, Observer}
 import model.input.CommandsStackHandler
+import model.input.commands.Command
 
 import java.util.UUID
 
@@ -30,7 +32,14 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
 
   // Creazione della scena di gioco (Diversa da quella del Menù).
   private val scene: Scene = Scene(root, model.GUIWIDTH, model.GUIHEIGHT)
-  scene.setOnKeyPressed(handleInput)
+  scene.setOnKeyPressed { k =>
+    k.getCode match
+      case KeyCode.LEFT => handleInput(Command.left)
+      case KeyCode.RIGHT => handleInput(Command.right)
+      case KeyCode.UP => handleInput(Command.jump)
+      case KeyCode.SPACE => handleInput(Command.shoot)
+      case _ => ()
+  }
   primaryStage.setScene(scene)
   observables.foreach(_.addObserver(this))
 

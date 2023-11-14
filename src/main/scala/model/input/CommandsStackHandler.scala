@@ -1,11 +1,11 @@
 package model.input
 
-import javafx.scene.input.{KeyCode, KeyEvent}
-import jdk.internal.util.xml.impl.Input
+
+import model.ecs.entities.Entity
 import model.inputsQueue
 
 trait CommandsStackHandler extends InputHandler:
-  override def handleInput(keyEvent: KeyEvent): Unit = {
-    val newStack = inputsQueue.push(keyEvent.getCode)
+  override def handleInput(command: Entity => Unit): Unit = {
+    val newStack = inputsQueue.push(command)
     inputsQueue = newStack
   }

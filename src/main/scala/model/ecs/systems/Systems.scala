@@ -65,21 +65,9 @@ object Systems extends Observable[Event]:
   val inputMovementSystem: Long => Unit = elapsedTime =>
     EntityManager().getEntitiesWithComponent(classOf[PlayerComponent]).foreach {
       entity =>
-        inputsQueue.peek.foreach {
-          case KeyCode.W =>
-            JumpCommand(model.JUMP_DURATION).execute(entity, elapsedTime)
-          case KeyCode.A =>
-            MoveCommand(-model.INPUT_MOVEMENT_VELOCITY, 0)
-              .execute(entity, elapsedTime)
-          case KeyCode.S =>
-            MoveCommand(0, model.INPUT_MOVEMENT_VELOCITY)
-              .execute(entity, elapsedTime)
-          case KeyCode.D =>
-            MoveCommand(model.INPUT_MOVEMENT_VELOCITY, 0)
-              .execute(entity, elapsedTime)
-          case KeyCode.SPACE => ShootCommand().execute(entity, elapsedTime)
-          case _             => InvalidCommand.execute(entity, elapsedTime)
-        }
+        inputsQueue.peek match
+          case Some(command) => command(entity)
+          case None => ()
         inputsQueue = inputsQueue.pop.getOrElse(Empty)
     }
 
