@@ -100,6 +100,81 @@ object Systems extends Observable[Event]:
         }
     }
 
+  def updatePosition(entity: Entity, elapsedTime: Long): PositionComponent = {
+    val currentPosition = entity
+      .getComponent[PositionComponent]
+      .getOrElse(throw new Exception("Position not found"))
+    var velocity = entity
+      .getComponent[VelocityComponent]
+      .getOrElse(throw new Exception("Velocity not found"))
+    var newPositionX = currentPosition.x + velocity.x * elapsedTime * 0.001
+    var newPositionY = currentPosition.y + velocity.y * elapsedTime * 0.001
+
+    PositionComponent(
+      boundaryCheck(newPositionX, model.GUIWIDTH, HORIZONTAL_COLLISION_SIZE),
+      boundaryCheck(newPositionY, model.GUIHEIGHT, VERTICAL_COLLISION_SIZE)
+    )
+  }
+
+  def checkCollision(
+      entity: Entity,
+      newPosition: PositionComponent
+  ): Boolean = {
+    val potentialCollisions = EntityManager().getEntitiesWithComponent(
+      classOf[PositionComponent],
+      classOf[SizeComponent]
+    )
+    val size = entity.getComponent[SizeComponent].get
+
+    potentialCollisions.exists(otherEntity =>
+      !otherEntity.isSameEntity(entity) && CollisionSystem.isOverlapping(
+        newPosition,
+        size,
+        otherEntity.getComponent[PositionComponent].get,
+        otherEntity.getComponent[SizeComponent].get
+      )
+    )
+  }
+
+  def updateVelocity(
+      entity: Entity,
+      willCollide: Boolean
+  ): VelocityComponent = {
+    var velocity = entity
+      .getComponent[VelocityComponent]
+      .getOrElse(throw new Exception("Velocity not found"))
+    if (willCollide) {
+      velocity = VelocityComponent(0, velocity.y)
+    }
+    val newHorizontalVelocity = velocity.x * FRICTION_FACTOR
+    VelocityComponent(newHorizontalVelocity, velocity.y)
+  }
+
+  def updateJumpingState(entity: Entity): JumpingComponent = {
+    val currentPosition = entity
+      .getComponent[PositionComponent]
+      .getOrElse(throw new Exception("Position not found"))
+    val velocity = entity
+      .getComponent[VelocityComponent]
+      .getOrElse(throw new Exception("Velocity not found"))
+    val isTouchingGround =
+      currentPosition.y + VERTICAL_COLLISION_SIZE >= model.GUIHEIGHT && velocity.y >= 0
+    if (isTouchingGround) JumpingComponent(false)
+    else entity.getComponent[JumpingComponent].get
+  }
+
+  def notifyMovement(entity: Entity, newPosition: PositionComponent): Unit = {
+    val sprite = entity.getComponent[SpriteComponent].get
+    notifyObservers {
+      Move(
+        entity.id,
+        sprite,
+        newPosition,
+        model.MOVEMENT_DURATION
+      )
+    }
+  }
+
   val positionUpdateSystem: Long => Unit = elapsedTime =>
     EntityManager()
       .getEntitiesWithComponent(
@@ -108,80 +183,22 @@ object Systems extends Observable[Event]:
         classOf[JumpingComponent]
       )
       .foreach { entity =>
-        val currentPosition = entity
-          .getComponent[PositionComponent]
-          .getOrElse(
-            throw new Exception("Position not found")
-          )
-        var velocity = entity
-          .getComponent[VelocityComponent]
-          .getOrElse(throw new Exception("Velocity not found"))
-        val size = entity.getComponent[SizeComponent].get
+        var newPosition = updatePosition(entity, elapsedTime)
+        val willCollide = checkCollision(entity, newPosition)
+        val newVelocity =
+          val newVelocity = updateVelocity(entity, willCollide)
+          if willCollide then
+            // if there is a collision, we need to fix newPosition
+            entity.replaceComponent(newVelocity)
+            newPosition = updatePosition(entity, elapsedTime)
+            // we update velocity again, this time without collision (to apply friction)
+            updateVelocity(entity, willCollide)
+          else newVelocity
+        val newJumping = updateJumpingState(entity)
 
-        // Check if the player is touching the ground
-        val isTouchingGround =
-          currentPosition.y + VERTICAL_COLLISION_SIZE >= model.GUIHEIGHT && velocity.y >= 0
-        var newPositionX = currentPosition.x + velocity.x * elapsedTime * 0.001
-        var newPositionY = currentPosition.y + velocity.y * elapsedTime * 0.001
-
-        // Calculate the new position based on the velocity and elapsed time
-        var newPosition = PositionComponent(
-          boundaryCheck(
-            newPositionX,
-            model.GUIWIDTH,
-            HORIZONTAL_COLLISION_SIZE
-          ),
-          boundaryCheck(newPositionY, model.GUIHEIGHT, VERTICAL_COLLISION_SIZE)
-        )
-
-        // Check for potential collisions
-        val potentialCollisions = EntityManager().getEntitiesWithComponent(
-          classOf[PositionComponent],
-          classOf[SizeComponent]
-        )
-        val willCollide = potentialCollisions.exists(otherEntity =>
-          !otherEntity.isSameEntity(entity) && CollisionSystem.isOverlapping(
-            newPosition,
-            size,
-            otherEntity.getComponent[PositionComponent].get,
-            otherEntity.getComponent[SizeComponent].get
-          )
-        )
-
-        // If a collision would occur, set velocity.x to 0
-        if (willCollide) {
-          velocity = VelocityComponent(0, velocity.y)
-          newPositionX = currentPosition.x + velocity.x * elapsedTime * 0.001
-          newPosition = PositionComponent(
-            boundaryCheck(
-              newPositionX,
-              model.GUIWIDTH,
-              HORIZONTAL_COLLISION_SIZE
-            ),
-            boundaryCheck(newPositionY, model.GUIHEIGHT, VERTICAL_COLLISION_SIZE)
-          )
-        }
-
-        // Reduce the horizontal velocity by the friction factor
-        val newHorizontalVelocity = velocity.x * FRICTION_FACTOR
-
-        val newVelocity = VelocityComponent(newHorizontalVelocity, velocity.y)
         entity.replaceComponent(newVelocity)
-
         entity.replaceComponent(newPosition)
+        entity.replaceComponent(newJumping)
 
-        // If the player is touching the ground, update the JumpingComponent to false
-        if (isTouchingGround) {
-          val newJumping = JumpingComponent(false)
-          entity.replaceComponent(newJumping)
-        }
-        val sprite = entity.getComponent[SpriteComponent].get
-        notifyObservers {
-          Move(
-            entity.id,
-            sprite,
-            newPosition,
-            model.MOVEMENT_DURATION
-          )
-        }
+        notifyMovement(entity, newPosition)
       }
