@@ -12,7 +12,6 @@ import javafx.stage.Stage
 import javafx.util.Duration
 import model.ecs.components.*
 import model.ecs.entities.{Entity, EntityManager}
-import model.ecs.systems.CollisionSystem.getBoundingBox
 import model.event.Event
 import model.event.Event.*
 import model.event.observer.{Observable, Observer}
