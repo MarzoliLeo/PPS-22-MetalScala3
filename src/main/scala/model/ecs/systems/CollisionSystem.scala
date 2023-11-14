@@ -21,16 +21,12 @@ object CollisionSystem {
   }
 
   extension (entity: Entity)
-    private def retrieveComponent[T <: Component](
-        componentClass: Class[T]
-    ): Option[T] =
-      entity.getComponent(componentClass).asInstanceOf[Option[T]]
 
     private def getPositionComponent: Option[PositionComponent] =
-      retrieveComponent[PositionComponent](classOf[PositionComponent])
+      entity.getComponent[PositionComponent]
 
     private def getColliderComponent: Option[ColliderComponent] =
-      retrieveComponent[ColliderComponent](classOf[ColliderComponent])
+      entity.getComponent[ColliderComponent]
 
     def getBoundingBox: BoundingBox =
       val size = entity.getColliderComponent.get.size
@@ -93,22 +89,18 @@ object CollisionSystem {
       entityB: Entity
   ): Boolean = {
     val positionA = entityA
-      .getComponent(classOf[PositionComponent])
+      .getComponent[PositionComponent]
       .get
-      .asInstanceOf[PositionComponent]
     val positionB = entityB
-      .getComponent(classOf[PositionComponent])
+      .getComponent[PositionComponent]
       .get
-      .asInstanceOf[PositionComponent]
     val sizeA = entityA
-      .getComponent(classOf[ColliderComponent])
+      .getComponent[ColliderComponent]
       .get
-      .asInstanceOf[ColliderComponent]
       .size
     val sizeB = entityB
-      .getComponent(classOf[ColliderComponent])
+      .getComponent[ColliderComponent]
       .get
-      .asInstanceOf[ColliderComponent]
       .size
 
     val checkedX =

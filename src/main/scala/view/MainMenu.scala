@@ -61,7 +61,6 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
               Size(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
             )
           )
-          .addComponent(FallCountComponent(0))
           .addComponent(JumpingComponent(false))
           .addComponent(VelocityComponent(0, 0))
           .addComponent(SpriteComponent(model.playerSpriteList))

@@ -16,14 +16,12 @@ case class JumpCommand(duration: Double) extends Command {
   override def execute(entity: Entity, elapsedTime: Long): Unit = {
     // Only allow the entity to jump if it's not already jumping
     val jumping: JumpingComponent = entity
-      .getComponent(classOf[JumpingComponent])
-      .getOrElse(throw new Exception("Jumping component not found"))
-      .asInstanceOf[JumpingComponent]
+      .getComponent[JumpingComponent]
+      .get
     if (!jumping.isJumping) {
       val velocity: VelocityComponent = entity
-        .getComponent(classOf[VelocityComponent])
+        .getComponent[VelocityComponent]
         .get
-        .asInstanceOf[VelocityComponent]
 
       // Set the vertical velocity to the jump velocity
       val newVelocity =
@@ -39,7 +37,7 @@ case class JumpCommand(duration: Double) extends Command {
 case class MoveCommand(dx: Double, dy: Double) extends Command {
   override def execute(entity: Entity, elapsedTime: Long): Unit = {
     val velocity = entity
-      .getComponent(classOf[VelocityComponent])
+      .getComponent[VelocityComponent]
       .get
       .asInstanceOf[VelocityComponent]
 
@@ -52,13 +50,11 @@ case class MoveCommand(dx: Double, dy: Double) extends Command {
 case class ShootCommand() extends Command {
   override def execute(entity: Entity, elapsedTime: Long): Unit = {
     val pos = entity
-      .getComponent(classOf[PositionComponent])
+      .getComponent[PositionComponent]
       .get
-      .asInstanceOf[PositionComponent]
     val dir = entity
-      .getComponent(classOf[DirectionComponent])
+      .getComponent[DirectionComponent]
       .get
-      .asInstanceOf[DirectionComponent]
     val xVelocity = dir.d match
       case RIGHT => 20
       case LEFT  => -20

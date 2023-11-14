@@ -18,7 +18,6 @@ case class DirectionComponent(d: Direction) extends Component
 case class ColliderComponent(size: Size) extends Component
 case class ColorComponent(color: Color) extends Component
 case class PlayerComponent() extends Component
-case class FallCountComponent(var count: Long) extends Component
 case class VelocityComponent(var x: Double, var y: Double) extends Component:
 
   def this(to: PositionComponent, from: PositionComponent) =
@@ -36,6 +35,6 @@ case class VelocityComponent(var x: Double, var y: Double) extends Component:
 
   @targetName("multiply")
   def *(fact: Double): VelocityComponent =
-    new VelocityComponent(x * fact, y * fact)
+    VelocityComponent(x * fact, y * fact)
 
   override def toString: String = s"VelocityComponent($x,$y)"

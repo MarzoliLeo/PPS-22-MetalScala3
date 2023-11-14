@@ -29,12 +29,8 @@ private case class EntityManagerImpl() extends EntityManager:
       Spawn (
         entity.id,
         entity.getClass,
-        entity.getComponent(classOf[SpriteComponent])
-            .getOrElse(SpriteComponent(model.playerSpriteList))
-            .asInstanceOf[SpriteComponent],
-        entity.getComponent(classOf[PositionComponent])
-          .getOrElse(PositionComponent(0,0))
-          .asInstanceOf[PositionComponent]
+        entity.getComponent[SpriteComponent].get,
+        entity.getComponent[PositionComponent].get
       )
     }
     entities = entities :+ entity
