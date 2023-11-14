@@ -116,7 +116,7 @@ object Systems extends Observable[Event]:
     )
   }
 
-  def checkCollision(
+  private def checkCollision(
       entity: Entity,
       newPosition: PositionComponent
   ): Boolean = {
@@ -136,7 +136,7 @@ object Systems extends Observable[Event]:
     )
   }
 
-  def updateVelocity(
+  private def updateVelocity(
       entity: Entity,
       willCollide: Boolean
   ): VelocityComponent = {
@@ -150,7 +150,7 @@ object Systems extends Observable[Event]:
     VelocityComponent(newHorizontalVelocity, velocity.y)
   }
 
-  def updateJumpingState(entity: Entity): JumpingComponent = {
+  private def updateJumpingState(entity: Entity): JumpingComponent = {
     val currentPosition = entity
       .getComponent[PositionComponent]
       .getOrElse(throw new Exception("Position not found"))
@@ -163,7 +163,7 @@ object Systems extends Observable[Event]:
     else entity.getComponent[JumpingComponent].get
   }
 
-  def notifyMovement(entity: Entity, newPosition: PositionComponent): Unit = {
+  private def notifyMovement(entity: Entity, newPosition: PositionComponent): Unit = {
     val sprite = entity.getComponent[SpriteComponent].get
     notifyObservers {
       Move(
