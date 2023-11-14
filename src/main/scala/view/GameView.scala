@@ -50,13 +50,22 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
         case Tick(entities) =>
           entityIdToView.foreach((_, view) => root.getChildren.remove(view))
           entities.foreach(entity =>
-            if entity.hasComponent(classOf[PositionComponent]) && entity.hasComponent(classOf[SpriteComponent]) then
+            if
+              entity.hasComponent(classOf[PositionComponent])
+              && entity.hasComponent(classOf[SpriteComponent])
+              && entity.hasComponent(classOf[VelocityComponent])
+            then
               val position = entity.getComponent[PositionComponent].get
               val sprite = entity.getComponent[SpriteComponent].get
+              val velocity = entity.getComponent[VelocityComponent].get
               entityIdToView = entityIdToView + (entity.id -> createSpriteView(sprite,0, position))
               val entityToShow = entityIdToView(entity.id)
               entityToShow.setTranslateX(position.x)
               entityToShow.setTranslateY(position.y)
+              if velocity.x < 0 then
+                entityToShow.setScaleX(-1)
+              else
+                entityToShow.setScaleX(1)
           )
           entityIdToView.foreach((_, view) => root.getChildren.add(view))
     }
@@ -68,7 +77,7 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
     box.setTranslateY(position.y)
     box.setMaterial(PhongMaterial(Color.RED))
     box
-  
+
 
   private def createSpriteView(spriteComponent: SpriteComponent, index: Int, position: PositionComponent): Node = {
     val imageView = new ImageView(new Image(spriteComponent.spritePath(index)))
