@@ -29,7 +29,7 @@ private case class EntityManagerImpl() extends EntityManager:
       Spawn (
         entity.id,
         entity.getClass,
-        entity.getComponent[SpriteComponent].get,
+        entity.getComponent[SpriteComponent].getOrElse(SpriteComponent(List("src/main/resources/sprites/MarcoRossi.png"))),
         entity.getComponent[PositionComponent].get
       )
     }
