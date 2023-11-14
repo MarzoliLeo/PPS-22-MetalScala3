@@ -43,8 +43,7 @@ object Systems extends Observable[Event]:
           boundaryCheck(newPositionY, model.GUIHEIGHT, VERTICAL_COLLISION_SIZE)
         )
         bullet.replaceComponent(newPosition)
-        //val nextPos = pos + vel
-        //bullet.replaceComponent(nextPos)
+
       }
     }
 

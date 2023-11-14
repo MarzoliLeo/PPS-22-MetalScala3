@@ -63,8 +63,13 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
               entityToShow.setTranslateX(position.x)
               entityToShow.setTranslateY(position.y)
               if velocity.x < 0 then
+                //per il bullet.
+                entity.replaceComponent(DirectionComponent(LEFT))
+                //per il player.
                 entityToShow.setScaleX(-1)
               if velocity.x > 0 then
+                //uguale a sopra. //TODO o entrambi con setScaleX(1) o entrambi con la directionComponent.
+                entity.replaceComponent(DirectionComponent(RIGHT))
                 entityToShow.setScaleX(1)
 
           )
