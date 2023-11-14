@@ -4,7 +4,6 @@ import model.ecs.components.*
 import model.ecs.entities.{BulletEntity, Entity, EntityManager, PlayerEntity}
 import model.ecs.systems.CollisionSystem.{MovementAxis, wouldCollide}
 import model.ecs.systems.Systems.{boundaryCheck, gravitySystem, notifyObservers}
-import model.event.Event.{Jump, Move}
 
 object Command:
   def jump(entity: Entity): Unit =

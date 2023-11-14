@@ -5,7 +5,6 @@ import model.*
 import model.ecs.components.*
 import model.ecs.entities.*
 import model.event.Event
-import model.event.Event.Move
 import model.event.observer.Observable
 import model.input.commands.*
 import model.utilities.Empty
@@ -39,14 +38,6 @@ object Systems extends Observable[Event]:
 
         if currentSprite.spritePath.nonEmpty then
           bullet.replaceComponent(nextPos)
-          notifyObservers(
-            Move(
-              bullet.id,
-              currentSprite,
-              nextPos,
-              model.MOVEMENT_DURATION
-            )
-          )
       }
     }
 
@@ -120,15 +111,6 @@ object Systems extends Observable[Event]:
         if (isTouchingGround) {
           val newJumping = JumpingComponent(false)
           entity.replaceComponent(newJumping)
-        }
-        val sprite = entity.getComponent[SpriteComponent].get
-        notifyObservers {
-          Move(
-            entity.id,
-            sprite,
-            newPosition,
-            model.MOVEMENT_DURATION
-          )
         }
       }
 

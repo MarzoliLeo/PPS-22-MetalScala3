@@ -29,7 +29,7 @@ object Engine {
     // TODO: delete debug print
     override def tick(elapsedTime: Long): Unit =
       systemManager.updateAll(elapsedTime)
-      notifyObservers(Tick())
+      notifyObservers(Tick(EntityManager().entities))
 
     override def start(): Unit = {
       // init()

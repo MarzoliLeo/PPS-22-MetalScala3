@@ -42,7 +42,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
 
   private val entityManager = EntityManager()
   private val systemManager = SystemManager(entityManager)
-  private val gameEngine = Engine(systemManager)
+  private val gameEngine = Engine()
   getButton(root, "Start").setOnAction((_: ActionEvent) => handleStartButton())
   getButton(root, "Exit").setOnAction((_: ActionEvent) => handleExitButton())
 
