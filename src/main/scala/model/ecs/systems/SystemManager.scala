@@ -4,12 +4,11 @@ import model.ecs.components.GravityComponent
 import model.ecs.entities.{BulletEntity, EntityManager, PlayerEntity}
 
 trait SystemManager:
-  protected type System = EntityManager => Unit
-
+  protected type System = Long => Unit
   var systems: List[System]
   def addSystem(system: System): SystemManager
   def removeSystem(system: System): SystemManager
-  def updateAll(): Unit
+  def updateAll(elapsedTime: Long): Unit
 
 private class SystemManagerImpl(var entityManager: EntityManager)
     extends SystemManager:
@@ -23,8 +22,8 @@ private class SystemManagerImpl(var entityManager: EntityManager)
     systems = systems.filterNot(_ == system)
     this
 
-  override def updateAll(): Unit =
-    systems.foreach(_(entityManager))
+  override def updateAll(elapsedTime: Long): Unit =
+    systems.foreach(_(elapsedTime))
 
 object SystemManager:
   def apply(entityManager: EntityManager): SystemManager = SystemManagerImpl(

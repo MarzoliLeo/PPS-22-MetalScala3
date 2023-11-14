@@ -16,18 +16,13 @@ import model.ecs.systems.CollisionSystem.getBoundingBox
 import model.event.Event
 import model.event.Event.*
 import model.event.observer.{Observable, Observer}
-import model.input.BasicInputHandler
+import model.input.CommandsStackHandler
 
 import java.util.UUID
 
 trait GameView extends View
 
-private class GameViewImpl(
-    primaryStage: Stage,
-    observables: Set[Observable[Event]]
-) extends GameView
-    with BasicInputHandler
-    with Observer[Event] {
+private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Event]]) extends GameView with CommandsStackHandler with Observer[Event] {
   val root: Pane = Pane()
   private var entityIdToView: Map[UUID, Node] = Map()
   private var isAnimationMovingOn = false

@@ -1,24 +1,21 @@
 package model.ecs.systems
 
 import javafx.scene.input.KeyCode
+import model.*
 import model.ecs.components.*
-import model.ecs.entities.{BulletEntity, Entity, EntityManager, PlayerEntity}
-import model.ecs.systems.CollisionSystem.{MovementAxis, wouldCollide}
-import model.ecs.systems.Systems.shootBullet
+import model.ecs.entities.*
 import model.event.Event
-import model.event.Event.*
+import model.event.Event.Move
 import model.event.observer.Observable
+import model.input.commands.*
 import model.utilities.Empty
-import model.{JUMP_DURATION, inputsQueue}
-
-import java.awt.Component
 
 object Systems extends Observable[Event]:
 
   /** Applies a boundary check to a position value, ensuring it stays within the
     * bounds of the system.
-   *
-   * @param pos
+    *
+    * @param pos
     *   The position value to check.
     * @param max
     *   The maximum value allowed for the position.
@@ -30,122 +27,32 @@ object Systems extends Observable[Event]:
   def boundaryCheck(pos: Double, max: Double, size: Double): Double =
     math.max(0.0, math.min(pos, max - size))
 
-  private def moveEntity(entity: Entity, dx: Double, dy: Double): Unit = {
-    val currentPosition = entity
-      .getComponent(classOf[PositionComponent])
-      .get
-      .asInstanceOf[PositionComponent]
-    val collider = entity
-      .getComponent(classOf[ColliderComponent])
-      .get
-      .asInstanceOf[ColliderComponent]
-
-    val movementAxis =
-      if (dx != 0) MovementAxis.Horizontal else MovementAxis.Vertical
-    val proposedPosition = PositionComponent(
-      boundaryCheck(
-        currentPosition.x + dx,
-        model.GUIWIDTH,
-        collider.size.width
-      ),
-      boundaryCheck(
-        currentPosition.y + dy,
-        model.GUIHEIGHT,
-        collider.size.height
-      )
-    )
-
-    val currentSprite = entity
-      .getComponent(classOf[SpriteComponent])
-      .get
-      .asInstanceOf[SpriteComponent]
-
-    if (!entity.wouldCollide(proposedPosition, movementAxis)) {
-      if currentSprite.spritePath.nonEmpty then
-        entity.replaceComponent(proposedPosition)
-        notifyObservers(
-          Move(
-            entity.id,
-            currentSprite,
-            proposedPosition,
-            model.MOVEMENT_DURATION
-          )
-        )
-    } else {
-      // Handle the collision case here if needed
-    }
-
-  }
-
-  private def jumpEntity(entity: Entity, duration: Double): Unit =
-    val currentPosition = entity
-      .getComponent(classOf[PositionComponent])
-      .get
-      .asInstanceOf[PositionComponent]
-
-    val currentSprite = entity
-      .getComponent(classOf[SpriteComponent])
-      .get
-      .asInstanceOf[SpriteComponent]
-
-    entity.replaceComponent(PositionComponent(currentPosition.x, currentPosition.y - model.JUMP_MOVEMENT_VELOCITY))
-
-    try {
-      model.isGravityEnabled = false
-      notifyObservers(
-        Jump(
-          entity.id,
-          currentSprite,
-          currentPosition,
-          model.JUMP_MOVEMENT_VELOCITY,
-          duration
-        )
-      )
-    } finally {
-      model.isGravityEnabled = true
-    }
-
   val bulletMovementSystem: EntityManager => Unit = manager =>
     manager.getEntitiesByClass(classOf[BulletEntity]).foreach { bullet =>
-      val pos = bullet
-        .getComponent(classOf[PositionComponent])
-        .get
-        .asInstanceOf[PositionComponent]
-      val vel = bullet
-        .getComponent(classOf[VelocityComponent])
-        .get
-        .asInstanceOf[VelocityComponent]
-      val nextPos = PositionComponent(pos.x + vel.x, pos.y + vel.y)
-      // bullet.replaceComponent(nextPos)
+      {
+        val pos = bullet.getComponent[PositionComponent].get
+        val vel = bullet.getComponent[VelocityComponent].get
+        val nextPos = pos + vel
 
-      val currentSprite = bullet
-        .getComponent(classOf[SpriteComponent])
-        .getOrElse(SpriteComponent(List("sprites/MarcoRossi.png")))
-        .asInstanceOf[SpriteComponent]
+        val currentSprite = bullet.getComponent[SpriteComponent]
+          .getOrElse(SpriteComponent(List("sprites/MarcoRossi.png")))
 
-      if currentSprite.spritePath.nonEmpty then
-        bullet.replaceComponent(nextPos)
-        notifyObservers(
-          Move(
-            bullet.id,
-            currentSprite,
-            nextPos,
-            model.MOVEMENT_DURATION
+        if currentSprite.spritePath.nonEmpty then
+          bullet.replaceComponent(nextPos)
+          notifyObservers(
+            Move(
+              bullet.id,
+              currentSprite,
+              nextPos,
+              model.MOVEMENT_DURATION
+            )
           )
-        )
-
-      // notifyObservers(Move(bullet.id, currentSprite, nextPos))
+      }
     }
 
   private def shootBullet(shooter: Entity, manager: EntityManager): Unit =
-    val pos = shooter
-      .getComponent(classOf[PositionComponent])
-      .get
-      .asInstanceOf[PositionComponent]
-    val dir = shooter
-      .getComponent(classOf[DirectionComponent])
-      .get
-      .asInstanceOf[DirectionComponent]
+    val pos = shooter.getComponent[PositionComponent].get
+    val dir = shooter.getComponent[DirectionComponent].get
     val xVelocity = dir.d match
       case RIGHT => 20
       case LEFT  => -20
@@ -155,63 +62,85 @@ object Systems extends Observable[Event]:
         .addComponent(VelocityComponent(xVelocity, 0))
     )
 
-  val passiveMovementSystem: EntityManager => Unit = manager =>
-    manager
-      .getEntitiesWithComponent(classOf[PositionComponent])
-      .foreach(entity => moveEntity(entity, 1.0, 0))
-
-  val inputMovementSystem: EntityManager => Unit = manager =>
-    manager.getEntitiesWithComponent(classOf[PlayerComponent]).foreach {
+  val inputMovementSystem: Long => Unit = elapsedTime =>
+    EntityManager().getEntitiesWithComponent(classOf[PlayerComponent]).foreach {
       entity =>
         inputsQueue.peek.foreach {
-          case KeyCode.W => jumpEntity(entity, model.JUMP_DURATION)
+          case KeyCode.W =>
+            JumpCommand(model.JUMP_DURATION).execute(entity, elapsedTime)
           case KeyCode.A =>
-            moveEntity(entity, -model.INPUT_MOVEMENT_VELOCITY, 0)
-          case KeyCode.S => moveEntity(entity, 0, model.INPUT_MOVEMENT_VELOCITY)
-          case KeyCode.D => moveEntity(entity, model.INPUT_MOVEMENT_VELOCITY, 0)
-          case KeyCode.SPACE => shootBullet(entity, manager)
-          case _             => println("[INPUT] Invalid key")
+            MoveCommand(-model.INPUT_MOVEMENT_VELOCITY, 0)
+              .execute(entity, elapsedTime)
+          case KeyCode.S =>
+            MoveCommand(0, model.INPUT_MOVEMENT_VELOCITY)
+              .execute(entity, elapsedTime)
+          case KeyCode.D =>
+            MoveCommand(model.INPUT_MOVEMENT_VELOCITY, 0)
+              .execute(entity, elapsedTime)
+          case KeyCode.SPACE => ShootCommand().execute(entity, elapsedTime)
+          case _             => InvalidCommand.execute(entity, elapsedTime)
         }
         inputsQueue = inputsQueue.pop.getOrElse(Empty)
     }
 
-  val gravitySystem: EntityManager => Unit = manager =>
+  val gravitySystem: Long => Unit = elapsedTime =>
     if (model.isGravityEnabled) {
-      manager
-        .getEntitiesWithComponent(
+      EntityManager().getEntitiesWithComponent(
           classOf[PositionComponent],
           classOf[GravityComponent],
-          classOf[ColliderComponent]
+          classOf[VelocityComponent]
         )
         .foreach { entity =>
-          val currentPosition = entity
-            .getComponent(classOf[PositionComponent])
-            .get
-            .asInstanceOf[PositionComponent]
-          val gravityComp = entity
-            .getComponent(classOf[GravityComponent])
-            .get
-            .asInstanceOf[GravityComponent]
-          val collider = entity
-            .getComponent(classOf[ColliderComponent])
-            .get
-            .asInstanceOf[ColliderComponent]
-
-          val newPosition = PositionComponent(
-            currentPosition.x,
-            boundaryCheck(
-              currentPosition.y + gravityComp.gravity,
-              model.GUIHEIGHT,
-              collider.size.height
-            )
-          )
-
-          entity.replaceComponent(newPosition)
-          notifyObservers(
-            Gravity(
-              entity.id,
-              newPosition,
-            )
-          )
+          val velocity = entity.getComponent[VelocityComponent].get
+          entity.replaceComponent(velocity + VelocityComponent(0, GRAVITY_VELOCITY * elapsedTime))
         }
     }
+
+  val positionUpdateSystem: Long => Unit = elapsedTime =>
+    EntityManager()
+      .getEntitiesWithComponent(
+        classOf[PositionComponent],
+        classOf[VelocityComponent],
+        classOf[JumpingComponent]
+      )
+      .foreach { entity =>
+        val currentPosition = entity.getComponent[PositionComponent].get
+        val velocity = entity.getComponent[VelocityComponent].get
+        val jumping = entity.getComponent[JumpingComponent].get
+        // Check if the player is touching the ground
+        val isTouchingGround = currentPosition.y + VERTICAL_COLLISION_SIZE >= model.GUIHEIGHT && velocity.y >= 0
+        val newPositionX = currentPosition.x + velocity.x * elapsedTime * 0.001
+        val newPositionY = currentPosition.y + velocity.y * elapsedTime * 0.001
+        // Calculate the new position based on the velocity and elapsed time
+        val newPosition = PositionComponent(
+          boundaryCheck(
+            newPositionX,
+            model.GUIWIDTH,
+            HORIZONTAL_COLLISION_SIZE
+          ),
+          boundaryCheck(newPositionY, model.GUIHEIGHT, VERTICAL_COLLISION_SIZE)
+        )
+        entity.replaceComponent(newPosition)
+
+        // Reduce the horizontal velocity by the friction factor
+        val newHorizontalVelocity = velocity.x * FRICTION_FACTOR
+
+        val newVelocity = VelocityComponent(newHorizontalVelocity, velocity.y)
+        entity.replaceComponent(newVelocity)
+
+        // If the player is touching the ground, update the JumpingComponent to false
+        if (isTouchingGround) {
+          val newJumping = JumpingComponent(false)
+          entity.replaceComponent(newJumping)
+        }
+        val sprite = entity.getComponent[SpriteComponent].get
+        notifyObservers {
+          Move(
+            entity.id,
+            sprite,
+            newPosition,
+            model.MOVEMENT_DURATION
+          )
+        }
+      }
+

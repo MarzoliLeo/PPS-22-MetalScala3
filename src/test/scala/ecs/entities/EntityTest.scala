@@ -11,7 +11,7 @@ class EntityTest extends AnyFunSuite {
 
   test("entity has position component") {
     assert(player.hasComponent(classOf[PositionComponent]))
-    assert(player.getComponent(classOf[PositionComponent]).contains(PositionComponent(0, 0)))
+    assert(player.getComponent[PositionComponent].contains(PositionComponent(0, 0)))
   }
 
   test("remove position component") {
@@ -22,6 +22,6 @@ class EntityTest extends AnyFunSuite {
   test("replace position component") {
     val newPosition = PositionComponent(1, 1)
     player.replaceComponent(newPosition)
-    assert(player.getComponent(classOf[PositionComponent]).contains(newPosition))
+    assert(player.getComponent[PositionComponent].contains(newPosition))
   }
 }

@@ -1,8 +1,8 @@
 package model.engine
 
-import model.ecs.systems.Systems.passiveMovementSystem
 import GameStatus.*
 import javafx.scene.paint.Color
+import model.Fps
 import model.ecs.components.PositionComponent
 import model.ecs.entities.{EntityManager, PlayerEntity}
 import model.ecs.systems.SystemManager
@@ -23,12 +23,12 @@ trait Engine extends GameEngine with Observable[Event]{
 object Engine {
   def apply(systemManager: SystemManager): Engine = new EngineImpl(systemManager)
   private class EngineImpl(systemManager: SystemManager) extends Engine {
-    private val Fps = 60
+
     private val gameLoop = GameLoop(Fps, this)
 
     // TODO: delete debug print
-    override def tick(): Unit =
-      systemManager.updateAll()
+    override def tick(elapsedTime: Long): Unit =
+      systemManager.updateAll(elapsedTime)
       notifyObservers(Tick())
 
     override def start(): Unit = {
