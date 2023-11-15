@@ -51,25 +51,20 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
             if
               entity.hasComponent(classOf[PositionComponent])
               && entity.hasComponent(classOf[SpriteComponent])
-              && entity.hasComponent(classOf[VelocityComponent])
+              && entity.hasComponent(classOf[DirectionComponent])
             then
               val position = entity.getComponent[PositionComponent].get
               val sprite = entity.getComponent[SpriteComponent].get
-              val velocity = entity.getComponent[VelocityComponent].get
+              val direction = entity.getComponent[DirectionComponent].get
 
-              velocity.x match
-                case 0 =>
-                    entityIdToView = entityIdToView + (entity.id -> createSpriteView(sprite,position))
-                case x if x < 0 =>
-                    entityIdToView = entityIdToView + (entity.id -> createSpriteView(sprite, position))
-                    //entityToShow.setScaleX(-1)
-                case x if x > 0 =>
-                    entityIdToView = entityIdToView + (entity.id -> createSpriteView(sprite, position))
-                    //entityToShow.setScaleX(1)
+              entityIdToView = entityIdToView + (entity.id -> createSpriteView(sprite, position))
+              val entityToShow = entityIdToView(entity.id)
+              entityToShow.setTranslateX(position.x)
+              entityToShow.setTranslateY(position.y)
+              direction match
+                case DirectionComponent(RIGHT) => entityToShow.setScaleX(1)
+                case DirectionComponent(LEFT) => entityToShow.setScaleX(-1)
 
-                val entityToShow = entityIdToView(entity.id)
-                entityToShow.setTranslateX(position.x)
-                entityToShow.setTranslateY(position.y)
           )
           entityIdToView.foreach((_, view) => root.getChildren.add(view))
     }
