@@ -57,15 +57,22 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
               val sprite = entity.getComponent[SpriteComponent].get
               val velocity = entity.getComponent[VelocityComponent].get
 
-              entityIdToView = entityIdToView + (entity.id -> createSpriteView(sprite,0, position))
-              val entityToShow = entityIdToView(entity.id)
-              entityToShow.setTranslateX(position.x)
-              entityToShow.setTranslateY(position.y)
-              if velocity.x < 0 then
-                entityToShow.setScaleX(-1)
-              if velocity.x > 0 then
-                entityToShow.setScaleX(1)
+              velocity.x match
+                case 0 =>
+                  print("SONO A ZERO \n" + velocity.x+"\n")
+                    entityIdToView = entityIdToView + (entity.id -> createSpriteView(sprite, 0, position))
+                case x if x < 0 =>
+                  print("NOooo A ZERO \n" +velocity.x+"\n")
+                    entityIdToView = entityIdToView + (entity.id -> createSpriteView(sprite, 1, position))
+                    //entityToShow.setScaleX(-1)
+                case x if x > 0 =>
+                  print("Nooooo A ZERO \n" +velocity.x+"\n")
+                    entityIdToView = entityIdToView + (entity.id -> createSpriteView(sprite, 1, position))
+                    //entityToShow.setScaleX(1)
 
+                val entityToShow = entityIdToView(entity.id)
+                entityToShow.setTranslateX(position.x)
+                entityToShow.setTranslateY(position.y)
           )
           entityIdToView.foreach((_, view) => root.getChildren.add(view))
     }

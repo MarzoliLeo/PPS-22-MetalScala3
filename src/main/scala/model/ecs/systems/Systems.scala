@@ -96,7 +96,9 @@ object Systems extends Observable[Event]:
         entity.replaceComponent(newPosition)
 
         // Reduce the horizontal velocity by the friction factor
-        val newHorizontalVelocity = velocity.x * FRICTION_FACTOR
+        val newHorizontalVelocity = if velocity.x * FRICTION_FACTOR < 0.1 && -0.1 < velocity.x * FRICTION_FACTOR
+                                    then 0.0
+                                    else velocity.x * FRICTION_FACTOR
 
         val newVelocity = VelocityComponent(newHorizontalVelocity, velocity.y)
         entity.replaceComponent(newVelocity)
