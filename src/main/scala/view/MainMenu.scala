@@ -75,7 +75,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
           .addComponent(VelocityComponent(0, 0))
           .addComponent(DirectionComponent(RIGHT))
           .addComponent(JumpingComponent(false))
-          .addComponent(SpriteComponent(model.playerSpriteList))
+          .addComponent(SpriteComponent(List("sprites/box.jpg")))
       )
     systemManager
       .addSystem(inputMovementSystem)

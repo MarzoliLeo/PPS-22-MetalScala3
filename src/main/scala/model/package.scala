@@ -30,12 +30,12 @@ package object model:
   var isGravityEnabled = true
   var isTouchingGround = false
 
-  val playerSpriteList = List("sprites/MarcoRossi.png",
+  val playerSpriteList: List[String] = List("sprites/MarcoRossi.png",
                               "sprites/MarcoRossiMove.png",
                               "sprites/MarcoRossiJump.png")
 
-  val VERTICAL_COLLISION_SIZE = 100
-  val HORIZONTAL_COLLISION_SIZE = 100
+  val VERTICAL_COLLISION_SIZE: Double = fixedSpriteHeight
+  val HORIZONTAL_COLLISION_SIZE: Double = fixedSpriteWidth
 
   var inputsQueue: Stack[KeyCode] = Empty
 
