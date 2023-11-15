@@ -33,5 +33,5 @@ object Command:
       BulletEntity()
         .addComponent(PositionComponent(p.x, p.y))
         .addComponent(VelocityComponent(vx, 0))
-        .addComponent(SpriteComponent(model.bulletSpriteList))
+        .addComponent(SpriteComponent(model.bulletSprite))
     }

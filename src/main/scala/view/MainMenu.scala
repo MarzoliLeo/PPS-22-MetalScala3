@@ -63,7 +63,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
           )
           .addComponent(JumpingComponent(false))
           .addComponent(VelocityComponent(0, 0))
-          .addComponent(SpriteComponent(model.playerSpriteList))
+          .addComponent(SpriteComponent(model.marcoRossiSprite))
           .addComponent(ColorComponent(Color.BLUE))
           .addComponent(DirectionComponent(RIGHT))
       )

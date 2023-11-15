@@ -59,15 +59,12 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
 
               velocity.x match
                 case 0 =>
-                  print("SONO A ZERO \n" + velocity.x+"\n")
-                    entityIdToView = entityIdToView + (entity.id -> createSpriteView(sprite, 0, position))
+                    entityIdToView = entityIdToView + (entity.id -> createSpriteView(sprite,position))
                 case x if x < 0 =>
-                  print("NOooo A ZERO \n" +velocity.x+"\n")
-                    entityIdToView = entityIdToView + (entity.id -> createSpriteView(sprite, 1, position))
+                    entityIdToView = entityIdToView + (entity.id -> createSpriteView(sprite, position))
                     //entityToShow.setScaleX(-1)
                 case x if x > 0 =>
-                  print("Nooooo A ZERO \n" +velocity.x+"\n")
-                    entityIdToView = entityIdToView + (entity.id -> createSpriteView(sprite, 1, position))
+                    entityIdToView = entityIdToView + (entity.id -> createSpriteView(sprite, position))
                     //entityToShow.setScaleX(1)
 
                 val entityToShow = entityIdToView(entity.id)
