@@ -47,47 +47,33 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
   override def update(subject: Event): Unit =
     Platform.runLater { () =>
       subject match
-        case Spawn(entityID, ofType, sprite, position) =>
-          entityIdToView = entityIdToView + (entityID -> createSpriteView(sprite,0, position))
-        case Move(entityID, sprite, position, duration) =>
-          val entityToShow = entityIdToView(entityID)
-//          if (!isAnimationMovingOn && model.isTouchingGround) {
-//            reUpdateView(entityID, sprite, 1, position)
-//            val moveTransition = moveAnimation(entityToShow, position, duration)
-//            moveTransition.setOnFinished(_ =>
-//              isAnimationMovingOn = false
-//              reUpdateView(entityID, sprite, 0, position)
-//            )
-//            moveTransition.play()
-//            isAnimationMovingOn = true
-//            model.isTouchingGround = false
-//          }
-          //CODICE ORIGINALE: lo tengo perché così faccio il paragone fra l'animazione e non.
-          entityToShow.setTranslateX(position.x)
-          entityToShow.setTranslateY(position.y)
-        case Tick() =>
+        case Tick(entities) =>
           entityIdToView.foreach((_, view) => root.getChildren.remove(view))
-          entityIdToView.foreach((_, view) => root.getChildren.add(view))
-        case Jump(entityID, sprite, position, jumpHeight, duration) =>
-          reUpdateView(entityID, sprite, 2, position)
-          // Ricordarsi che la jump animation prende il nuovo sprite che ho appena creato (dentro reUpdateView),
-          // e non quello originale.
-          val entityToMakeJump = entityIdToView(entityID)
-//          if(!isAnimationJumpingOn && model.isTouchingGround) {
-//            val jumpTransition = jumpAnimation(entityToMakeJump, position.y, jumpHeight, duration)
-//            jumpTransition.setOnFinished(_ =>
-//              isAnimationJumpingOn = false
-//              reUpdateView(entityID, sprite, 0, position)
-//            )
-//            jumpTransition.play()
-//            isAnimationJumpingOn = true
-//            model.isTouchingGround = false
-//          }
-          entityToMakeJump.setTranslateY(position.y - jumpHeight)
-        case Gravity(entityID, position) =>
-          val entityToShow = entityIdToView(entityID)
-          entityToShow.setTranslateY(position.y)
+          entities.foreach(entity =>
+            if //1° Check - Se renderizzabile
+              entity.hasComponent(classOf[PositionComponent])
+              && entity.hasComponent(classOf[SpriteComponent])
+              && entity.hasComponent(classOf[VelocityComponent])
+            then
+              val position = entity.getComponent[PositionComponent].get
+              val sprite = entity.getComponent[SpriteComponent].get
+              val velocity = entity.getComponent[VelocityComponent].get
+              entityIdToView = entityIdToView + (entity.id -> createSpriteView(sprite,0, position))
+              val entityToShow = entityIdToView(entity.id)
+              entityToShow.setTranslateX(position.x)
+              entityToShow.setTranslateY(position.y)
+              if velocity.x < 0 then
+                //per il bullet.
+                entity.replaceComponent(DirectionComponent(LEFT))
+                //per il player.
+                entityToShow.setScaleX(-1)
+              if velocity.x > 0 then
+                //uguale a sopra. //TODO o entrambi con setScaleX(1) o entrambi con la directionComponent.
+                entity.replaceComponent(DirectionComponent(RIGHT))
+                entityToShow.setScaleX(1)
 
+          )
+          entityIdToView.foreach((_, view) => root.getChildren.add(view))
     }
 
   //TODO lo userò per creare il terreno di gioco.
@@ -99,24 +85,6 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
     box
 
 
-  private def jumpAnimation(node: Node, startYPosition: Double, jumpHeight: Double, durationSeconds: Double): TranslateTransition= {
-    val numerOfCyclesPerAnimation = 2
-    val translateYTransition = new TranslateTransition(Duration.seconds(durationSeconds), node)
-    translateYTransition.setToY(startYPosition - jumpHeight)
-    translateYTransition.setCycleCount(numerOfCyclesPerAnimation)
-    translateYTransition.setAutoReverse(true)
-    translateYTransition
-    }
-
-  private def moveAnimation(node: Node, positionComponent: PositionComponent, durationSeconds: Double): TranslateTransition = {
-    val translateTransition = new TranslateTransition(Duration.seconds(durationSeconds), node)
-    translateTransition.setFromX(node.getTranslateX)
-    translateTransition.setToX(positionComponent.x)
-    translateTransition.setCycleCount(1)
-    translateTransition.setAutoReverse(false)
-    translateTransition
-  }
-
   private def createSpriteView(spriteComponent: SpriteComponent, index: Int, position: PositionComponent): Node = {
     val imageView = new ImageView(new Image(spriteComponent.spritePath(index)))
     imageView.setFitWidth(model.fixedSpriteWidth)
@@ -125,14 +93,6 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
     imageView.setTranslateX(position.x)
     imageView.setTranslateY(position.y)
     imageView
-  }
-
-  private def reUpdateView(entityID : UUID, sprite: SpriteComponent, index: Int, position: PositionComponent) : Unit = {
-    //TODO sto facendo il remove qua perché l'evento Move va più veloce di Tick() il che si traduce che se non fai questa remove qua,
-    // hai 300 sprite nella stessa scena di gioco e non uno sprite che viene sostituito nella stessa posizione.
-    entityIdToView.foreach((_, view) => root.getChildren.remove(view))
-    entityIdToView = entityIdToView + (entityID -> createSpriteView(sprite, index, position))
-    entityIdToView.foreach((_, view) => root.getChildren.add(view))
   }
 
 }

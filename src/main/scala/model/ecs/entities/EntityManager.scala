@@ -2,7 +2,6 @@ package model.ecs.entities
 
 import model.ecs.components.{Component, PositionComponent, SpriteComponent}
 import model.event.Event
-import model.event.Event.Spawn
 import model.event.observer.Observable
 
 import scala.collection.immutable.{AbstractSeq, LinearSeq}
@@ -24,15 +23,6 @@ private case class EntityManagerImpl() extends EntityManager:
     entities.filter(_.getClass == entityClass)
 
   override def addEntity(entity: Entity): EntityManager =
-    //Imposto il Frontend (View).
-    notifyObservers {
-      Spawn (
-        entity.id,
-        entity.getClass,
-        entity.getComponent[SpriteComponent].get,
-        entity.getComponent[PositionComponent].get
-      )
-    }
     entities = entities :+ entity
     this
 

@@ -10,7 +10,7 @@ class EngineTest {
 
   val entityManager: EntityManager = EntityManager()
   val systemManager: SystemManager = SystemManager(entityManager)
-  val engine: Engine = Engine(systemManager)
+  val engine: Engine = Engine()
 
   engine.start()
   @Test
