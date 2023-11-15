@@ -16,10 +16,12 @@ object Command:
 
   def left(entity: Entity): Unit =
     val v = entity.getComponent[VelocityComponent].get
+    entity.replaceComponent(DirectionComponent(LEFT))
     entity.replaceComponent(VelocityComponent(v.x - model.INPUT_MOVEMENT_VELOCITY, v.y))
 
   def right(entity: Entity): Unit =
     val v = entity.getComponent[VelocityComponent].get
+    entity.replaceComponent(DirectionComponent(RIGHT))
     entity.replaceComponent(VelocityComponent(v.x + model.INPUT_MOVEMENT_VELOCITY, v.y))
 
   def shoot(entity: Entity): Unit =
