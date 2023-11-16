@@ -1,134 +1,62 @@
 package model.ecs.systems
 
-import model.ecs.components.{ColliderComponent, Component, PositionComponent}
-import model.ecs.entities.{Entity, EntityManager}
-import model.ecs.systems.Systems.boundaryCheck
+import model.ecs.components.{PositionComponent, SizeComponent}
+import model.ecs.entities.EntityManager
+import java.awt.image.BufferedImage
+import javax.imageio.ImageIO
+import java.io.File
 
 object CollisionSystem {
-
-  // Define the MovementAxis enum
-  enum MovementAxis:
-    case Horizontal, Vertical
-
-  case class BoundingBox(
-      left: Double,
-      right: Double,
-      top: Double,
-      bottom: Double
-  ) {
-    def width: Double = right - left
-    def height: Double = bottom - top
+  enum OverlapType {
+    case None, SameX, SameY, Both
   }
 
-  extension (entity: Entity)
+  def isOverlapping(
+      pos1: PositionComponent,
+      size1: SizeComponent,
+      pos2: PositionComponent,
+      size2: SizeComponent
+  ): OverlapType = {
+    val overlapX = isOverlappingX(pos1, size1, pos2, size2)
+    val overlapY = isOverlappingY(pos1, size1, pos2, size2)
 
-    private def getPositionComponent: Option[PositionComponent] =
-      entity.getComponent[PositionComponent]
-
-    private def getColliderComponent: Option[ColliderComponent] =
-      entity.getComponent[ColliderComponent]
-
-    def getBoundingBox: BoundingBox =
-      val size = entity.getColliderComponent.get.size
-      val position = entity.getPositionComponent.get
-      BoundingBox(
-        position.x,
-        position.x + size.width,
-        position.y,
-        position.y + size.height
-      )
-
-    def isColliding: Boolean =
-      entity.getCollidingEntities.nonEmpty
-
-    def wouldCollide(
-        proposedPosition: PositionComponent,
-        movementAxis: MovementAxis
-    ): Boolean =
-      val size = entity.getColliderComponent.get.size
-      val proposedBoundingBox = BoundingBox(
-        proposedPosition.x,
-        proposedPosition.x + size.width,
-        proposedPosition.y,
-        proposedPosition.y + size.height
-      )
-
-      val wouldCollide = entity.getCollidingEntities.exists { otherEntity =>
-        val otherBoundingBox = otherEntity.getBoundingBox
-        movementAxis match {
-          case MovementAxis.Horizontal =>
-            isIntersectingHorizontally(proposedBoundingBox, otherBoundingBox)
-          case MovementAxis.Vertical =>
-            isIntersectingVertically(proposedBoundingBox, otherBoundingBox)
-        }
-      }
-
-      // print the bounding boxes of the colliding entities
-      //   if wouldCollide then
-      //        println(
-      //          s"entity: ${entity.getBoundingBox}, other: ${entity.getCollidingEntities.head.getBoundingBox}"
-      //        )
-      wouldCollide && isEntityWithinBounds(
-        entity,
-        entity.getCollidingEntities.head
-      )
-
-    private def getCollidingEntities: List[Entity] =
-      val boundingBox = entity.getBoundingBox
-      EntityManager().entities
-        .filter(_.hasComponent(classOf[ColliderComponent]))
-        .filter { otherEntity =>
-        !entity.isSameEntity(otherEntity) && isIntersecting(
-          boundingBox,
-          otherEntity.getBoundingBox
-        )
-      }
-
-  private def isEntityWithinBounds(
-      entityA: Entity,
-      entityB: Entity
-  ): Boolean = {
-    val positionA = entityA
-      .getComponent[PositionComponent]
-      .get
-    val positionB = entityB
-      .getComponent[PositionComponent]
-      .get
-    val sizeA = entityA
-      .getComponent[ColliderComponent]
-      .get
-      .size
-    val sizeB = entityB
-      .getComponent[ColliderComponent]
-      .get
-      .size
-
-    val checkedX =
-      boundaryCheck(positionA.x, positionB.x + sizeB.width, sizeA.width)
-    val checkedY =
-      boundaryCheck(positionA.y, positionB.y + sizeB.height, sizeA.height)
-
-    checkedX == positionA.x && checkedY == positionA.y
+    (overlapX, overlapY) match {
+      case (OverlapType.SameX, OverlapType.SameY) => OverlapType.Both
+      case (OverlapType.SameX, _) => OverlapType.SameX
+      case (_, OverlapType.SameY)   => OverlapType.SameY
+      case _                           => OverlapType.None
+    }
   }
 
-  private def isIntersecting(box1: BoundingBox, box2: BoundingBox): Boolean =
-    isIntersectingHorizontally(box1, box2) && isIntersectingVertically(
-      box1,
-      box2
-    )
+  private def isOverlappingX(
+      pos1: PositionComponent,
+      size1: SizeComponent,
+      pos2: PositionComponent,
+      size2: SizeComponent
+  ): OverlapType = {
+    val left1 = pos1.x
+    val right1 = pos1.x + size1.width
 
-  private def isIntersectingHorizontally(
-      box1: BoundingBox,
-      box2: BoundingBox
-  ): Boolean =
-    // If the right side of box1 is to the right of the left side of box2
-    (box1.right > box2.left) && (box1.left < box2.right)
+    val left2 = pos2.x
+    val right2 = pos2.x + size2.width
 
-  private def isIntersectingVertically(
-      box1: BoundingBox,
-      box2: BoundingBox
-  ): Boolean =
-    // If the bottom side of box1 is below the top side of box2
-    // and the top side of box1 is above the bottom side of box2
-    (box1.bottom >= box2.top) && (box1.top <= box2.bottom)
+    if (!(left1 >= right2 || right1 <= left2)) OverlapType.SameX
+    else OverlapType.None
+  }
+
+  private def isOverlappingY(
+      pos1: PositionComponent,
+      size1: SizeComponent,
+      pos2: PositionComponent,
+      size2: SizeComponent
+  ): OverlapType = {
+    val top1 = pos1.y
+    val bottom1 = pos1.y + size1.height
+
+    val top2 = pos2.y
+    val bottom2 = pos2.y + size2.height
+
+    if (!(top1 >= bottom2 || bottom1 <= top2)) OverlapType.SameY
+    else OverlapType.None
+  }
 }

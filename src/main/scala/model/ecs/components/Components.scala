@@ -6,16 +6,16 @@ import scala.annotation.targetName
 import scala.math.sqrt
 
 sealed trait Component
-case class Size(width: Double, height: Double) extends Component
+case class SizeComponent(width: Double, height: Double) extends Component
 case class PositionComponent(x: Double, y: Double) extends Component:
   @targetName("sum")
   def +(v: VelocityComponent): PositionComponent =
     PositionComponent(x + v.x, y + v.y)
 case class GravityComponent(gravity: Double) extends Component
+// Component necessary to make the entity jump and be afflicted by gravity
 case class JumpingComponent(isJumping: Boolean) extends Component
 case class SpriteComponent(spritePath: String) extends Component
 case class DirectionComponent(d: Direction) extends Component
-case class ColliderComponent(size: Size) extends Component
 case class ColorComponent(color: Color) extends Component
 case class PlayerComponent() extends Component
 case class VelocityComponent(var x: Double, var y: Double) extends Component:

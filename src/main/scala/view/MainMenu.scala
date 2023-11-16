@@ -14,7 +14,7 @@ import model.ecs.entities.{EntityManager, PlayerEntity}
 import model.ecs.systems.Systems.{bulletMovementSystem, gravitySystem, inputMovementSystem, positionUpdateSystem}
 import model.ecs.systems.{CollisionSystem, SystemManager, Systems}
 import model.engine.Engine
-import model.{HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
+import model.{GUIHEIGHT, HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
 import view.{GameView, View}
 
 trait MainMenu extends View:
@@ -54,31 +54,33 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       .addEntity(
         PlayerEntity()
           .addComponent(PlayerComponent())
-          .addComponent(PositionComponent(100, 600))
           .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
+          .addComponent(PositionComponent(250, GUIHEIGHT))
           .addComponent(
-            ColliderComponent(
-              Size(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
-            )
+            SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
           )
-          .addComponent(JumpingComponent(false))
           .addComponent(VelocityComponent(0, 0))
-          .addComponent(SpriteComponent(model.marcoRossiSprite))
-          .addComponent(ColorComponent(Color.BLUE))
           .addComponent(DirectionComponent(RIGHT))
+          .addComponent(JumpingComponent(false))
+          .addComponent(SpriteComponent(model.marcoRossiSprite))
       )
-    /* .addEntity(
+      .addEntity(
         PlayerEntity()
-          .addComponent(PositionComponent(400, 100))
-          .addComponent(ColorComponent(Color.RED))
+          //.addComponent(PlayerComponent())
           .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
-          .addComponent(ColliderComponent(Size(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)))
-      ) */
+          .addComponent(PositionComponent(400, GUIHEIGHT))
+          .addComponent(
+            SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
+          )
+          .addComponent(VelocityComponent(0, 0))
+          .addComponent(DirectionComponent(RIGHT))
+          .addComponent(JumpingComponent(false))
+          .addComponent(SpriteComponent("sprites/box.jpg"))
+      )
     systemManager
       .addSystem(inputMovementSystem)
       .addSystem(gravitySystem)
       .addSystem(positionUpdateSystem)
-    // .addSystem(collisionSystem)
       .addSystem(bulletMovementSystem)
     parentStage.getScene.setRoot(gameView)
     gameEngine.start()
