@@ -1,11 +1,12 @@
 package model.ecs.entities
 
 import model.ecs.components.Component
+import scala.reflect.ClassTag
 
 trait Entity:
-  import scala.reflect.ClassTag
 
   private var signature: Set[Component] = Set()
+
   val id: java.util.UUID = java.util.UUID.randomUUID()
 
   def addComponent(component: Component): Entity =
@@ -31,6 +32,7 @@ trait Entity:
 
   def isSameEntity(entity: Entity): Boolean =
     entity.id == id
+
 
   override def toString: String =
     s"Entity(id: $id, components: $signature)"

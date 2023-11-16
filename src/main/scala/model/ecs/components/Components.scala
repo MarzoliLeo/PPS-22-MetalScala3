@@ -14,7 +14,7 @@ case class PositionComponent(x: Double, y: Double) extends Component:
 case class GravityComponent(gravity: Double) extends Component
 // Component necessary to make the entity jump and be afflicted by gravity
 case class JumpingComponent(isJumping: Boolean) extends Component
-case class SpriteComponent(spritePath: List[String]) extends Component
+case class SpriteComponent(spritePath: String) extends Component
 case class DirectionComponent(d: Direction) extends Component
 case class ColorComponent(color: Color) extends Component
 case class PlayerComponent() extends Component

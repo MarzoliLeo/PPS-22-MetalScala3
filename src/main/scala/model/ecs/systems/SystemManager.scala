@@ -25,7 +25,12 @@ private class SystemManagerImpl(var entityManager: EntityManager)
   override def updateAll(elapsedTime: Long): Unit =
     systems.foreach(_(elapsedTime))
 
-object SystemManager:
-  def apply(entityManager: EntityManager): SystemManager = SystemManagerImpl(
-    entityManager
-  )
+object SystemManager {
+  private var singleton: Option[SystemManager] = None
+
+  def apply(entityManager: EntityManager): SystemManager =
+    if (singleton.isEmpty) {
+      singleton = Some(new SystemManagerImpl(entityManager))
+    }
+    singleton.get
+}

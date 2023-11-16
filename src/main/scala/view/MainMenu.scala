@@ -42,7 +42,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
 
   private val entityManager = EntityManager()
   private val systemManager = SystemManager(entityManager)
-  private val gameEngine = Engine(systemManager)
+  private val gameEngine = Engine()
   getButton(root, "Start").setOnAction((_: ActionEvent) => handleStartButton())
   getButton(root, "Exit").setOnAction((_: ActionEvent) => handleExitButton())
 
@@ -62,7 +62,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
           .addComponent(VelocityComponent(0, 0))
           .addComponent(DirectionComponent(RIGHT))
           .addComponent(JumpingComponent(false))
-          .addComponent(SpriteComponent(model.playerSpriteList))
+          .addComponent(SpriteComponent(model.marcoRossiSprite))
       )
       .addEntity(
         PlayerEntity()
@@ -82,7 +82,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       .addSystem(gravitySystem)
       .addSystem(positionUpdateSystem)
     // .addSystem(collisionSystem)
-    // .addSystem(bulletMovementSystem)
+      .addSystem(bulletMovementSystem)
     parentStage.getScene.setRoot(gameView)
     gameEngine.start()
 
