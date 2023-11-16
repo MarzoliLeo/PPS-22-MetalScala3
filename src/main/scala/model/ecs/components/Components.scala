@@ -13,7 +13,7 @@ case class PositionComponent(x: Double, y: Double) extends Component:
     PositionComponent(x + v.x, y + v.y)
 case class GravityComponent(gravity: Double) extends Component
 case class JumpingComponent(isJumping: Boolean) extends Component
-case class SpriteComponent(spritePath: List[String]) extends Component
+case class SpriteComponent(spritePath: String) extends Component
 case class DirectionComponent(d: Direction) extends Component
 case class ColliderComponent(size: Size) extends Component
 case class ColorComponent(color: Color) extends Component

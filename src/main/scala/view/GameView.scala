@@ -27,8 +27,6 @@ trait GameView extends View
 private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Event]]) extends GameView with CommandsStackHandler with Observer[Event] {
   val root: Pane = Pane()
   private var entityIdToView: Map[UUID, Node] = Map()
-  private var isAnimationMovingOn = false
-  private var isAnimationJumpingOn = false
 
   // Creazione della scena di gioco (Diversa da quella del Menù).
   private val scene: Scene = Scene(root, model.GUIWIDTH, model.GUIHEIGHT)
@@ -50,27 +48,22 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
         case Tick(entities) =>
           entityIdToView.foreach((_, view) => root.getChildren.remove(view))
           entities.foreach(entity =>
-            if //1° Check - Se renderizzabile
+            if
               entity.hasComponent(classOf[PositionComponent])
               && entity.hasComponent(classOf[SpriteComponent])
-              && entity.hasComponent(classOf[VelocityComponent])
+              && entity.hasComponent(classOf[DirectionComponent])
             then
               val position = entity.getComponent[PositionComponent].get
               val sprite = entity.getComponent[SpriteComponent].get
-              val velocity = entity.getComponent[VelocityComponent].get
-              entityIdToView = entityIdToView + (entity.id -> createSpriteView(sprite,0, position))
+              val direction = entity.getComponent[DirectionComponent].get
+
+              entityIdToView = entityIdToView + (entity.id -> createSpriteView(sprite, position))
               val entityToShow = entityIdToView(entity.id)
               entityToShow.setTranslateX(position.x)
               entityToShow.setTranslateY(position.y)
-              if velocity.x < 0 then
-                //per il bullet.
-                entity.replaceComponent(DirectionComponent(LEFT))
-                //per il player.
-                entityToShow.setScaleX(-1)
-              if velocity.x > 0 then
-                //uguale a sopra. //TODO o entrambi con setScaleX(1) o entrambi con la directionComponent.
-                entity.replaceComponent(DirectionComponent(RIGHT))
-                entityToShow.setScaleX(1)
+              direction match
+                case DirectionComponent(RIGHT) => entityToShow.setScaleX(1)
+                case DirectionComponent(LEFT) => entityToShow.setScaleX(-1)
 
           )
           entityIdToView.foreach((_, view) => root.getChildren.add(view))

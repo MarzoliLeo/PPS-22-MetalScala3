@@ -14,7 +14,7 @@ package object model:
   val GUIWIDTH: Int = 1500
   val GUIHEIGHT: Int = 800
   val Fps = 60
-  val FRICTION_FACTOR = 0.50 // Define a friction factor between 0 and 1
+  val FRICTION_FACTOR = 0.5 // Define a friction factor between 0 and 1
   val fixedSpriteWidth = 100.0 // Desired fixed width
   val fixedSpriteHeight = 100.0 // Desired fixed height
   val INPUT_MOVEMENT_VELOCITY = 1000
@@ -25,8 +25,8 @@ package object model:
   var isGravityEnabled = true
   var isTouchingGround = false
   val playerSpriteList = List("sprites/MarcoRossi.png",
-                          "sprites/MarcoRossiMove.png",
-                          "sprites/MarcoRossiJump.png")
+                              "sprites/MarcoRossiMove.png",
+                              "sprites/MarcoRossiJump.png")
   val bulletSpriteList = List("sprites/Bullet.png")
   val VERTICAL_COLLISION_SIZE = 100
   val HORIZONTAL_COLLISION_SIZE = 100

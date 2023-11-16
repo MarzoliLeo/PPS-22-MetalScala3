@@ -65,8 +65,15 @@ object Systems extends Observable[Event]:
           classOf[VelocityComponent]
         )
         .foreach { entity =>
+          val position = entity.getComponent[PositionComponent].get
           val velocity = entity.getComponent[VelocityComponent].get
-          entity.replaceComponent(velocity + VelocityComponent(0, GRAVITY_VELOCITY * elapsedTime))
+          val isTouchingGround = position.y + VERTICAL_COLLISION_SIZE >= model.GUIHEIGHT && velocity.y >= 0
+          if isTouchingGround then
+            entity.replaceComponent(VelocityComponent(velocity.x, 0))
+          else
+            entity.replaceComponent(velocity + VelocityComponent(0, GRAVITY_VELOCITY * elapsedTime))
+
+          print(velocity.y + "\n")
         }
     }
 
@@ -95,8 +102,15 @@ object Systems extends Observable[Event]:
         )
         entity.replaceComponent(newPosition)
 
-        // Reduce the horizontal velocity by the friction factor
-        val newHorizontalVelocity = velocity.x * FRICTION_FACTOR
+        val newHorizontalVelocity = if -0.1 < velocity.x * FRICTION_FACTOR && velocity.x * FRICTION_FACTOR < 0.1 then 0.0 else velocity.x * FRICTION_FACTOR
+
+        velocity match
+          case VelocityComponent(0, 0) =>
+            entity.replaceComponent(SpriteComponent(model.marcoRossiSprite))
+          case VelocityComponent(_, y) if y != 0 =>
+            entity.replaceComponent(SpriteComponent(model.marcoRossiJumpSprite))
+          case VelocityComponent(x, y) if x != 0 && y == 0 =>
+            entity.replaceComponent(SpriteComponent(model.marcoRossiMoveSprite))
 
         val newVelocity = VelocityComponent(newHorizontalVelocity, velocity.y)
         entity.replaceComponent(newVelocity)

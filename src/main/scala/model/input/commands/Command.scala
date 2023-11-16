@@ -16,20 +16,24 @@ object Command:
 
   def left(entity: Entity): Unit =
     val v = entity.getComponent[VelocityComponent].get
+    entity.replaceComponent(DirectionComponent(LEFT))
     entity.replaceComponent(VelocityComponent(v.x - model.INPUT_MOVEMENT_VELOCITY, v.y))
 
   def right(entity: Entity): Unit =
     val v = entity.getComponent[VelocityComponent].get
+    entity.replaceComponent(DirectionComponent(RIGHT))
     entity.replaceComponent(VelocityComponent(v.x + model.INPUT_MOVEMENT_VELOCITY, v.y))
 
   def shoot(entity: Entity): Unit =
     val p = entity.getComponent[PositionComponent].get
-    val vx = entity.getComponent[DirectionComponent].get.d match
+    val bulletDirection = entity.getComponent[DirectionComponent].get
+    val vx = bulletDirection.d match
       case RIGHT => model.BULLET_VELOCITY
       case LEFT => -model.BULLET_VELOCITY
     EntityManager().addEntity {
       BulletEntity()
         .addComponent(PositionComponent(p.x, p.y))
         .addComponent(VelocityComponent(vx, 0))
-        .addComponent(SpriteComponent(model.bulletSpriteList))
+        .addComponent(SpriteComponent(model.bulletSprite))
+        .addComponent(DirectionComponent(bulletDirection.d))
     }
