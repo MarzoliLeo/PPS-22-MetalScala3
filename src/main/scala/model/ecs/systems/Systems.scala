@@ -73,7 +73,7 @@ object Systems extends Observable[Event]:
           else
             entity.replaceComponent(velocity + VelocityComponent(0, GRAVITY_VELOCITY * elapsedTime))
 
-          print(velocity.y + "\n")
+          print(GRAVITY_VELOCITY * elapsedTime + "\n")
         }
     }
 

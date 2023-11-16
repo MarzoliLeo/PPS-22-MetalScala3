@@ -69,6 +69,7 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
           entityIdToView.foreach((_, view) => root.getChildren.add(view))
     }
 
+
   //TODO lo userò per creare il terreno di gioco.
   private def createBoxView(position: PositionComponent): Node =
     val box = Box(100, 100, 100)
@@ -78,8 +79,8 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
     box
 
 
-  private def createSpriteView(spriteComponent: SpriteComponent, index: Int, position: PositionComponent): Node = {
-    val imageView = new ImageView(new Image(spriteComponent.spritePath(index)))
+  private def createSpriteView(spriteComponent: SpriteComponent, position: PositionComponent): Node = {
+    val imageView = new ImageView(new Image(spriteComponent.spritePath))
     imageView.setFitWidth(model.fixedSpriteWidth)
     imageView.setFitHeight(model.fixedSpriteHeight)
     imageView.setPreserveRatio(true)
