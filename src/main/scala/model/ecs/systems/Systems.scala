@@ -4,7 +4,9 @@ import javafx.scene.input.KeyCode
 import model.*
 import model.ecs.components.*
 import model.ecs.entities.*
-import model.ecs.entities.weapons.BulletEntity
+import model.ecs.entities.environment.BoxEntity
+import model.ecs.entities.player.PlayerEntity
+import model.ecs.entities.weapons.{BulletEntity, MachineGunEntity, WeaponEntity}
 import model.ecs.systems.CollisionSystem.OverlapType
 import model.ecs.systems.CollisionSystem.OverlapType.Both
 import model.ecs.systems.Systems.updatePosition
@@ -84,8 +86,6 @@ object Systems extends Observable[Event]:
             entity.replaceComponent(
               velocity + VelocityComponent(0, GRAVITY_VELOCITY * elapsedTime)
             )
-
-          print(GRAVITY_VELOCITY * elapsedTime + "\n")
         }
     }
 
@@ -153,29 +153,30 @@ object Systems extends Observable[Event]:
     }
   }
 
-  private def updateVelocity(
-      entity: Entity
-  ): VelocityComponent = {
+  private def updateVelocity(entity: Entity): VelocityComponent = {
     val velocity = entity
       .getComponent[VelocityComponent]
       .getOrElse(throw new Exception("Velocity not found"))
 
-    val newHorizontalVelocity =
-      if -0.1 < velocity.x * FRICTION_FACTOR && velocity.x * FRICTION_FACTOR < 0.1
-      then 0.0
-      else velocity.x * FRICTION_FACTOR
+    val newHorizontalVelocity = velocity.x * FRICTION_FACTOR match {
+      case x if -0.1 < x && x < 0.1 => 0.0
+      case x                        => x
+    }
 
-    velocity match
-      case VelocityComponent(0, 0) =>
-        entity.replaceComponent(SpriteComponent(model.marcoRossiSprite))
-      case VelocityComponent(_, y) if y != 0 =>
-        entity.replaceComponent(
-          SpriteComponent(model.marcoRossiJumpSprite)
-        )
-      case VelocityComponent(x, y) if x != 0 && y == 0 =>
-        entity.replaceComponent(
-          SpriteComponent(model.marcoRossiMoveSprite)
-        )
+    entity match {
+      case _: PlayerEntity =>
+        val sprite = velocity match {
+          case VelocityComponent(0, 0)           => model.marcoRossiSprite
+          case VelocityComponent(_, y) if y != 0 => model.marcoRossiJumpSprite
+          case VelocityComponent(x, y) if x != 0 && y == 0 =>
+            model.marcoRossiMoveSprite
+        }
+        entity.replaceComponent(SpriteComponent(sprite))
+      case _: MachineGunEntity =>
+        entity.replaceComponent(SpriteComponent("sprites/H_weapon.jpg"))
+      case _: BoxEntity =>
+        entity.replaceComponent(SpriteComponent("sprites/box.jpg"))
+    }
 
     VelocityComponent(newHorizontalVelocity, velocity.y)
   }
