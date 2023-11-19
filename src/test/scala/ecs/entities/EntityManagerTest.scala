@@ -1,7 +1,8 @@
 package ecs.entities
 
 import model.ecs.components.{Component, PositionComponent}
-import model.ecs.entities.{EntityManager, PlayerEntity}
+import model.ecs.entities.EntityManager
+import model.ecs.entities.player.PlayerEntity
 import org.scalatest.BeforeAndAfter
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers

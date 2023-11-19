@@ -10,7 +10,8 @@ import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.Box
 import javafx.stage.Stage
 import model.ecs.components.*
-import model.ecs.entities.{EntityManager, PlayerEntity}
+import model.ecs.entities.EntityManager
+import model.ecs.entities.player.PlayerEntity
 import model.ecs.systems.Systems.{bulletMovementSystem, gravitySystem, inputMovementSystem, positionUpdateSystem}
 import model.ecs.systems.{CollisionSystem, SystemManager, Systems}
 import model.engine.Engine

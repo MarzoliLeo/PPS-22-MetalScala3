@@ -1,7 +1,9 @@
 package model.input.commands
 
 import model.ecs.components.*
-import model.ecs.entities.{BulletEntity, Entity, EntityManager, PlayerEntity}
+import model.ecs.entities.player.PlayerEntity
+import model.ecs.entities.weapons.BulletEntity
+import model.ecs.entities.{Entity, EntityManager}
 import model.ecs.systems.Systems.{boundaryCheck, gravitySystem, notifyObservers}
 
 object Command:

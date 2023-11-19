@@ -4,6 +4,7 @@ import javafx.scene.input.KeyCode
 import model.*
 import model.ecs.components.*
 import model.ecs.entities.*
+import model.ecs.entities.weapons.BulletEntity
 import model.ecs.systems.CollisionSystem.OverlapType
 import model.ecs.systems.CollisionSystem.OverlapType.Both
 import model.ecs.systems.Systems.updatePosition

@@ -4,7 +4,8 @@ import GameStatus.*
 import javafx.scene.paint.Color
 import model.Fps
 import model.ecs.components.PositionComponent
-import model.ecs.entities.{EntityManager, PlayerEntity}
+import model.ecs.entities.EntityManager
+import model.ecs.entities.player.PlayerEntity
 import model.ecs.systems.SystemManager
 import model.event.Event
 import model.event.Event.Tick

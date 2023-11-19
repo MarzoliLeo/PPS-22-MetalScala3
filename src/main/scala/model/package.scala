@@ -1,7 +1,8 @@
 import javafx.scene.input.KeyCode
 import javafx.scene.paint.Color
 import model.ecs.components.{Component, GravityComponent, PositionComponent, VelocityComponent}
-import model.ecs.entities.{Entity, EntityManager, PlayerEntity}
+import model.ecs.entities.player.PlayerEntity
+import model.ecs.entities.{Entity, EntityManager}
 import model.ecs.systems.SystemManager
 import model.ecs.systems.Systems.{gravitySystem, inputMovementSystem}
 import model.event.observer.Observable
