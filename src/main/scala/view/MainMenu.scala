@@ -63,6 +63,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
           .addComponent(
             SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
           )
+          .addComponent(BulletComponent(Bullet.StandardBullet))
           .addComponent(VelocityComponent(0, 0))
           .addComponent(DirectionComponent(RIGHT))
           .addComponent(JumpingComponent(false))
@@ -88,7 +89,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
           .addComponent(DirectionComponent(RIGHT))
           .addComponent(SpriteComponent("sprites/H.png"))
           .addComponent(
-          SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
+            SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
           )
           .addComponent(VelocityComponent(0, 0))
           .addComponent(JumpingComponent(false))

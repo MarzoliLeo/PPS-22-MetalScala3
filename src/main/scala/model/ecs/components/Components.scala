@@ -9,6 +9,11 @@ import scala.math.sqrt
   */
 sealed trait Component
 
+enum Bullet:
+    case StandardBullet
+    case MachineGunBullet
+case class BulletComponent(bullet: Bullet) extends Component
+
 /** Represents the size of an entity.
   * @param width
   *   The width of the entity.

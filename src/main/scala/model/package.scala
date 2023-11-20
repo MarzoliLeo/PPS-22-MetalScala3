@@ -28,7 +28,8 @@ package object model:
   val marcoRossiSprite = "sprites/MarcoRossi.png"
   val marcoRossiMoveSprite = "sprites/MarcoRossiMove.png"
   val marcoRossiJumpSprite = "sprites/MarcoRossiJump.png"
-  val bulletSprite = "sprites/Bullet.png"
+  val standardBulletSprite = "sprites/Bullet.png"
+  val machineGunBulletSprite = "sprites/h.png"
   val VERTICAL_COLLISION_SIZE = 100
   val HORIZONTAL_COLLISION_SIZE = 100
   var inputsQueue: Stack[Entity => Unit] = Empty

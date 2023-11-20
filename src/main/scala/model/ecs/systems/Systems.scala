@@ -7,8 +7,8 @@ import model.ecs.entities.*
 import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.{BulletEntity, MachineGunEntity, WeaponEntity}
-import model.ecs.systems.CollisionSystem.OverlapType
 import model.ecs.systems.CollisionSystem.OverlapType.Both
+import model.ecs.systems.CollisionSystem.{OverlapType, checkCollision}
 import model.ecs.systems.Systems.updatePosition
 import model.event.Event
 import model.event.observer.Observable
@@ -18,7 +18,8 @@ import model.utilities.Empty
 object Systems extends Observable[Event]:
 
   /** Applies a boundary check to a position value, ensuring it stays within the
-    * bounds of the system.
+    * bounds of the system. It ensures that 'pos' is not less than 0.0 and not
+    * greater than 'max - size'.
     *
     * @param pos
     *   The position value to check.
@@ -121,38 +122,6 @@ object Systems extends Observable[Event]:
     )
   }
 
-  /** Checks if the entity collides with another entity in the new position
-    *
-    * @param entity
-    *   the entity to check
-    * @param newPosition
-    *   the new position of the entity
-    * @return
-    *   the entity that collides with the entity passed as parameter
-    */
-  private def checkCollision(
-      entity: Entity,
-      newPosition: PositionComponent
-  ): Option[Entity] = {
-    val potentialCollisions = EntityManager().getEntitiesWithComponent(
-      classOf[PositionComponent],
-      classOf[SizeComponent]
-    )
-    val size = entity.getComponent[SizeComponent].get
-
-    potentialCollisions.find { otherEntity =>
-      if (!otherEntity.isSameEntity(entity)) {
-        val overlap: OverlapType = CollisionSystem.isOverlapping(
-          newPosition,
-          size,
-          otherEntity.getComponent[PositionComponent].get,
-          otherEntity.getComponent[SizeComponent].get
-        )
-        overlap == OverlapType.Both
-      } else false
-    }
-  }
-
   private def updateVelocity(entity: Entity): VelocityComponent = {
     val velocity = entity
       .getComponent[VelocityComponent]
@@ -173,7 +142,7 @@ object Systems extends Observable[Event]:
         }
         entity.replaceComponent(SpriteComponent(sprite))
       case _: MachineGunEntity =>
-        entity.replaceComponent(SpriteComponent("sprites/H_weapon.jpg"))
+        entity.replaceComponent(SpriteComponent("sprites/h.png"))
       case _: BoxEntity =>
         entity.replaceComponent(SpriteComponent("sprites/box.jpg"))
     }

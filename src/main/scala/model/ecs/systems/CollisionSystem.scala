@@ -2,30 +2,79 @@ package model.ecs.systems
 
 import model.ecs.components.{PositionComponent, SizeComponent}
 import model.ecs.entities.EntityManager
+
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 import java.io.File
+import model.ecs.entities.Entity
+import model.ecs.entities.player.PlayerEntity
+import model.ecs.entities.weapons.WeaponEntity
 
 object CollisionSystem {
   enum OverlapType {
     case None, SameX, SameY, Both
   }
 
-  def isOverlapping(
+  /** Checks if the entity collides with another entity in the new position
+    *
+    * @param entity
+    *   the entity to check
+    * @param newPosition
+    *   the new position of the entity
+    * @return
+    *   the entity that collides with the entity passed as parameter
+    */
+  def checkCollision(
+      entity: Entity,
+      newPosition: PositionComponent
+  ): Option[Entity] = {
+    val potentialCollisions = EntityManager().getEntitiesWithComponent(
+      classOf[PositionComponent],
+      classOf[SizeComponent]
+    )
+    val size = entity.getComponent[SizeComponent].get
+
+    // [ATTENTION] We are hypothesizing that there is at most one collision
+    potentialCollisions.find { otherEntity =>
+      if (!otherEntity.isSameEntity(entity)) {
+        CollisionSystem.isOverlapping(
+            newPosition,
+            size,
+            otherEntity.getComponent[PositionComponent].get,
+            otherEntity.getComponent[SizeComponent].get
+          )
+      } else false
+    }
+  }
+
+  def handleCollision(entity: Entity, otherEntity: Entity): Unit = {
+    (entity, otherEntity) match
+      case (_: PlayerEntity, weaponEntity: WeaponEntity) =>
+        // Remove the weapon from the EntityManager
+        EntityManager().removeEntity(weaponEntity)
+      // Here the "move back" strategy used to fix the collided positions of entities should be implemented
+      case _ => ()
+  }
+
+  def updateEntityBasedOnCollisions(entity: Entity, newPosition: PositionComponent): Unit = {
+    checkCollision(entity, newPosition) match {
+      case Some(collidingEntity) => handleCollision(entity, collidingEntity)
+      case None => // No collision, so just update the entity's position
+        entity.replaceComponent(newPosition)
+    }
+  }
+
+
+  private def isOverlapping(
       pos1: PositionComponent,
       size1: SizeComponent,
       pos2: PositionComponent,
       size2: SizeComponent
-  ): OverlapType = {
+  ): Boolean = {
     val overlapX = isOverlappingX(pos1, size1, pos2, size2)
     val overlapY = isOverlappingY(pos1, size1, pos2, size2)
 
-    (overlapX, overlapY) match {
-      case (OverlapType.SameX, OverlapType.SameY) => OverlapType.Both
-      case (OverlapType.SameX, _) => OverlapType.SameX
-      case (_, OverlapType.SameY)   => OverlapType.SameY
-      case _                           => OverlapType.None
-    }
+    overlapX == OverlapType.SameX && overlapY == OverlapType.SameY
   }
 
   private def isOverlappingX(

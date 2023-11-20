@@ -1,6 +1,7 @@
 package model.ecs.entities
 
 import model.ecs.components.Component
+
 import scala.reflect.ClassTag
 
 trait Entity:
@@ -22,9 +23,11 @@ trait Entity:
     addComponent(component)
     this
 
-  def getComponent[T <: Component : ClassTag]: Option[T] =
+  def getComponent[T <: Component: ClassTag]: Option[T] =
     signature.collectFirst {
-      case component if summon[ClassTag[T]].runtimeClass.isInstance(component) => component.asInstanceOf[T]
+      case component
+          if summon[ClassTag[T]].runtimeClass.isInstance(component) =>
+        component.asInstanceOf[T]
     }
 
   def hasComponent(componentType: Class[_ <: Component]): Boolean =
@@ -32,7 +35,6 @@ trait Entity:
 
   def isSameEntity(entity: Entity): Boolean =
     entity.id == id
-
 
   override def toString: String =
     s"Entity(id: $id, components: $signature)"
