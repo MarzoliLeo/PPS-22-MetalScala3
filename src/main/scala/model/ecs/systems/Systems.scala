@@ -7,7 +7,7 @@ import model.ecs.entities.*
 import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.{BulletEntity, MachineGunEntity, WeaponEntity}
-import model.ecs.systems.CollisionSystem.{checkCollision}
+import model.ecs.systems.CollisionSystem.{checkCollision, handleCollision}
 import model.ecs.systems.Systems.updatePosition
 import model.event.Event
 import model.event.observer.Observable
@@ -161,13 +161,35 @@ object Systems extends Observable[Event]:
       val isTouchingGround =
         currentPosition.y + VERTICAL_COLLISION_SIZE >= model.GUIHEIGHT && velocity.y >= 0
       if (isTouchingGround)
-        // fixme: gravity should be subjective 
+        // fixme: gravity should be subjective
         model.isGravityEnabled = false
         entity.replaceComponent(JumpingComponent(false))
       else
         model.isGravityEnabled = true
         entity.getComponent[JumpingComponent].get
   }
+
+  val collisionDetectionSystem: Long => Unit = elapsedTime =>
+    EntityManager().entities.foreach { entity =>
+      checkCollision(entity, entity.getComponent[PositionComponent].get) match
+        case Some(collidingEntity) =>
+          entity.replaceComponent(CollisionComponent(collidingEntity))
+          collidingEntity.replaceComponent(CollisionComponent(entity))
+        case None => ()
+    }
+
+  val collisionHandlingSystem: Long => Unit = elapsedTime =>
+    EntityManager().entities.foreach { entity =>
+      entity.getComponent[CollisionComponent] match
+        case Some(collisionComponent: CollisionComponent) if entity.hasComponent(classOf[TriggerComponent]) =>
+          println("trigger")
+        case Some(collisionComponent: CollisionComponent) =>
+          // It should move entity back to a not colliding position
+          handleCollision(entity, collisionComponent.otherEntity)
+        case None => ()
+    }
+
+
 
   val positionUpdateSystem: Long => Unit = elapsedTime =>
     EntityManager()

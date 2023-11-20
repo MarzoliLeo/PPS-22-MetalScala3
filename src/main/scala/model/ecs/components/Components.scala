@@ -1,6 +1,7 @@
 package model.ecs.components
 
 import javafx.scene.paint.Color
+import model.ecs.entities.Entity
 
 import scala.annotation.targetName
 import scala.math.sqrt
@@ -14,6 +15,12 @@ enum Bullet:
     case MachineGunBullet
 case class BulletComponent(bullet: Bullet) extends Component
 
+case class CollisionComponent(otherEntity: Entity) extends Component
+
+/**
+ * An Entity has this component if it's a trigger
+ */
+case class TriggerComponent() extends Component
 /** Represents the size of an entity.
   * @param width
   *   The width of the entity.
