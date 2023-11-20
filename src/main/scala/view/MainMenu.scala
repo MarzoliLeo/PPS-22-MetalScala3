@@ -85,7 +85,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       .addEntity(
         MachineGunEntity()
           .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
-          .addComponent(PositionComponent(600, GUIHEIGHT))
+          .addComponent(PositionComponent(800, GUIHEIGHT))
           .addComponent(DirectionComponent(RIGHT))
           .addComponent(SpriteComponent("sprites/H.png"))
           .addComponent(

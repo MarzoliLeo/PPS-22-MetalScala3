@@ -11,10 +11,6 @@ import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.WeaponEntity
 
 object CollisionSystem {
-  enum OverlapType {
-    case None, SameX, SameY, Both
-  }
-
   /** Checks if the entity collides with another entity in the new position
     *
     * @param entity
@@ -71,10 +67,7 @@ object CollisionSystem {
       pos2: PositionComponent,
       size2: SizeComponent
   ): Boolean = {
-    val overlapX = isOverlappingX(pos1, size1, pos2, size2)
-    val overlapY = isOverlappingY(pos1, size1, pos2, size2)
-
-    overlapX == OverlapType.SameX && overlapY == OverlapType.SameY
+    isOverlappingX(pos1, size1, pos2, size2) && isOverlappingY(pos1, size1, pos2, size2)
   }
 
   private def isOverlappingX(
@@ -82,15 +75,14 @@ object CollisionSystem {
       size1: SizeComponent,
       pos2: PositionComponent,
       size2: SizeComponent
-  ): OverlapType = {
+  ): Boolean = {
     val left1 = pos1.x
     val right1 = pos1.x + size1.width
 
     val left2 = pos2.x
     val right2 = pos2.x + size2.width
 
-    if (!(left1 >= right2 || right1 <= left2)) OverlapType.SameX
-    else OverlapType.None
+    (!(left1 >= right2 || right1 <= left2))
   }
 
   private def isOverlappingY(
@@ -98,14 +90,13 @@ object CollisionSystem {
       size1: SizeComponent,
       pos2: PositionComponent,
       size2: SizeComponent
-  ): OverlapType = {
+  ): Boolean = {
     val top1 = pos1.y
     val bottom1 = pos1.y + size1.height
 
     val top2 = pos2.y
     val bottom2 = pos2.y + size2.height
 
-    if (!(top1 >= bottom2 || bottom1 <= top2)) OverlapType.SameY
-    else OverlapType.None
+    (!(top1 >= bottom2 || bottom1 <= top2))
   }
 }

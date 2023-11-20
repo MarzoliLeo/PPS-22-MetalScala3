@@ -7,8 +7,7 @@ import model.ecs.entities.*
 import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.{BulletEntity, MachineGunEntity, WeaponEntity}
-import model.ecs.systems.CollisionSystem.OverlapType.Both
-import model.ecs.systems.CollisionSystem.{OverlapType, checkCollision}
+import model.ecs.systems.CollisionSystem.{checkCollision}
 import model.ecs.systems.Systems.updatePosition
 import model.event.Event
 import model.event.observer.Observable
@@ -162,6 +161,7 @@ object Systems extends Observable[Event]:
       val isTouchingGround =
         currentPosition.y + VERTICAL_COLLISION_SIZE >= model.GUIHEIGHT && velocity.y >= 0
       if (isTouchingGround)
+        // fixme: gravity should be subjective 
         model.isGravityEnabled = false
         entity.replaceComponent(JumpingComponent(false))
       else
