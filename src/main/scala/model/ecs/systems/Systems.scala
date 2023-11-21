@@ -219,12 +219,14 @@ object Systems extends Observable[Event]:
 
   val AIMoveTowardPlayerSystem: Long => Unit = elapsedTime =>
     import alice.tuprolog._
-    given Conversion[String, Term] = Term.createTerm(_)
-    given Conversion[Seq[_], Term] = _.mkString("[", ",", "]")
+    import utilities.Scala2P._
 
     val prologFile = "Enemy.pl"
+
+
     val engine = new Prolog()
-    engine.setTheory(new Theory(new java.io.File(prologFile)))
+    engine.setTheory(new Theory(new java.io.File(prologFile).toString))
+
 
     val playerPosition: PositionComponent = EntityManager()
       .getEntitiesByClass(classOf[PlayerEntity])
