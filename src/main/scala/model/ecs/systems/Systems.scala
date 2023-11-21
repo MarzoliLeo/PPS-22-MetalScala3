@@ -12,6 +12,8 @@ import model.event.observer.Observable
 import model.input.commands.*
 import model.utilities.Empty
 
+import java.io.FileInputStream
+
 object Systems extends Observable[Event]:
 
   /** Applies a boundary check to a position value, ensuring it stays within the
@@ -83,8 +85,6 @@ object Systems extends Observable[Event]:
             entity.replaceComponent(
               velocity + VelocityComponent(0, GRAVITY_VELOCITY * elapsedTime)
             )
-
-          print(GRAVITY_VELOCITY * elapsedTime + "\n")
         }
     }
 
@@ -221,11 +221,9 @@ object Systems extends Observable[Event]:
     import alice.tuprolog._
     import utilities.Scala2P._
 
-    val prologFile = "Enemy.pl"
-
-
+    val prologFile = new java.io.File("src/main/resources/EnemyAI.pl")
     val engine = new Prolog()
-    engine.setTheory(new Theory(new java.io.File(prologFile).toString))
+    engine.setTheory(new Theory(new FileInputStream(prologFile)))
 
 
     val playerPosition: PositionComponent = EntityManager()
@@ -241,12 +239,29 @@ object Systems extends Observable[Event]:
       .foreach( entity =>
         val enemyPosition = entity.getComponent[PositionComponent].get
 
-        val query = new Struct("move_toward_player",
+/*        val query = new Struct("move_toward_player",
           0.0,
           (playerPosition.x, playerPosition.y),
           (enemyPosition.x, enemyPosition.y),
           new Var(),
-          new Var())
-        val s = engine.solve(query).getSolution
+          new Var())*/
 
+        val query = new Struct("main",
+          //List("Sono", "un", "test"),
+          new Var(),
+          new Var()
+        )
+
+        try {
+          val s = engine.solve(query).getSolution
+          print("Posizione x: " + extractTerm(s, 0) + "\n")
+          print("Posizione y: " + extractTerm(s, 1) + "\n")
+
+        } catch {
+          case e: Exception => e match
+            case e: NoSolutionException => println ("Prolog query failed: No.")
+            case e: MalformedGoalException => println ("Prolog query failed: Malformed.")
+            case e: NoMoreSolutionException => println ("Prolog query failed: No more.")
+            case _ => println("Rised expetion: " + e)
+        }
       )

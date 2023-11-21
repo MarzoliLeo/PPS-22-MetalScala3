@@ -11,7 +11,7 @@ import javafx.scene.shape.Box
 import javafx.stage.Stage
 import model.ecs.components.*
 import model.ecs.entities.{EnemyEntity, EntityManager, PlayerEntity}
-import model.ecs.systems.Systems.{bulletMovementSystem, gravitySystem, inputMovementSystem, positionUpdateSystem}
+import model.ecs.systems.Systems.{AIMoveTowardPlayerSystem, bulletMovementSystem, gravitySystem, inputMovementSystem, positionUpdateSystem}
 import model.ecs.systems.{CollisionSystem, SystemManager, Systems}
 import model.engine.Engine
 import model.{GUIHEIGHT, HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
@@ -89,6 +89,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       .addSystem(gravitySystem)
       .addSystem(positionUpdateSystem)
       .addSystem(bulletMovementSystem)
+      .addSystem(AIMoveTowardPlayerSystem)
     parentStage.getScene.setRoot(gameView)
     gameEngine.start()
 

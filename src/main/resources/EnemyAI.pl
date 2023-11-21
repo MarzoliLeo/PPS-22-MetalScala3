@@ -1,4 +1,1 @@
-move_toward_player(Randomess, (PlayerX, PlayerY), (EnemyX, EnemyY), NewEnemyX, NewEnemyY) :- !.
-
-main(Parola) :-
-    write(Parola).
+main(X, Y) :- X = 1, Y = 2.
