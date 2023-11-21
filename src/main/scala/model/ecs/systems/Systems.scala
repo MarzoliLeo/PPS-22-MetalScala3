@@ -95,6 +95,7 @@ object Systems extends Observable[Event]:
     val velocity = entity
       .getComponent[VelocityComponent]
       .getOrElse(throw new Exception("Velocity not found"))
+
     val tmpPositionX: PositionComponent = PositionComponent(
       currentPosition.x + velocity.x * elapsedTime * 0.001,
       currentPosition.y
@@ -236,7 +237,7 @@ object Systems extends Observable[Event]:
       )
       .foreach( entity =>
         val enemyPosition = entity.getComponent[PositionComponent].get
-        //val randomDouble = scala.util.Random.nextDouble(1.0)
+        //val randomDouble = scala.util.Random.nextDouble()
 
         val query = new Struct("move_toward_player",
           0.4,
@@ -246,17 +247,10 @@ object Systems extends Observable[Event]:
           new Var()
         )
 
-/*        val query2 = new Struct("main",
-          new Var(),
-          new Var()
-        )*/
 
         try {
           //Facendo l'update della posizione dell'enemy.
           val s = engine.solve(query).getSolution
-/*        val s2 = engine.solve(query2).getSolution
-          println(extractTerm(s2, 0))
-          println(extractTerm(s2, 1))*/
 
           print("NEW_ENEMY_X: " + extractTerm(s, 3) + "\n") //NEW_ENEMY_X
           print("NEW_ENEMY_Y: " + extractTerm(s, 4) + "\n") //NEW_ENEMY_Y
@@ -264,11 +258,12 @@ object Systems extends Observable[Event]:
           val newEnemyX = extractTerm(s, 3)
           val newEnemyY = extractTerm(s, 4)
 
-          val v = VelocityComponent(x = newEnemyX * elapsedTime * 0.01, y = newEnemyY * elapsedTime * 0.01)
-          val p = PositionComponent(x = newEnemyX, y = newEnemyY)
+          val v = VelocityComponent(x = playerPosition.x - newEnemyX * elapsedTime * 0.01, y = playerPosition.y - newEnemyY * elapsedTime * 0.01)
+          //val p = PositionComponent(x = newEnemyX, y = newEnemyY)
+
 
           entity.replaceComponent(v)
-          entity.replaceComponent(p)
+          //entity.replaceComponent(p)
 
         } catch {
           case e: Exception => e match
