@@ -82,7 +82,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
           .addComponent(DirectionComponent(LEFT))
           .addComponent(JumpingComponent(false))
           .addComponent(SpriteComponent("sprites/Enemy.jpg"))
-          .addComponent(AIComponent(0.0))
+          .addComponent(AIComponent())
       )
     systemManager
       .addSystem(inputMovementSystem)

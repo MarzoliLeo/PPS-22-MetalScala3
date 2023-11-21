@@ -15,7 +15,7 @@ case class GravityComponent(gravity: Double) extends Component
 case class JumpingComponent(isJumping: Boolean) extends Component
 case class SpriteComponent(spritePath: String) extends Component
 case class DirectionComponent(d: Direction) extends Component
-case class AIComponent(foolishness: Double) extends Component
+case class AIComponent() extends Component
 case class ColorComponent(color: Color) extends Component
 
 case class PlayerComponent() extends Component

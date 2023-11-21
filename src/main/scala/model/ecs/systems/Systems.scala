@@ -205,7 +205,7 @@ object Systems extends Observable[Event]:
         classOf[VelocityComponent],
         classOf[JumpingComponent]
       )
-      .foreach { entity =>
+      .foreach( entity =>
 
         val newPosition = updatePosition(entity, elapsedTime)
 
@@ -214,4 +214,37 @@ object Systems extends Observable[Event]:
 
         updateJumpingState(entity)
         entity.replaceComponent(newPosition)
-      }
+      )
+
+
+  val AIMoveTowardPlayerSystem: Long => Unit = elapsedTime =>
+    import alice.tuprolog._
+    given Conversion[String, Term] = Term.createTerm(_)
+    given Conversion[Seq[_], Term] = _.mkString("[", ",", "]")
+
+    val prologFile = "Enemy.pl"
+    val engine = new Prolog()
+    engine.setTheory(new Theory(new java.io.File(prologFile)))
+
+    val playerPosition: PositionComponent = EntityManager()
+      .getEntitiesByClass(classOf[PlayerEntity])
+      .head
+      .getComponent[PositionComponent].get
+
+
+    EntityManager()
+      .getEntitiesWithComponent(
+        classOf[AIComponent]
+      )
+      .foreach( entity =>
+        val enemyPosition = entity.getComponent[PositionComponent].get
+
+        val query = new Struct("move_toward_player",
+          0.0,
+          (playerPosition.x, playerPosition.y),
+          (enemyPosition.x, enemyPosition.y),
+          new Var(),
+          new Var())
+        val s = engine.solve(query).getSolution
+
+      )
