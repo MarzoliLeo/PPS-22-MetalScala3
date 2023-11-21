@@ -20,7 +20,6 @@ case class ColorComponent(color: Color) extends Component
 
 case class PlayerComponent() extends Component
 case class VelocityComponent(var x: Double, var y: Double) extends Component:
-
   def this(to: PositionComponent, from: PositionComponent) =
     this(to.x - from.x, to.y - from.y)
 
