@@ -15,7 +15,7 @@ enum Bullet:
     case MachineGunBullet
 case class BulletComponent(bullet: Bullet) extends Component
 
-case class CollisionComponent(otherEntity: Entity) extends Component
+case class CollisionComponent(entities: scala.collection.mutable.Set[Entity]) extends Component
 
 /**
  * An Entity has this component if it's a trigger

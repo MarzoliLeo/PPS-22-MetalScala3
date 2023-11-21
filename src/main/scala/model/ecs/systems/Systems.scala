@@ -169,13 +169,28 @@ object Systems extends Observable[Event]:
         entity.getComponent[JumpingComponent].get
   }
 
-  val collisionDetectionSystem: Long => Unit = elapsedTime =>
-    EntityManager().entities.foreach { entity =>
-      checkCollision(entity, entity.getComponent[PositionComponent].get) match
-        case Some(collidingEntity) =>
-          entity.replaceComponent(CollisionComponent(collidingEntity))
-          collidingEntity.replaceComponent(CollisionComponent(entity))
-        case None => ()
+  def collisionDetectionSystem(elapsedTime: Long): Unit =
+    var entitiesToCheck = EntityManager().getEntitiesWithComponent(classOf[SizeComponent], classOf[PositionComponent]).toSet
+    EntityManager().getEntitiesWithComponent(classOf[SizeComponent], classOf[PositionComponent], classOf[CollisionComponent]).foreach { e1 =>
+      entitiesToCheck -= e1
+      val pos1 = e1.getComponent[PositionComponent].get
+      val size1 = e1.getComponent[SizeComponent].get
+      entitiesToCheck.foreach { e2 =>
+        val pos2 = e2.getComponent[PositionComponent].get
+        val size2 = e2.getComponent[SizeComponent].get
+        val right = pos1.x + size1.width - pos2.x // overlap between right side of e1 and left side of e2
+        val left = pos1.x - pos2.x + size2.width // overlap between left side of e1 and right side of e2
+        val bottom = pos1.y + size1.height - pos2.y // overlap between bottom side of e1 and top side of e2
+        val top = pos1.y - pos2.y + size2.height // overlap between top side of e1 and bottom side of e2
+        (right, left, bottom, top) match
+          case (r, l, b, t) if r > 0 && l < 0 && b > 0 && t < 0 => // e1 colliding with e2
+            e1.getComponent[CollisionComponent].get.entities += e2 // marking e1
+            e2.getComponent[CollisionComponent] match
+              case Some(collisionComponent) =>                     // e2 has to be marked
+                collisionComponent.entities += e1                  // marking e2
+              case None =>
+          case _ =>
+      }
     }
 
   val collisionHandlingSystem: Long => Unit = elapsedTime =>
@@ -185,7 +200,6 @@ object Systems extends Observable[Event]:
           println("trigger")
         case Some(collisionComponent: CollisionComponent) =>
           // It should move entity back to a not colliding position
-          handleCollision(entity, collisionComponent.otherEntity)
         case None => ()
     }
 
