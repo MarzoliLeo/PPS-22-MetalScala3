@@ -193,14 +193,27 @@ object Systems extends Observable[Event]:
       }
     }
 
-  val collisionHandlingSystem: Long => Unit = elapsedTime =>
-    EntityManager().entities.foreach { entity =>
-      entity.getComponent[CollisionComponent] match
-        case Some(collisionComponent: CollisionComponent) if entity.hasComponent(classOf[TriggerComponent]) =>
-          println("trigger")
-        case Some(collisionComponent: CollisionComponent) =>
-          // It should move entity back to a not colliding position
-        case None => ()
+  def collisionHandlingSystem(elapsedTime: Long): Unit =
+    EntityManager().getEntitiesWithComponent(classOf[CollisionComponent], classOf[VelocityComponent]).foreach { entity =>
+      val velocity = entity.getComponent[VelocityComponent].get
+      var position = entity.getComponent[PositionComponent].get
+      val collisions = entity.getComponent[CollisionComponent].get.entities
+      // check the velocity to know in what direction has been collided
+      // resolve finding max or min accordingly that represent a surely empty space
+      if velocity.x < 0 then
+        val x = collisions.map(e => e.getComponent[PositionComponent].get.x + e.getComponent[SizeComponent].get.width).max
+        position = PositionComponent(x, position.y)
+      else if velocity.x > 0 then
+        val x = collisions.map(_.getComponent[PositionComponent].get.x).min
+        position = PositionComponent(x, position.y)
+      if velocity.y < 0 then
+        val y = collisions.map(e => e.getComponent[PositionComponent].get.y + e.getComponent[SizeComponent].get.height).max
+        position = PositionComponent(position.x, y)
+      else if velocity.y > 0 then
+        val y = collisions.map(_.getComponent[PositionComponent].get.y).min
+        position = PositionComponent(position.x, y)
+      entity.replaceComponent(position)
+      entity.replaceComponent(CollisionComponent(scala.collection.mutable.Set()))
     }
 
 
