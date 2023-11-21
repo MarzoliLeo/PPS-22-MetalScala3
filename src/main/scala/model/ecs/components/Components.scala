@@ -12,11 +12,12 @@ case class PositionComponent(x: Double, y: Double) extends Component:
   def +(v: VelocityComponent): PositionComponent =
     PositionComponent(x + v.x, y + v.y)
 case class GravityComponent(gravity: Double) extends Component
-// Component necessary to make the entity jump and be afflicted by gravity
 case class JumpingComponent(isJumping: Boolean) extends Component
 case class SpriteComponent(spritePath: String) extends Component
 case class DirectionComponent(d: Direction) extends Component
+case class AIComponent(foolishness: Double) extends Component
 case class ColorComponent(color: Color) extends Component
+
 case class PlayerComponent() extends Component
 case class VelocityComponent(var x: Double, var y: Double) extends Component:
 
@@ -27,14 +28,6 @@ case class VelocityComponent(var x: Double, var y: Double) extends Component:
   def +(v: VelocityComponent): VelocityComponent =
     VelocityComponent(x + v.x, y + v.y)
 
-  def module(): Double = sqrt(x * x + y * y)
-
-  def getNormalized: VelocityComponent =
-    val mod = module()
-    VelocityComponent(x / mod, y / mod)
-
   @targetName("multiply")
   def *(fact: Double): VelocityComponent =
     VelocityComponent(x * fact, y * fact)
-
-  override def toString: String = s"VelocityComponent($x,$y)"
