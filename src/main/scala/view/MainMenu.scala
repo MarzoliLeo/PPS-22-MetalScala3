@@ -14,7 +14,7 @@ import model.ecs.entities.EntityManager
 import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.MachineGunEntity
-import model.ecs.systems.Systems.{bulletMovementSystem, gravitySystem, inputMovementSystem, positionUpdateSystem}
+import model.ecs.systems.Systems.{bulletMovementSystem, collisionDetectionSystem, collisionHandlingSystem, gravitySystem, inputMovementSystem, positionUpdateSystem}
 import model.ecs.systems.{CollisionSystem, SystemManager, Systems}
 import model.engine.Engine
 import model.{GUIHEIGHT, HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
@@ -63,6 +63,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
           .addComponent(
             SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
           )
+          .addComponent(CollisionComponent(scala.collection.mutable.Set()))
           .addComponent(BulletComponent(Bullet.StandardBullet))
           .addComponent(VelocityComponent(0, 0))
           .addComponent(DirectionComponent(RIGHT))
@@ -99,6 +100,8 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       .addSystem(gravitySystem)
       .addSystem(positionUpdateSystem)
       .addSystem(bulletMovementSystem)
+      .addSystem(collisionDetectionSystem)
+      .addSystem(collisionHandlingSystem)
     parentStage.getScene.setRoot(gameView)
     gameEngine.start()
 

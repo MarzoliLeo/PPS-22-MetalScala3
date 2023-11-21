@@ -96,28 +96,28 @@ object Systems extends Observable[Event]:
     val velocity = entity
       .getComponent[VelocityComponent]
       .getOrElse(throw new Exception("Velocity not found"))
-    val tmpPositionX: PositionComponent = PositionComponent(
-      currentPosition.x + velocity.x * elapsedTime * 0.001,
-      currentPosition.y
-    )
-    val tmpPositionY = PositionComponent(
-      currentPosition.x,
-      currentPosition.y + velocity.y * elapsedTime * 0.001
-    )
-
-    val newPositionX =
-      if checkCollision(entity, tmpPositionX).isEmpty then tmpPositionX.x
-      else currentPosition.x
-
-    val newPositionY =
-      if checkCollision(entity, tmpPositionY).isEmpty then tmpPositionY.y
-      else
-        entity.replaceComponent(JumpingComponent(false))
-        currentPosition.y
+//    val tmpPositionX: PositionComponent = PositionComponent(
+//      currentPosition.x + velocity.x * elapsedTime * 0.001,
+//      currentPosition.y
+//    )
+//    val tmpPositionY = PositionComponent(
+//      currentPosition.x,
+//      currentPosition.y + velocity.y * elapsedTime * 0.001
+//    )
+//
+//    val newPositionX =
+//      if checkCollision(entity, tmpPositionX).isEmpty then tmpPositionX.x
+//      else currentPosition.x
+//
+//    val newPositionY =
+//      if checkCollision(entity, tmpPositionY).isEmpty then tmpPositionY.y
+//      else
+//        entity.replaceComponent(JumpingComponent(false))
+//        currentPosition.y
 
     PositionComponent(
-      boundaryCheck(newPositionX, model.GUIWIDTH, HORIZONTAL_COLLISION_SIZE),
-      boundaryCheck(newPositionY, model.GUIHEIGHT, VERTICAL_COLLISION_SIZE)
+      boundaryCheck(currentPosition.x + velocity.x * elapsedTime * 0.001, model.GUIWIDTH, HORIZONTAL_COLLISION_SIZE),
+      boundaryCheck(currentPosition.y + velocity.y * elapsedTime * 0.001, model.GUIHEIGHT, VERTICAL_COLLISION_SIZE)
     )
   }
 
@@ -195,25 +195,26 @@ object Systems extends Observable[Event]:
 
   def collisionHandlingSystem(elapsedTime: Long): Unit =
     EntityManager().getEntitiesWithComponent(classOf[CollisionComponent], classOf[VelocityComponent]).foreach { entity =>
-      val velocity = entity.getComponent[VelocityComponent].get
-      var position = entity.getComponent[PositionComponent].get
       val collisions = entity.getComponent[CollisionComponent].get.entities
-      // check the velocity to know in what direction has been collided
-      // resolve finding max or min accordingly that represent a surely empty space
-      if velocity.x < 0 then
-        val x = collisions.map(e => e.getComponent[PositionComponent].get.x + e.getComponent[SizeComponent].get.width).max
-        position = PositionComponent(x, position.y)
-      else if velocity.x > 0 then
-        val x = collisions.map(_.getComponent[PositionComponent].get.x).min
-        position = PositionComponent(x, position.y)
-      if velocity.y < 0 then
-        val y = collisions.map(e => e.getComponent[PositionComponent].get.y + e.getComponent[SizeComponent].get.height).max
-        position = PositionComponent(position.x, y)
-      else if velocity.y > 0 then
-        val y = collisions.map(_.getComponent[PositionComponent].get.y).min
-        position = PositionComponent(position.x, y)
-      entity.replaceComponent(position)
-      entity.replaceComponent(CollisionComponent(scala.collection.mutable.Set()))
+      if collisions.nonEmpty then
+        val velocity = entity.getComponent[VelocityComponent].get
+        var position = entity.getComponent[PositionComponent].get
+        // check the velocity to know in what direction has been collided
+        // resolve finding max or min accordingly that represent a surely empty space
+        if velocity.x < 0 then
+          val x = collisions.map(e => e.getComponent[PositionComponent].get.x + e.getComponent[SizeComponent].get.width).max
+          position = PositionComponent(x, position.y)
+        else if velocity.x > 0 then
+          val x = collisions.map(_.getComponent[PositionComponent].get.x).min
+          position = PositionComponent(x, position.y)
+        if velocity.y < 0 then
+          val y = collisions.map(e => e.getComponent[PositionComponent].get.y + e.getComponent[SizeComponent].get.height).max
+          position = PositionComponent(position.x, y)
+        else if velocity.y > 0 then
+          val y = collisions.map(_.getComponent[PositionComponent].get.y).min
+          position = PositionComponent(position.x, y)
+        entity.replaceComponent(position)
+        entity.replaceComponent(CollisionComponent(scala.collection.mutable.Set()))
     }
 
 
