@@ -229,7 +229,7 @@ object Systems extends Observable[Event]:
         //val randomDouble = scala.util.Random.nextDouble()
 
         val query = new Struct("move_toward_player",
-          0.4,
+          2,
           (playerPosition.x, playerPosition.y),
           (enemyPosition.x, enemyPosition.y),
           new Var()
