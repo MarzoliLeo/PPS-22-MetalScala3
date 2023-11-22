@@ -19,10 +19,7 @@ case class AIComponent() extends Component
 case class ColorComponent(color: Color) extends Component
 
 case class PlayerComponent() extends Component
-case class VelocityComponent(var x: Double, var y: Double) extends Component:
-  def this(to: PositionComponent, from: PositionComponent) =
-    this(to.x - from.x, to.y - from.y)
-
+case class VelocityComponent(x: Double, y: Double) extends Component:
   @targetName("sum")
   def +(v: VelocityComponent): VelocityComponent =
     VelocityComponent(x + v.x, y + v.y)

@@ -40,18 +40,7 @@ object Systems extends Observable[Event]:
           val newPositionX = pos.x + vel.x * elapsedTime * 0.001
           val newPositionY = pos.y + vel.y * elapsedTime * 0.001
           // Calculate the new position based on the velocity and elapsed time
-          val newPosition = PositionComponent(
-            boundaryCheck(
-              newPositionX,
-              model.GUIWIDTH,
-              HORIZONTAL_COLLISION_SIZE
-            ),
-            boundaryCheck(
-              newPositionY,
-              model.GUIHEIGHT,
-              VERTICAL_COLLISION_SIZE
-            )
-          )
+          val newPosition = PositionComponent(newPositionX, newPositionY)
           bullet.replaceComponent(newPosition)
 
         }
@@ -187,9 +176,8 @@ object Systems extends Observable[Event]:
       val velocity = entity
         .getComponent[VelocityComponent]
         .getOrElse(throw new Exception("Velocity not found"))
-      val isTouchingGround =
-        currentPosition.y + VERTICAL_COLLISION_SIZE >= model.GUIHEIGHT && velocity.y >= 0
-      if (isTouchingGround)
+      val isEntityTouchingGround = currentPosition.y + VERTICAL_COLLISION_SIZE >= model.GUIHEIGHT && velocity.y >= 0
+      if (isEntityTouchingGround)
         model.isGravityEnabled = false
         entity.replaceComponent(JumpingComponent(false))
       else
@@ -197,7 +185,7 @@ object Systems extends Observable[Event]:
         entity.getComponent[JumpingComponent].get
   }
 
-  val positionUpdateSystem: Long => Unit = elapsedTime =>
+  val playerPositionUpdateSystem: Long => Unit = elapsedTime =>
     EntityManager()
       .getEntitiesWithComponent(
         classOf[PositionComponent],
@@ -207,12 +195,12 @@ object Systems extends Observable[Event]:
       .foreach( entity =>
 
         val newPosition = updatePosition(entity, elapsedTime)
-
         val newVelocity = updateVelocity(entity)
-        entity.replaceComponent(newVelocity)
 
+        entity.replaceComponent(newVelocity)
         updateJumpingState(entity)
         entity.replaceComponent(newPosition)
+
       )
 
 
@@ -247,7 +235,6 @@ object Systems extends Observable[Event]:
           new Var()
         )
 
-
         try {
           //Facendo l'update della posizione dell'enemy.
           val s = engine.solve(query).getSolution
@@ -258,12 +245,13 @@ object Systems extends Observable[Event]:
           val newEnemyX = extractTerm(s, 3)
           val newEnemyY = extractTerm(s, 4)
 
-          val v = VelocityComponent(x = playerPosition.x - newEnemyX * elapsedTime * 0.01, y = playerPosition.y - newEnemyY * elapsedTime * 0.01)
-          //val p = PositionComponent(x = newEnemyX, y = newEnemyY)
+/*
+          val newEnemyVelocity = VelocityComponent(newEnemyX, newEnemyY)
+          entity.replaceComponent(newEnemyVelocity)*/
 
-
-          entity.replaceComponent(v)
-          //entity.replaceComponent(p)
+          /*
+          val newEnemyPosition = PositionComponent(x = newEnemyX , y = newEnemyY )
+          entity.replaceComponent(newEnemyPosition)*/
 
         } catch {
           case e: Exception => e match

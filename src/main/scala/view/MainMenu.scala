@@ -8,10 +8,10 @@ import javafx.scene.input.{KeyCode, KeyEvent}
 import javafx.scene.layout.{GridPane, Pane}
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.Box
-import javafx.stage.Stage
+import javafx.stage.{Stage, WindowEvent}
 import model.ecs.components.*
 import model.ecs.entities.{EnemyEntity, EntityManager, PlayerEntity}
-import model.ecs.systems.Systems.{AIMoveTowardPlayerSystem, bulletMovementSystem, gravitySystem, inputMovementSystem, positionUpdateSystem}
+import model.ecs.systems.Systems.{AIMoveTowardPlayerSystem, bulletMovementSystem, gravitySystem, inputMovementSystem, playerPositionUpdateSystem}
 import model.ecs.systems.{CollisionSystem, SystemManager, Systems}
 import model.engine.Engine
 import model.{GUIHEIGHT, HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
@@ -45,6 +45,8 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
   private val gameEngine = Engine()
   getButton(root, "Start").setOnAction((_: ActionEvent) => handleStartButton())
   getButton(root, "Exit").setOnAction((_: ActionEvent) => handleExitButton())
+  // Set the onCloseRequest handler
+  parentStage.setOnCloseRequest((event: WindowEvent) => handleWindowCloseRequest())
 
   def handleStartButton(): Unit =
     val gameView =
@@ -87,7 +89,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
     systemManager
       .addSystem(inputMovementSystem)
       .addSystem(gravitySystem)
-      .addSystem(positionUpdateSystem)
+      .addSystem(playerPositionUpdateSystem)
       .addSystem(bulletMovementSystem)
       .addSystem(AIMoveTowardPlayerSystem)
     parentStage.getScene.setRoot(gameView)
@@ -97,6 +99,12 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
     parentStage.close()
     gameEngine.stop()
     System.exit(0)
+
+  def handleWindowCloseRequest(): Unit = {
+    parentStage.close()
+    gameEngine.stop()
+    System.exit(0)
+  }
 
   override def startButton: Button = getButton(root, "Start")
 
