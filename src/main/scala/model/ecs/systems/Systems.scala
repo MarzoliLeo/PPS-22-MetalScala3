@@ -229,31 +229,27 @@ object Systems extends Observable[Event]:
         //val randomDouble = scala.util.Random.nextDouble()
 
         val query = new Struct("move_toward_player",
-          0.6,
+          0.4,
           (playerPosition.x, playerPosition.y),
           (enemyPosition.x, enemyPosition.y),
           new Var()
-          //new Var()
         )
 
         try {
           //Facendo l'update della posizione dell'enemy.
           val s = engine.solve(query).getSolution
 
-          print("NEW_ENEMY_X: " + extractTerm(s, 3) + "\n") //NEW_ENEMY_X
-
+          //print("NEW_ENEMY_X: " + extractTerm(s, 3) + "\n") //NEW_ENEMY_X
           val newEnemyX = extractTerm(s, 3)
 
-
-          // Optionally, you can scale the values by elapsed time or other factors
-          val scaledDeltaX = (enemyPosition.x - newEnemyX) * elapsedTime * 0.001
-
-
-          // Modify the existing VelocityComponent based on the delta values
           val newEnemyVelocity = VelocityComponent(
-            currentVelocity.x + scaledDeltaX,
+            currentVelocity.x + (enemyPosition.x - newEnemyX) * elapsedTime * 0.001,
             currentVelocity.y
           )
+
+          newEnemyVelocity match
+            case VelocityComponent(x, _) if x > 0 => entity.replaceComponent(DirectionComponent(LEFT))
+            case _ => entity.replaceComponent(DirectionComponent(RIGHT))
 
           entity.replaceComponent(newEnemyVelocity)
 
