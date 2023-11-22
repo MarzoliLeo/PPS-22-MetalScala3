@@ -7,7 +7,7 @@ import model.ecs.entities.*
 import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.{BulletEntity, MachineGunEntity, WeaponEntity}
-import model.ecs.systems.CollisionSystem.{checkCollision, handleCollision, isOverlapping}
+import model.ecs.systems.CollisionSystem.isOverlapping
 import model.ecs.systems.Systems.updatePosition
 import model.event.Event
 import model.event.observer.Observable
@@ -96,25 +96,6 @@ object Systems extends Observable[Event]:
     val velocity = entity
       .getComponent[VelocityComponent]
       .getOrElse(throw new Exception("Velocity not found"))
-//    val tmpPositionX: PositionComponent = PositionComponent(
-//      currentPosition.x + velocity.x * elapsedTime * 0.001,
-//      currentPosition.y
-//    )
-//    val tmpPositionY = PositionComponent(
-//      currentPosition.x,
-//      currentPosition.y + velocity.y * elapsedTime * 0.001
-//    )
-//
-//    val newPositionX =
-//      if checkCollision(entity, tmpPositionX).isEmpty then tmpPositionX.x
-//      else currentPosition.x
-//
-//    val newPositionY =
-//      if checkCollision(entity, tmpPositionY).isEmpty then tmpPositionY.y
-//      else
-//        entity.replaceComponent(JumpingComponent(false))
-//        currentPosition.y
-
     PositionComponent(
       boundaryCheck(currentPosition.x + velocity.x * elapsedTime * 0.001, model.GUIWIDTH, HORIZONTAL_COLLISION_SIZE),
       boundaryCheck(currentPosition.y + velocity.y * elapsedTime * 0.001, model.GUIHEIGHT, VERTICAL_COLLISION_SIZE)
@@ -179,10 +160,10 @@ object Systems extends Observable[Event]:
         val pos2 = e2.getComponent[PositionComponent].get
         val size2 = e2.getComponent[SizeComponent].get
         if isOverlapping(pos1, size1, pos2, size2) then
-          e1.getComponent[CollisionComponent].get.entities += e2 // marking e1
+          e1.getComponent[CollisionComponent].get.entities += e2
           e2.getComponent[CollisionComponent] match
-            case Some(collisionComponent) => // e2 has to be marked
-              collisionComponent.entities += e1 // marking e2
+            case Some(collisionComponent) =>
+              collisionComponent.entities += e1
             case None =>
       }
     }
@@ -194,14 +175,12 @@ object Systems extends Observable[Event]:
         val velocity = entity.getComponent[VelocityComponent].get
         val size = entity.getComponent[SizeComponent].get
         var position = entity.getComponent[PositionComponent].get
-        // check the velocity to know in what direction has been collided
-        // resolve finding max or min accordingly that represent a surely empty space
         if velocity.x < 0 then
           val x = collisions.map(e => e.getComponent[PositionComponent].get.x + e.getComponent[SizeComponent].get.width).max
-          position = PositionComponent(x, position.y)
+          position = PositionComponent(x + 1, position.y)
         else if velocity.x > 0 then
           val x = collisions.map(_.getComponent[PositionComponent].get.x).min
-          position = PositionComponent(x - size.width, position.y)
+          position = PositionComponent(x - size.width - 1, position.y)
         if velocity.y < 0 then
           val y = collisions.map(e => e.getComponent[PositionComponent].get.y + e.getComponent[SizeComponent].get.height).max
           position = PositionComponent(position.x, y)

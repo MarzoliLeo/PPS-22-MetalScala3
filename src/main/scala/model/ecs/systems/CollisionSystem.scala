@@ -11,60 +11,6 @@ import javax.imageio.ImageIO
 
 object CollisionSystem {
 
-  /** Checks if the entity collides with another entity in the new position
-    *
-    * @param entity
-    *   the entity to check
-    * @param newPosition
-    *   the new position of the entity
-    * @return
-    *   the entity that collides with the entity passed as parameter
-    */
-  def checkCollision(
-      entity: Entity,
-      newPosition: PositionComponent
-  ): Option[Entity] = {
-    val potentialCollisions = EntityManager().getEntitiesWithComponent(
-      classOf[PositionComponent],
-      classOf[SizeComponent]
-    )
-    val size = entity.getComponent[SizeComponent].get
-
-    // [ATTENTION] We are hypothesizing that there is at most one collision
-    potentialCollisions.find { otherEntity =>
-      if (!otherEntity.isSameEntity(entity)) {
-        isOverlapping(
-          newPosition,
-          size,
-          otherEntity.getComponent[PositionComponent].get,
-          otherEntity.getComponent[SizeComponent].get
-        )
-      } else false
-    }
-  }
-
-  def handleCollision(entity: Entity, otherEntity: Entity): Unit = {
-    (entity, otherEntity) match
-      case (_: PlayerEntity, _: WeaponEntity) =>
-        // Remove the weapon from the EntityManager
-        EntityManager().removeEntity(otherEntity)
-      case (_: PlayerEntity, _: Entity) =>
-
-      case _ => ()
-    entity.removeComponent(classOf[CollisionComponent])
-  }
-
-  def updateEntityBasedOnCollisions(
-      entity: Entity,
-      newPosition: PositionComponent
-  ): Unit = {
-    checkCollision(entity, newPosition) match {
-      case Some(collidingEntity) => handleCollision(entity, collidingEntity)
-      case None => // No collision, so just update the entity's position
-        entity.replaceComponent(newPosition)
-    }
-  }
-
   def isOverlapping(
       pos1: PositionComponent,
       size1: SizeComponent,
