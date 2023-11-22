@@ -37,3 +37,5 @@ trait Entity:
 
   override def toString: String =
     s"Entity(id: $id, components: $signature)"
+
+  def onCollisionEnter(other: Entity): Unit = ()
