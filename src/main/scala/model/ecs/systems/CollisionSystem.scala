@@ -1,16 +1,16 @@
 package model.ecs.systems
 
 import model.ecs.components.{PositionComponent, SizeComponent}
-import model.ecs.entities.EntityManager
-
-import java.awt.image.BufferedImage
-import javax.imageio.ImageIO
-import java.io.File
-import model.ecs.entities.Entity
+import model.ecs.entities.{Entity, EntityManager}
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.WeaponEntity
 
+import java.awt.image.BufferedImage
+import java.io.File
+import javax.imageio.ImageIO
+
 object CollisionSystem {
+
   /** Checks if the entity collides with another entity in the new position
     *
     * @param entity
@@ -34,32 +34,14 @@ object CollisionSystem {
     potentialCollisions.find { otherEntity =>
       if (!otherEntity.isSameEntity(entity)) {
         CollisionSystem.isOverlapping(
-            newPosition,
-            size,
-            otherEntity.getComponent[PositionComponent].get,
-            otherEntity.getComponent[SizeComponent].get
-          )
+          newPosition,
+          size,
+          otherEntity.getComponent[PositionComponent].get,
+          otherEntity.getComponent[SizeComponent].get
+        )
       } else false
     }
   }
-
-  def handleCollision(entity: Entity, otherEntity: Entity): Unit = {
-    (entity, otherEntity) match
-      case (_: PlayerEntity, weaponEntity: WeaponEntity) =>
-        // Remove the weapon from the EntityManager
-        EntityManager().removeEntity(weaponEntity)
-      // Here the "move back" strategy used to fix the collided positions of entities should be implemented
-      case _ => ()
-  }
-
-  def updateEntityBasedOnCollisions(entity: Entity, newPosition: PositionComponent): Unit = {
-    checkCollision(entity, newPosition) match {
-      case Some(collidingEntity) => handleCollision(entity, collidingEntity)
-      case None => // No collision, so just update the entity's position
-        entity.replaceComponent(newPosition)
-    }
-  }
-
 
   private def isOverlapping(
       pos1: PositionComponent,
@@ -67,7 +49,12 @@ object CollisionSystem {
       pos2: PositionComponent,
       size2: SizeComponent
   ): Boolean = {
-    isOverlappingX(pos1, size1, pos2, size2) && isOverlappingY(pos1, size1, pos2, size2)
+    isOverlappingX(pos1, size1, pos2, size2) && isOverlappingY(
+      pos1,
+      size1,
+      pos2,
+      size2
+    )
   }
 
   private def isOverlappingX(

@@ -23,7 +23,12 @@ import java.util.UUID
 
 trait GameView extends View
 
-private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Event]]) extends GameView with CommandsStackHandler with Observer[Event] {
+private class GameViewImpl(
+    primaryStage: Stage,
+    observables: Set[Observable[Event]]
+) extends GameView
+    with CommandsStackHandler
+    with Observer[Event] {
   val root: Pane = Pane()
   private var entityIdToView: Map[UUID, Node] = Map()
 
@@ -31,15 +36,14 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
   private val scene: Scene = Scene(root, model.GUIWIDTH, model.GUIHEIGHT)
   scene.setOnKeyPressed { k =>
     k.getCode match
-      case KeyCode.LEFT => handleInput(Command.left)
+      case KeyCode.LEFT  => handleInput(Command.left)
       case KeyCode.RIGHT => handleInput(Command.right)
-      case KeyCode.UP => handleInput(Command.jump)
+      case KeyCode.UP    => handleInput(Command.jump)
       case KeyCode.SPACE => handleInput(Command.shoot)
-      case _ => ()
+      case _             => ()
   }
   primaryStage.setScene(scene)
   observables.foreach(_.addObserver(this))
-
 
   override def update(subject: Event): Unit =
     Platform.runLater { () =>
@@ -47,8 +51,7 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
         case Tick(entities) =>
           entityIdToView.foreach((_, view) => root.getChildren.remove(view))
           entities.foreach(entity =>
-            if
-              entity.hasComponent(classOf[PositionComponent])
+            if entity.hasComponent(classOf[PositionComponent])
               && entity.hasComponent(classOf[SpriteComponent])
               && entity.hasComponent(classOf[DirectionComponent])
             then
@@ -56,20 +59,21 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
               val sprite = entity.getComponent[SpriteComponent].get
               val direction = entity.getComponent[DirectionComponent].get
 
-              entityIdToView = entityIdToView + (entity.id -> createSpriteView(sprite, position))
+              entityIdToView = entityIdToView + (entity.id -> createSpriteView(
+                sprite,
+                position
+              ))
               val entityToShow = entityIdToView(entity.id)
               entityToShow.setTranslateX(position.x)
               entityToShow.setTranslateY(position.y)
               direction match
                 case DirectionComponent(RIGHT) => entityToShow.setScaleX(1)
-                case DirectionComponent(LEFT) => entityToShow.setScaleX(-1)
-
+                case DirectionComponent(LEFT)  => entityToShow.setScaleX(-1)
           )
           entityIdToView.foreach((_, view) => root.getChildren.add(view))
     }
 
-
-  //TODO lo userò per creare il terreno di gioco.
+  // TODO lo userò per creare il terreno di gioco.
   private def createBoxView(position: PositionComponent): Node =
     val box = Box(100, 100, 100)
     box.setTranslateX(position.x)
@@ -77,8 +81,10 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
     box.setMaterial(PhongMaterial(Color.RED))
     box
 
-
-  private def createSpriteView(spriteComponent: SpriteComponent, position: PositionComponent): Node = {
+  private def createSpriteView(
+      spriteComponent: SpriteComponent,
+      position: PositionComponent
+  ): Node = {
     val imageView = new ImageView(new Image(spriteComponent.spritePath))
     imageView.setFitWidth(model.fixedSpriteWidth)
     imageView.setFitHeight(model.fixedSpriteHeight)
@@ -89,7 +95,6 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
   }
 
 }
-
 
 object GameView {
   def apply(

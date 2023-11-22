@@ -7,7 +7,7 @@ import model.ecs.entities.*
 import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.{BulletEntity, MachineGunEntity, WeaponEntity}
-import model.ecs.systems.CollisionSystem.{checkCollision}
+import model.ecs.systems.CollisionSystem.checkCollision
 import model.ecs.systems.Systems.updatePosition
 import model.event.Event
 import model.event.observer.Observable
@@ -89,31 +89,28 @@ object Systems extends Observable[Event]:
         }
     }
 
-  def updatePosition(entity: Entity, elapsedTime: Long): PositionComponent = {
-    val currentPosition = entity
-      .getComponent[PositionComponent]
-      .getOrElse(throw new Exception("Position not found"))
-    val velocity = entity
-      .getComponent[VelocityComponent]
-      .getOrElse(throw new Exception("Velocity not found"))
+  def updatePosition(entity: Entity, elapsedTime: Long)(using
+      position: PositionComponent,
+      velocity: VelocityComponent
+  ): PositionComponent = {
     val tmpPositionX: PositionComponent = PositionComponent(
-      currentPosition.x + velocity.x * elapsedTime * 0.001,
-      currentPosition.y
+      position.x + velocity.x * elapsedTime * 0.001,
+      position.y
     )
     val tmpPositionY = PositionComponent(
-      currentPosition.x,
-      currentPosition.y + velocity.y * elapsedTime * 0.001
+      position.x,
+      position.y + velocity.y * elapsedTime * 0.001
     )
 
     val newPositionX =
       if checkCollision(entity, tmpPositionX).isEmpty then tmpPositionX.x
-      else currentPosition.x
+      else position.x
 
     val newPositionY =
       if checkCollision(entity, tmpPositionY).isEmpty then tmpPositionY.y
       else
         entity.replaceComponent(JumpingComponent(false))
-        currentPosition.y
+        position.y
 
     PositionComponent(
       boundaryCheck(newPositionX, model.GUIWIDTH, HORIZONTAL_COLLISION_SIZE),
@@ -121,11 +118,9 @@ object Systems extends Observable[Event]:
     )
   }
 
-  private def updateVelocity(entity: Entity): VelocityComponent = {
-    val velocity = entity
-      .getComponent[VelocityComponent]
-      .getOrElse(throw new Exception("Velocity not found"))
-
+  private def updateVelocity(entity: Entity)(using
+      velocity: VelocityComponent
+  ): VelocityComponent = {
     val newHorizontalVelocity = velocity.x * FRICTION_FACTOR match {
       case x if -0.1 < x && x < 0.1 => 0.0
       case x                        => x
@@ -161,7 +156,7 @@ object Systems extends Observable[Event]:
       val isTouchingGround =
         currentPosition.y + VERTICAL_COLLISION_SIZE >= model.GUIHEIGHT && velocity.y >= 0
       if (isTouchingGround)
-        // fixme: gravity should be subjective 
+        // fixme: gravity should be subjective
         model.isGravityEnabled = false
         entity.replaceComponent(JumpingComponent(false))
       else
@@ -177,6 +172,10 @@ object Systems extends Observable[Event]:
         classOf[JumpingComponent]
       )
       .foreach { entity =>
+        given position: PositionComponent =
+          entity.getComponent[PositionComponent].get
+        given velocity: VelocityComponent =
+          entity.getComponent[VelocityComponent].get
 
         val newPosition = updatePosition(entity, elapsedTime)
 
