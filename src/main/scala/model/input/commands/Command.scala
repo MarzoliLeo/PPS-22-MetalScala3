@@ -41,8 +41,9 @@ object Command:
       entity.getComponent[BulletComponent].getOrElse(throw new Exception) match
         case BulletComponent(Bullet.StandardBullet) =>
           BulletEntity()
-            .addComponent(PositionComponent(p.x, p.y))
+            .addComponent(PositionComponent(p.x + vx * 000.1, p.y))
             .addComponent(VelocityComponent(vx, 0))
+            .addComponent(SizeComponent(100, 100))
             .addComponent(SpriteComponent(model.standardBulletSprite))
             .addComponent(DirectionComponent(bulletDirection.d))
         case BulletComponent(Bullet.MachineGunBullet) =>

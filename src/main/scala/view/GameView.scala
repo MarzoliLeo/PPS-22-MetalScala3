@@ -50,6 +50,7 @@ private class GameViewImpl(
       subject match
         case Tick(entities) =>
           entityIdToView.foreach((_, view) => root.getChildren.remove(view))
+          entityIdToView = Map()
           entities.foreach(entity =>
             if entity.hasComponent(classOf[PositionComponent])
               && entity.hasComponent(classOf[SpriteComponent])
