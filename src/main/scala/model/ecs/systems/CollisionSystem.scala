@@ -43,6 +43,8 @@ object CollisionSystem {
     }
   }
 
+
+
   private def isOverlapping(
       pos1: PositionComponent,
       size1: SizeComponent,

@@ -1,7 +1,6 @@
 package model.ecs.entities
 
 import model.ecs.components.Component
-
 import scala.reflect.ClassTag
 
 trait Entity:
