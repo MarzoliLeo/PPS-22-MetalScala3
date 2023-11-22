@@ -225,14 +225,15 @@ object Systems extends Observable[Event]:
       )
       .foreach( entity =>
         val enemyPosition = entity.getComponent[PositionComponent].get
+        val currentVelocity = entity.getComponent[VelocityComponent].get
         //val randomDouble = scala.util.Random.nextDouble()
 
         val query = new Struct("move_toward_player",
-          0.4,
+          0.6,
           (playerPosition.x, playerPosition.y),
           (enemyPosition.x, enemyPosition.y),
-          new Var(),
           new Var()
+          //new Var()
         )
 
         try {
@@ -240,18 +241,24 @@ object Systems extends Observable[Event]:
           val s = engine.solve(query).getSolution
 
           print("NEW_ENEMY_X: " + extractTerm(s, 3) + "\n") //NEW_ENEMY_X
-          print("NEW_ENEMY_Y: " + extractTerm(s, 4) + "\n") //NEW_ENEMY_Y
 
           val newEnemyX = extractTerm(s, 3)
-          val newEnemyY = extractTerm(s, 4)
 
-/*
-          val newEnemyVelocity = VelocityComponent(newEnemyX, newEnemyY)
-          entity.replaceComponent(newEnemyVelocity)*/
 
-          /*
-          val newEnemyPosition = PositionComponent(x = newEnemyX , y = newEnemyY )
-          entity.replaceComponent(newEnemyPosition)*/
+          // Optionally, you can scale the values by elapsed time or other factors
+          val scaledDeltaX = (enemyPosition.x - newEnemyX) * elapsedTime * 0.001
+
+
+          // Modify the existing VelocityComponent based on the delta values
+          val newEnemyVelocity = VelocityComponent(
+            currentVelocity.x + scaledDeltaX,
+            currentVelocity.y
+          )
+
+          entity.replaceComponent(newEnemyVelocity)
+
+          val newEnemyPosition = PositionComponent(x = newEnemyX, y = enemyPosition.y)
+          entity.replaceComponent(newEnemyPosition)
 
         } catch {
           case e: Exception => e match
