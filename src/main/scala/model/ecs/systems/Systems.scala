@@ -13,6 +13,9 @@ import model.input.commands.*
 import model.utilities.Empty
 
 import java.io.FileInputStream
+import java.util.{Timer, TimerTask}
+
+
 
 object Systems extends Observable[Event]:
 
@@ -204,14 +207,15 @@ object Systems extends Observable[Event]:
       )
 
 
-  val AIMoveTowardPlayerSystem: Long => Unit = elapsedTime =>
+
+  val AISystem: Long => Unit = elapsedTime => {
     import alice.tuprolog._
     import utilities.Scala2P._
+    import model.*
 
     val prologFile = new java.io.File("src/main/resources/EnemyAI.pl")
     val engine = new Prolog()
     engine.setTheory(new Theory(new FileInputStream(prologFile)))
-
 
     val playerPosition: PositionComponent = EntityManager()
       .getEntitiesByClass(classOf[PlayerEntity])
@@ -220,47 +224,69 @@ object Systems extends Observable[Event]:
 
 
     EntityManager()
-      .getEntitiesWithComponent(
-        classOf[AIComponent]
-      )
-      .foreach( entity =>
+      .getEntitiesWithComponent(classOf[AIComponent])
+      .foreach(entity => {
         val enemyPosition = entity.getComponent[PositionComponent].get
         val currentVelocity = entity.getComponent[VelocityComponent].get
-        //val randomDouble = scala.util.Random.nextDouble()
 
-        val query = new Struct("move_toward_player",
-          2,
-          (playerPosition.x, playerPosition.y),
-          (enemyPosition.x, enemyPosition.y),
-          new Var()
-        )
+        val daemonThread = new Thread(new Runnable {
+          override def run(): Unit = {
+            val randomInt = scala.util.Random.nextInt(3) + 1
 
-        try {
-          //Facendo l'update della posizione dell'enemy.
-          val s = engine.solve(query).getSolution
+            val query = new Struct("move_toward_player",
+              randomInt,
+              (playerPosition.x, playerPosition.y),
+              (enemyPosition.x, enemyPosition.y),
+              new Var()
+            )
 
-          //print("NEW_ENEMY_X: " + extractTerm(s, 3) + "\n") //NEW_ENEMY_X
-          val newEnemyX = extractTerm(s, 3)
+            try {
+              val s = engine.solve(query).getSolution
 
-          val newEnemyVelocity = VelocityComponent(
-            currentVelocity.x + (enemyPosition.x - newEnemyX) * elapsedTime * 0.001,
-            currentVelocity.y
-          )
+              if (randomInt == 3) {
+                Command.shoot(entity)
+              } else {
+                val newEnemyX = extractTerm(s, 3)
 
-          newEnemyVelocity match
-            case VelocityComponent(x, _) if x > 0 => entity.replaceComponent(DirectionComponent(LEFT))
-            case _ => entity.replaceComponent(DirectionComponent(RIGHT))
+                val newEnemyVelocity = VelocityComponent(
+                  currentVelocity.x + (enemyPosition.x - newEnemyX) * elapsedTime * 0.001,
+                  currentVelocity.y
+                )
 
-          entity.replaceComponent(newEnemyVelocity)
+                newEnemyVelocity match {
+                  case VelocityComponent(x, _) if x > 0 => entity.replaceComponent(DirectionComponent(LEFT))
+                  case _ => entity.replaceComponent(DirectionComponent(RIGHT))
+                }
 
-          val newEnemyPosition = PositionComponent(x = newEnemyX, y = enemyPosition.y)
-          entity.replaceComponent(newEnemyPosition)
+                entity.replaceComponent(newEnemyVelocity)
 
-        } catch {
-          case e: Exception => e match
-            case e: NoSolutionException => println ("Prolog query failed: No.")
-            case e: MalformedGoalException => println ("Prolog query failed: Malformed.")
-            case e: NoMoreSolutionException => println ("Prolog query failed: No more solutions.")
-            case _ => println("Raised exception: " + e)
+                val newEnemyPosition = PositionComponent(x = newEnemyX, y = enemyPosition.y)
+                entity.replaceComponent(newEnemyPosition)
+              }
+            } catch {
+              case e: Exception => e match {
+                case e: NoSolutionException => println("Prolog query failed: No.")
+                case e: MalformedGoalException => println("Prolog query failed: Malformed.")
+                case e: NoMoreSolutionException => println("Prolog query failed: No more solutions.")
+                case _ => println("Raised exception: " + e)
+              }
+            }
+          }
+        })
+
+        AItimeElapsedSinceLastExecution += AIexecutionSpeed
+
+        println("timeElapsedSinceLastExecution: " + AItimeElapsedSinceLastExecution)
+
+        if (AItimeElapsedSinceLastExecution >= AIexecutionInterval) {
+          daemonThread.setDaemon(true) // Imposta il thread come daemon thread
+          daemonThread.start()
+          AItimeElapsedSinceLastExecution = 0
         }
-      )
+      })
+  }
+
+
+
+
+

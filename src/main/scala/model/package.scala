@@ -32,3 +32,10 @@ package object model:
   val HORIZONTAL_COLLISION_SIZE = 100
   var inputsQueue: Stack[Entity => Unit] = Empty
 
+  //Variabili di AI.
+  var AItimeElapsedSinceLastExecution = 0
+  val AIexecutionInterval = 50
+  val AIexecutionSpeed = 1
+
+
+
