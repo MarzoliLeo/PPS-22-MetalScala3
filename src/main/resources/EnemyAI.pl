@@ -3,9 +3,9 @@ move_toward_player(RANDOMNESS, (PLAYER_X, PLAYER_Y), (ENEMY_X, ENEMY_Y), NEW_ENE
     RANDOMNESS = 1 ->
     (
         ENEMY_X < PLAYER_X ->
-            NEW_ENEMY_X is ENEMY_X + 20.0
+            NEW_ENEMY_X is ENEMY_X + 40.0
         ;
-            NEW_ENEMY_X is ENEMY_X - 20.0
+            NEW_ENEMY_X is ENEMY_X - 40.0
     );
     RANDOMNESS = 2 ->
     (
