@@ -1,15 +1,16 @@
 package model.ecs.systems
 
 import model.ecs.components.{PositionComponent, SizeComponent}
-import model.ecs.entities.{Entity, EntityManager}
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.WeaponEntity
+import model.ecs.entities.{Entity, EntityManager}
+import model.{GUIWIDTH, HORIZONTAL_COLLISION_SIZE}
 
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 
-object CollisionSystem {
+object CollisionChecker {
 
   /** Checks if the entity collides with another entity in the new position
     *
@@ -20,7 +21,7 @@ object CollisionSystem {
     * @return
     *   the entity that collides with the entity passed as parameter
     */
-  def checkCollision(
+  def getCollidingEntity(
       entity: Entity,
       newPosition: PositionComponent
   ): Option[Entity] = {
@@ -33,7 +34,7 @@ object CollisionSystem {
     // [ATTENTION] We are hypothesizing that there is at most one collision
     potentialCollisions.find { otherEntity =>
       if (!otherEntity.isSameEntity(entity)) {
-        CollisionSystem.isOverlapping(
+        isOverlapping(
           newPosition,
           size,
           otherEntity.getComponent[PositionComponent].get,
@@ -43,7 +44,28 @@ object CollisionSystem {
     }
   }
 
+  /** Applies a boundary check to a currentPosition value, ensuring it stays
+    * within the bounds of the system. It ensures that 'pos' is not less than
+    * 0.0 and not greater than 'max - size'.
+    *
+    * @param pos
+    *   The currentPosition value to check.
+    * @param max
+    *   The maximum value allowed for the currentPosition.
+    * @param size
+    *   The size of the object being checked.
+    * @return
+    *   The new currentPosition value after the boundary check has been applied.
+    */
+  def boundaryCheck(pos: Double, max: Double, size: Double): Double =
+    math.max(0.0, math.min(pos, max - size))
 
+  def isOutOfHorizontalBoundaries(
+      newPosition: PositionComponent
+  ): Boolean = {
+    (newPosition.x + HORIZONTAL_COLLISION_SIZE >= GUIWIDTH) ||
+    (newPosition.x <= 0)
+  }
 
   private def isOverlapping(
       pos1: PositionComponent,
@@ -71,7 +93,7 @@ object CollisionSystem {
     val left2 = pos2.x
     val right2 = pos2.x + size2.width
 
-    (!(left1 >= right2 || right1 <= left2))
+    !(left1 >= right2 || right1 <= left2)
   }
 
   private def isOverlappingY(
@@ -86,6 +108,6 @@ object CollisionSystem {
     val top2 = pos2.y
     val bottom2 = pos2.y + size2.height
 
-    (!(top1 >= bottom2 || bottom1 <= top2))
+    !(top1 >= bottom2 || bottom1 <= top2)
   }
 }

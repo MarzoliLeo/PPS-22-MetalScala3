@@ -10,11 +10,9 @@ import org.scalatest.matchers.should.Matchers
 
 class WeaponEntityTest extends AnyFlatSpec with Matchers with BeforeAndAfter {
 
-  var weapon: WeaponEntity = new WeaponEntity {
-    override val damage: Int = 1
-  }
+  var weapon: WeaponEntity = MachineGunEntity()
 
-  "A WeaponEntity" should "have correct damage" in {
+  "A MachineGunEntity" should "have damage equal to 1" in {
     assert(weapon.damage == 1)
   }
 }

@@ -7,7 +7,7 @@ import model.ecs.entities.*
 import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.{BulletEntity, MachineGunEntity, WeaponEntity}
-import model.ecs.systems.CollisionSystem.checkCollision
+import model.ecs.systems.CollisionChecker.{boundaryCheck, getCollidingEntity, isOutOfHorizontalBoundaries}
 import model.ecs.systems.Systems.getUpdatedPosition
 import model.event.Event
 import model.event.observer.Observable
@@ -18,22 +18,6 @@ import scala.reflect.ClassTag
 
 object Systems extends Observable[Event]:
 
-  /** Applies a boundary check to a position value, ensuring it stays within the
-    * bounds of the system. It ensures that 'pos' is not less than 0.0 and not
-    * greater than 'max - size'.
-    *
-    * @param pos
-    *   The position value to check.
-    * @param max
-    *   The maximum value allowed for the position.
-    * @param size
-    *   The size of the object being checked.
-    * @return
-    *   The new position value after the boundary check has been applied.
-    */
-  def boundaryCheck(pos: Double, max: Double, size: Double): Double =
-    math.max(0.0, math.min(pos, max - size))
-
   val bulletMovementSystem: Long => Unit = elapsedTime =>
     EntityManager().getEntitiesByClass(classOf[BulletEntity]).foreach {
       bullet =>
@@ -41,15 +25,11 @@ object Systems extends Observable[Event]:
           bullet.getComponent[PositionComponent].get
         given velocity: VelocityComponent =
           bullet.getComponent[VelocityComponent].get
-        val newPosition = getUpdatedPosition(bullet, elapsedTime)
 
-        // Check if the bullet is in position.x + size = model.GUIWIDTH
-        if (newPosition.x + HORIZONTAL_COLLISION_SIZE >= model.GUIWIDTH) ||
-          (newPosition.x <= 0) ||
-          checkCollision(bullet, newPosition + velocity).nonEmpty
-        then
-          EntityManager().removeEntity(bullet)
-        else bullet.replaceComponent(newPosition)
+        val proposedPosition = getUpdatedPosition(elapsedTime)
+        bullet.handleCollision(proposedPosition) match
+          case Some(handledPosition) => bullet.replaceComponent(handledPosition)
+          case None                  => ()
     }
 
   val inputMovementSystem: Long => Unit = * =>
@@ -83,31 +63,14 @@ object Systems extends Observable[Event]:
         }
     }
 
-  def getUpdatedPosition(entity: Entity, elapsedTime: Long)(using
+  def getUpdatedPosition(elapsedTime: Long)(using
       position: PositionComponent,
       velocity: VelocityComponent
   ): PositionComponent = {
     val newPositionX = position.x + velocity.x * elapsedTime * 0.001
     val newPositionY = position.y + velocity.y * elapsedTime * 0.001
 
-    val finalPositionX =
-      if checkCollision(entity, PositionComponent(newPositionX, position.y)).isEmpty then newPositionX
-      else {
-        if (entity.isInstanceOf[BulletEntity]) EntityManager().removeEntity(entity)
-        position.x
-      }
-
-    val finalPositionY =
-      if checkCollision(entity, PositionComponent(finalPositionX, newPositionY)).isEmpty then newPositionY
-      else {
-        if (entity.isInstanceOf[BulletEntity]) EntityManager().removeEntity(entity)
-        position.y
-      }
-
-    PositionComponent(
-      boundaryCheck(finalPositionX, model.GUIWIDTH, HORIZONTAL_COLLISION_SIZE),
-      boundaryCheck(finalPositionY, model.GUIHEIGHT, VERTICAL_COLLISION_SIZE)
-    )
+    PositionComponent(newPositionX, newPositionY)
   }
 
   private def getUpdatedVelocity(entity: Entity)(using
@@ -165,12 +128,18 @@ object Systems extends Observable[Event]:
         classOf[JumpingComponent]
       )
       .foreach { entity =>
-        given position: PositionComponent =
+        given currentPosition: PositionComponent =
           entity.getComponent[PositionComponent].get
-        given velocity: VelocityComponent =
+        given currentVelocity: VelocityComponent =
           entity.getComponent[VelocityComponent].get
 
         entity.replaceComponent(getUpdatedVelocity(entity))
         updateJumpingState(entity)
-        entity.replaceComponent(getUpdatedPosition(entity, elapsedTime))
+
+        val proposedPosition = getUpdatedPosition(elapsedTime)
+        val handledPosition = entity.handleCollision(proposedPosition)
+        handledPosition match
+          case Some(handledPosition) => entity.replaceComponent(handledPosition)
+          // keep the current position
+          case None => ()
       }
