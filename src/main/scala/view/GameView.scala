@@ -57,7 +57,8 @@ private class GameViewImpl(
               && entity.hasComponent(classOf[DirectionComponent])
             then
               val position = entity.getComponent[PositionComponent].get
-              val sprite = entity.getComponent[SpriteComponent].get
+              val sprite = entity.getComponent[SpriteComponent].getOrElse(
+                throw new Exception("SpriteComponent not found in $entity"))
               val direction = entity.getComponent[DirectionComponent].get
 
               entityIdToView = entityIdToView + (entity.id -> createSpriteView(

@@ -100,26 +100,6 @@ object Systems extends Observable[Event]:
     VelocityComponent(newHorizontalVelocity, velocity.y)
   }
 
-  private def updateJumpingState(entity: Entity): Unit = {
-    if entity.hasComponent(classOf[PlayerComponent])
-    then
-      val currentPosition = entity
-        .getComponent[PositionComponent]
-        .getOrElse(throw new Exception("Position not found"))
-      val velocity = entity
-        .getComponent[VelocityComponent]
-        .getOrElse(throw new Exception("Velocity not found"))
-      val isTouchingGround =
-        currentPosition.y + VERTICAL_COLLISION_SIZE >= model.GUIHEIGHT && velocity.y >= 0
-      if (isTouchingGround)
-        // fixme: gravity should be subjective
-        model.isGravityEnabled = false
-        entity.replaceComponent(JumpingComponent(false))
-      else
-        model.isGravityEnabled = true
-        entity.getComponent[JumpingComponent].get
-  }
-
   val positionUpdateSystem: Long => Unit = elapsedTime =>
     EntityManager()
       .getEntitiesWithComponent(
@@ -134,10 +114,10 @@ object Systems extends Observable[Event]:
           entity.getComponent[VelocityComponent].get
 
         entity.replaceComponent(getUpdatedVelocity(entity))
-        updateJumpingState(entity)
 
         val proposedPosition = getUpdatedPosition(elapsedTime)
-        val handledPosition = entity.handleCollision(proposedPosition)
+        val handledPosition: Option[PositionComponent] =
+          entity.handleCollision(proposedPosition)
         handledPosition match
           case Some(handledPosition) => entity.replaceComponent(handledPosition)
           // keep the current position

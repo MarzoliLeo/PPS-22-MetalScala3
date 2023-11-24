@@ -44,6 +44,30 @@ object CollisionChecker {
     }
   }
 
+  /**
+   * Checks if `entity1` is immediately below `entity2`.
+   *
+   * @param entity1 The first entity to compare.
+   * @param entity2 The second entity to compare.
+   * @return `true` if `entity1` is immediately below `entity2`, `false` otherwise.
+   */
+  def isImmediatelyBelow(entity1: Entity, entity2: Entity): Boolean = {
+    val pos1 = entity1.getComponent[PositionComponent].get
+    val size1 = entity1.getComponent[SizeComponent].get
+
+    val pos2 = entity2.getComponent[PositionComponent].get
+    val size2 = entity2.getComponent[SizeComponent].get
+
+    val top1 = pos1.y
+    val bottom2 = pos2.y + size2.height
+
+    // check if entity1 is immediately below entity2
+    val isVerticallyAligned = top1 == bottom2
+    val isHorizontallyOverlapping = isOverlappingX(pos1, size1, pos2, size2)
+
+    isVerticallyAligned && isHorizontallyOverlapping
+  }
+
   /** Applies a boundary check to a currentPosition value, ensuring it stays
     * within the bounds of the system. It ensures that 'pos' is not less than
     * 0.0 and not greater than 'max - size'.
