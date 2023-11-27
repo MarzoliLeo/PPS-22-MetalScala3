@@ -8,11 +8,14 @@ import javafx.scene.input.{KeyCode, KeyEvent}
 import javafx.scene.layout.{GridPane, Pane}
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.Box
-import javafx.stage.Stage
+import javafx.stage.{Stage, WindowEvent}
 import model.ecs.components.*
-import model.ecs.entities.{EntityManager, PlayerEntity}
-import model.ecs.systems.Systems.{bulletMovementSystem, gravitySystem, inputMovementSystem, positionUpdateSystem}
-import model.ecs.systems.{CollisionSystem, SystemManager, Systems}
+import model.ecs.entities.environment.BoxEntity
+import model.ecs.entities.player.PlayerEntity
+import model.ecs.entities.weapons.MachineGunEntity
+import model.ecs.entities.{EnemyEntity, EntityManager}
+import model.ecs.systems.Systems.{AISystem, bulletMovementSystem, gravitySystem, inputMovementSystem, positionUpdateSystem}
+import model.ecs.systems.{CollisionChecker, SystemManager, Systems}
 import model.engine.Engine
 import model.{GUIHEIGHT, HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
 import view.{GameView, View}
@@ -84,7 +87,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       .addEntity(
         EnemyEntity()
           .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
-          .addComponent(PositionComponent(800, GUIHEIGHT))
+          .addComponent(PositionComponent(1000, GUIHEIGHT))
           .addComponent(SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE))
           .addComponent(VelocityComponent(0, 0))
           .addComponent(DirectionComponent(LEFT))

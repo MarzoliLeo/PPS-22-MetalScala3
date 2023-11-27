@@ -99,6 +99,8 @@ object Systems extends Observable[Event]:
         entity.replaceComponent(SpriteComponent("sprites/h.png"))
       case _: BoxEntity =>
         entity.replaceComponent(SpriteComponent("sprites/box.jpg"))
+      case _: EnemyEntity =>
+        entity.replaceComponent(SpriteComponent("sprites/MarcoRossi.png"))
     }
 
     VelocityComponent(newHorizontalVelocity, velocity.y)
@@ -189,9 +191,9 @@ object Systems extends Observable[Event]:
               }
             } catch {
               case e: Exception => e match {
-                case NoSolutionException => println("Prolog query failed: No.")
-                case MalformedGoalException => println("Prolog query failed: Malformed.")
-                case NoMoreSolutionException => println("Prolog query failed: No more solutions.")
+                case e: NoSolutionException => println("Prolog query failed: No.")
+                case e: MalformedGoalException => println("Prolog query failed: Malformed.")
+                case e: NoMoreSolutionException => println("Prolog query failed: No more solutions.")
                 case _ => println("Raised exception: " + e)
               }
             }
@@ -203,7 +205,7 @@ object Systems extends Observable[Event]:
         //println("timeElapsedSinceLastExecution: " + AItimeElapsedSinceLastExecution)
 
         if (AItimeElapsedSinceLastExecution >= AIexecutionInterval) {
-          daemonThread.setDaemon(true) // Imposta il thread come daemon thread
+          daemonThread.setDaemon(true)
           daemonThread.start()
           AItimeElapsedSinceLastExecution = 0
         }

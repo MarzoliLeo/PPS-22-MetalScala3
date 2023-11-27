@@ -1,3 +1,5 @@
 package model.ecs.entities
 
-case class EnemyEntity() extends Entity
+import model.ecs.collision_handlers.PlayerCollisionHandler
+
+case class EnemyEntity() extends Entity with PlayerCollisionHandler
