@@ -14,7 +14,10 @@ import model.event.observer.Observable
 import model.input.commands.*
 import model.utilities.Empty
 
-import scala.reflect.ClassTag
+import java.io.FileInputStream
+import java.util.{Timer, TimerTask}
+
+
 
 object Systems extends Observable[Event]:
 
@@ -67,6 +70,7 @@ object Systems extends Observable[Event]:
       position: PositionComponent,
       velocity: VelocityComponent
   ): PositionComponent = {
+
     val newPositionX = position.x + velocity.x * elapsedTime * 0.001
     val newPositionY = position.y + velocity.y * elapsedTime * 0.001
 
@@ -95,6 +99,8 @@ object Systems extends Observable[Event]:
         entity.replaceComponent(SpriteComponent("sprites/h.png"))
       case _: BoxEntity =>
         entity.replaceComponent(SpriteComponent("sprites/box.jpg"))
+      case _: EnemyEntity =>
+        entity.replaceComponent(SpriteComponent("sprites/MarcoRossi.png"))
     }
 
     VelocityComponent(newHorizontalVelocity, velocity.y)
@@ -107,7 +113,7 @@ object Systems extends Observable[Event]:
         classOf[VelocityComponent],
         classOf[JumpingComponent]
       )
-      .foreach { entity =>
+      .foreach( entity =>
         given currentPosition: PositionComponent =
           entity.getComponent[PositionComponent].get
         given currentVelocity: VelocityComponent =
@@ -115,11 +121,97 @@ object Systems extends Observable[Event]:
 
         entity.replaceComponent(getUpdatedVelocity(entity))
 
-        val proposedPosition = getUpdatedPosition(elapsedTime)
+        val proposedPosition = getUpdatedPosition( elapsedTime)
         val handledPosition: Option[PositionComponent] =
           entity.handleCollision(proposedPosition)
+
         handledPosition match
           case Some(handledPosition) => entity.replaceComponent(handledPosition)
-          // keep the current position
+        // keep the current position
           case None => ()
-      }
+
+      )
+
+
+
+  val AISystem: Long => Unit = elapsedTime => {
+    import alice.tuprolog._
+    import utilities.Scala2P._
+    import model.*
+
+    val prologFile = new java.io.File("src/main/resources/EnemyAI.pl")
+    val engine = new Prolog()
+    engine.setTheory(new Theory(new FileInputStream(prologFile)))
+
+    val playerPosition: PositionComponent = EntityManager()
+      .getEntitiesByClass(classOf[PlayerEntity])
+      .head
+      .getComponent[PositionComponent].get
+
+
+    EntityManager()
+      .getEntitiesWithComponent(classOf[AIComponent])
+      .foreach(entity => {
+        val enemyPosition = entity.getComponent[PositionComponent].get
+        val currentVelocity = entity.getComponent[VelocityComponent].get
+
+        val daemonThread = new Thread(new Runnable {
+          override def run(): Unit = {
+            val randomInt = scala.util.Random.nextInt(3) + 1
+
+            val query = new Struct("move_toward_player",
+              randomInt,
+              (playerPosition.x, playerPosition.y),
+              (enemyPosition.x, enemyPosition.y),
+              new Var()
+            )
+
+            try {
+              val s = engine.solve(query).getSolution
+
+              if (randomInt == 3) {
+                Command.shoot(entity)
+              } else {
+                val newEnemyX = extractTerm(s, 3)
+
+                val newEnemyVelocity = VelocityComponent(
+                  currentVelocity.x + (enemyPosition.x - newEnemyX) * elapsedTime * 0.001,
+                  currentVelocity.y
+                )
+
+                newEnemyVelocity match {
+                  case VelocityComponent(x, _) if x > 0 => entity.replaceComponent(DirectionComponent(LEFT))
+                  case _ => entity.replaceComponent(DirectionComponent(RIGHT))
+                }
+
+                entity.replaceComponent(newEnemyVelocity)
+
+                val newEnemyPosition = PositionComponent(x = newEnemyX, y = enemyPosition.y)
+                entity.replaceComponent(newEnemyPosition)
+              }
+            } catch {
+              case e: Exception => e match {
+                case e: NoSolutionException => println("Prolog query failed: No.")
+                case e: MalformedGoalException => println("Prolog query failed: Malformed.")
+                case e: NoMoreSolutionException => println("Prolog query failed: No more solutions.")
+                case _ => println("Raised exception: " + e)
+              }
+            }
+          }
+        })
+
+        AItimeElapsedSinceLastExecution += AIexecutionSpeed
+
+        //println("timeElapsedSinceLastExecution: " + AItimeElapsedSinceLastExecution)
+
+        if (AItimeElapsedSinceLastExecution >= AIexecutionInterval) {
+          daemonThread.setDaemon(true)
+          daemonThread.start()
+          AItimeElapsedSinceLastExecution = 0
+        }
+      })
+  }
+
+
+
+

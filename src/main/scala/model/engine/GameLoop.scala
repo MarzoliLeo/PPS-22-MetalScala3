@@ -41,7 +41,11 @@ private[engine] object GameLoop {
           val timeTaken: Long = (millisecond/fps) - tickTime
           if (timeTaken > 0) {
             Thread.sleep(timeTaken)
-          } else print("Slowing tickness\n")
+          }
+          else
+          {
+            print("Slowing tickness\n")
+          }
           lastTime = currentTime
         }
       }

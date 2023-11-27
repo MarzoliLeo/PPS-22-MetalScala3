@@ -8,13 +8,13 @@ import javafx.scene.input.{KeyCode, KeyEvent}
 import javafx.scene.layout.{GridPane, Pane}
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.Box
-import javafx.stage.Stage
+import javafx.stage.{Stage, WindowEvent}
 import model.ecs.components.*
-import model.ecs.entities.EntityManager
 import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.MachineGunEntity
-import model.ecs.systems.Systems.{bulletMovementSystem, gravitySystem, inputMovementSystem, positionUpdateSystem}
+import model.ecs.entities.{EnemyEntity, EntityManager}
+import model.ecs.systems.Systems.{AISystem, bulletMovementSystem, gravitySystem, inputMovementSystem, positionUpdateSystem}
 import model.ecs.systems.{CollisionChecker, SystemManager, Systems}
 import model.engine.Engine
 import model.{GUIHEIGHT, HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
@@ -48,6 +48,8 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
   private val gameEngine = Engine()
   getButton(root, "Start").setOnAction((_: ActionEvent) => handleStartButton())
   getButton(root, "Exit").setOnAction((_: ActionEvent) => handleExitButton())
+  // Set the onCloseRequest handler
+  parentStage.setOnCloseRequest((event: WindowEvent) => handleWindowCloseRequest())
 
   def handleStartButton(): Unit =
     val gameView =
@@ -55,7 +57,6 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
     // Imposta il backend ECS.
     entityManager
       .addEntity(
-        // Real player entity
         PlayerEntity()
           .addComponent(PlayerComponent())
           .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
@@ -81,7 +82,19 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
           .addComponent(VelocityComponent(0, 0))
           .addComponent(DirectionComponent(RIGHT))
           .addComponent(JumpingComponent(false))
-          .addComponent(SpriteComponent("sprites/box.jpg"))
+          .addComponent(SpriteComponent("sprites/Box.jpg"))
+      )
+      .addEntity(
+        EnemyEntity()
+          .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
+          .addComponent(PositionComponent(1000, GUIHEIGHT))
+          .addComponent(SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE))
+          .addComponent(BulletComponent(Bullet.StandardBullet))
+          .addComponent(VelocityComponent(0, 0))
+          .addComponent(DirectionComponent(LEFT))
+          .addComponent(JumpingComponent(false))
+          .addComponent(SpriteComponent("sprites/Enemy.jpg"))
+          .addComponent(AIComponent())
       )
       .addEntity(
         MachineGunEntity()
@@ -100,6 +113,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       .addSystem(gravitySystem)
       .addSystem(positionUpdateSystem)
       .addSystem(bulletMovementSystem)
+      .addSystem(AISystem)
     parentStage.getScene.setRoot(gameView)
     gameEngine.start()
 
@@ -107,6 +121,12 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
     parentStage.close()
     gameEngine.stop()
     System.exit(0)
+
+  def handleWindowCloseRequest(): Unit = {
+    parentStage.close()
+    gameEngine.stop()
+    System.exit(0)
+  }
 
   override def startButton: Button = getButton(root, "Start")
 

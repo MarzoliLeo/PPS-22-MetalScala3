@@ -69,6 +69,7 @@ case class SpriteComponent(spritePath: String) extends Component
   *   The direction of the entity.
   */
 case class DirectionComponent(d: Direction) extends Component
+case class AIComponent() extends Component
 
 /** Represents the color of an entity.
   * @param color
@@ -112,32 +113,13 @@ case class VelocityComponent(var x: Double, var y: Double) extends Component:
   def +(v: VelocityComponent): VelocityComponent =
     VelocityComponent(x + v.x, y + v.y)
 
-  /** Calculates the module (magnitude) of the velocity.
-    * @return
-    *   The module of the velocity.
-    */
-  def module(): Double = sqrt(x * x + y * y)
-
-  /** Returns the normalized velocity component.
-    * @return
-    *   The normalized velocity component.
-    */
-  def getNormalized: VelocityComponent =
-    val mod = module()
-    VelocityComponent(x / mod, y / mod)
-
-  /** Multiplies the velocity component by a factor.
-    * @param fact
-    *   The multiplication factor.
-    * @return
-    *   The new velocity component after multiplication.
-    */
   @targetName("multiply")
   def *(fact: Double): VelocityComponent =
     VelocityComponent(x * fact, y * fact)
 
   /** Returns a string representation of the velocity component.
+    *
     * @return
-    *   The string representation of the velocity component.
+    * The string representation of the velocity component.
     */
   override def toString: String = s"VelocityComponent($x,$y)"

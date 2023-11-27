@@ -1,4 +1,4 @@
-ThisBuild / version := "0.1.0-SNAPSHOT"
+ThisBuild / version := "1.1.5"
 
 ThisBuild / scalaVersion := "3.2.0"
 
@@ -10,5 +10,6 @@ lazy val root = (project in file("."))
     libraryDependencies += "org.openjfx" % "javafx-fxml" % "21",
     libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.17",
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.17" % "test",
-    libraryDependencies += "org.mockito" % "mockito-core" % "5.6.0" % Test
+    libraryDependencies += "org.mockito" % "mockito-core" % "5.6.0" % Test,
+    libraryDependencies += "it.unibo.alice.tuprolog" % "tuprolog" % "3.3.0"
   )

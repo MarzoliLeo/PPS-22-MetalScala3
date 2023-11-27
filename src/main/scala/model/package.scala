@@ -20,8 +20,8 @@ package object model:
   val fixedSpriteHeight = 100.0 // Desired fixed height
   val INPUT_MOVEMENT_VELOCITY = 1000
   val MOVEMENT_DURATION = 0.1
-  val JUMP_MOVEMENT_VELOCITY = 600
-  val BULLET_VELOCITY = 1500
+  val JUMP_MOVEMENT_VELOCITY = 500
+  val BULLET_VELOCITY = 1000
   val GRAVITY_VELOCITY = 0.5
   var isGravityEnabled = true
   var isTouchingGround = false
@@ -33,4 +33,11 @@ package object model:
   val VERTICAL_COLLISION_SIZE = 100
   val HORIZONTAL_COLLISION_SIZE = 100
   var inputsQueue: Stack[Entity => Unit] = Empty
+
+  //Variabili di AI.
+  var AItimeElapsedSinceLastExecution = 0
+  val AIexecutionInterval = 20
+  val AIexecutionSpeed = 1
+
+
 
