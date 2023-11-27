@@ -36,7 +36,7 @@ package object model:
 
   //Variabili di AI.
   var AItimeElapsedSinceLastExecution = 0
-  val AIexecutionInterval = 50
+  val AIexecutionInterval = 20
   val AIexecutionSpeed = 1
 
 
