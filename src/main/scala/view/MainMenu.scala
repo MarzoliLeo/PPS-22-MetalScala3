@@ -8,10 +8,10 @@ import javafx.scene.input.{KeyCode, KeyEvent}
 import javafx.scene.layout.{GridPane, Pane}
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.Box
-import javafx.stage.{Stage, WindowEvent}
+import javafx.stage.Stage
 import model.ecs.components.*
-import model.ecs.entities.{EnemyEntity, EntityManager, PlayerEntity}
-import model.ecs.systems.Systems.{AISystem, bulletMovementSystem, gravitySystem, inputMovementSystem, playerPositionUpdateSystem}
+import model.ecs.entities.{EntityManager, PlayerEntity}
+import model.ecs.systems.Systems.{bulletMovementSystem, gravitySystem, inputMovementSystem, positionUpdateSystem}
 import model.ecs.systems.{CollisionSystem, SystemManager, Systems}
 import model.engine.Engine
 import model.{GUIHEIGHT, HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
@@ -58,18 +58,24 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
           .addComponent(PlayerComponent())
           .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
           .addComponent(PositionComponent(250, GUIHEIGHT))
-          .addComponent(SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE))
+          .addComponent(
+            SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
+          )
+          .addComponent(CollisionComponent(scala.collection.mutable.Set()))
+          .addComponent(BulletComponent(Bullet.StandardBullet))
           .addComponent(VelocityComponent(0, 0))
           .addComponent(DirectionComponent(RIGHT))
           .addComponent(JumpingComponent(false))
           .addComponent(SpriteComponent(model.marcoRossiSprite))
       )
       .addEntity(
-        PlayerEntity()
-          //.addComponent(PlayerComponent())
+        // Used for testing collisions
+        BoxEntity()
           .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
           .addComponent(PositionComponent(400, GUIHEIGHT))
-          .addComponent(SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE))
+          .addComponent(
+            SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
+          )
           .addComponent(VelocityComponent(0, 0))
           .addComponent(DirectionComponent(RIGHT))
           .addComponent(JumpingComponent(false))
@@ -86,10 +92,22 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
           .addComponent(SpriteComponent("sprites/Enemy.jpg"))
           .addComponent(AIComponent())
       )
+      .addEntity(
+        MachineGunEntity()
+          .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
+          .addComponent(PositionComponent(800, GUIHEIGHT))
+          .addComponent(DirectionComponent(RIGHT))
+          .addComponent(SpriteComponent("sprites/H.png"))
+          .addComponent(
+            SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
+          )
+          .addComponent(VelocityComponent(0, 0))
+          .addComponent(JumpingComponent(false))
+      )
     systemManager
       .addSystem(inputMovementSystem)
       .addSystem(gravitySystem)
-      .addSystem(playerPositionUpdateSystem)
+      .addSystem(positionUpdateSystem)
       .addSystem(bulletMovementSystem)
       .addSystem(AISystem)
     parentStage.getScene.setRoot(gameView)

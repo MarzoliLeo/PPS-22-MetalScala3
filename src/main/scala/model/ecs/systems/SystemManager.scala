@@ -1,7 +1,9 @@
 package model.ecs.systems
 
 import model.ecs.components.GravityComponent
-import model.ecs.entities.{BulletEntity, EntityManager, PlayerEntity}
+import model.ecs.entities.weapons.BulletEntity
+import model.ecs.entities.EntityManager
+import model.ecs.entities.player.PlayerEntity
 
 trait SystemManager:
   protected type System = Long => Unit
