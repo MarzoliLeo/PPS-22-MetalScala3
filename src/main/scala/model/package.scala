@@ -1,7 +1,8 @@
 import javafx.scene.input.KeyCode
 import javafx.scene.paint.Color
 import model.ecs.components.{Component, GravityComponent, PositionComponent, VelocityComponent}
-import model.ecs.entities.{Entity, EntityManager, PlayerEntity}
+import model.ecs.entities.player.PlayerEntity
+import model.ecs.entities.{Entity, EntityManager}
 import model.ecs.systems.SystemManager
 import model.ecs.systems.Systems.{gravitySystem, inputMovementSystem}
 import model.event.observer.Observable
@@ -27,7 +28,8 @@ package object model:
   val marcoRossiSprite = "sprites/MarcoRossi.png"
   val marcoRossiMoveSprite = "sprites/MarcoRossiMove.png"
   val marcoRossiJumpSprite = "sprites/MarcoRossiJump.png"
-  val bulletSprite = "sprites/Bullet.png"
+  val standardBulletSprite = "sprites/Bullet.png"
+  val machineGunBulletSprite = "sprites/h.png"
   val VERTICAL_COLLISION_SIZE = 100
   val HORIZONTAL_COLLISION_SIZE = 100
   var inputsQueue: Stack[Entity => Unit] = Empty

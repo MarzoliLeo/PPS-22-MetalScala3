@@ -10,9 +10,12 @@ import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.Box
 import javafx.stage.Stage
 import model.ecs.components.*
-import model.ecs.entities.{EntityManager, PlayerEntity}
+import model.ecs.entities.EntityManager
+import model.ecs.entities.environment.BoxEntity
+import model.ecs.entities.player.PlayerEntity
+import model.ecs.entities.weapons.MachineGunEntity
 import model.ecs.systems.Systems.{bulletMovementSystem, gravitySystem, inputMovementSystem, positionUpdateSystem}
-import model.ecs.systems.{CollisionSystem, SystemManager, Systems}
+import model.ecs.systems.{CollisionChecker, SystemManager, Systems}
 import model.engine.Engine
 import model.{GUIHEIGHT, HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
 import view.{GameView, View}
@@ -52,6 +55,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
     // Imposta il backend ECS.
     entityManager
       .addEntity(
+        // Real player entity
         PlayerEntity()
           .addComponent(PlayerComponent())
           .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
@@ -59,14 +63,16 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
           .addComponent(
             SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
           )
+          .addComponent(CollisionComponent(scala.collection.mutable.Set()))
+          .addComponent(BulletComponent(Bullet.StandardBullet))
           .addComponent(VelocityComponent(0, 0))
           .addComponent(DirectionComponent(RIGHT))
           .addComponent(JumpingComponent(false))
           .addComponent(SpriteComponent(model.marcoRossiSprite))
       )
       .addEntity(
-        PlayerEntity()
-          //.addComponent(PlayerComponent())
+        // Used for testing collisions
+        BoxEntity()
           .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
           .addComponent(PositionComponent(400, GUIHEIGHT))
           .addComponent(
@@ -76,6 +82,18 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
           .addComponent(DirectionComponent(RIGHT))
           .addComponent(JumpingComponent(false))
           .addComponent(SpriteComponent("sprites/box.jpg"))
+      )
+      .addEntity(
+        MachineGunEntity()
+          .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
+          .addComponent(PositionComponent(800, GUIHEIGHT))
+          .addComponent(DirectionComponent(RIGHT))
+          .addComponent(SpriteComponent("sprites/H.png"))
+          .addComponent(
+            SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
+          )
+          .addComponent(VelocityComponent(0, 0))
+          .addComponent(JumpingComponent(false))
       )
     systemManager
       .addSystem(inputMovementSystem)

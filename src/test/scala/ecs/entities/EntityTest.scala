@@ -1,7 +1,8 @@
 package ecs.entities
 
 import model.ecs.components.PositionComponent
-import model.ecs.entities.{Entity, PlayerEntity}
+import model.ecs.entities.Entity
+import model.ecs.entities.player.PlayerEntity
 import org.scalatest.Assertions.*
 import org.scalatest.funsuite.AnyFunSuite
 
