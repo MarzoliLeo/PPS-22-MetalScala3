@@ -50,7 +50,7 @@ private case class AISystemImpl() extends AISystem :
                 val newEnemyX = extractTerm(s, 3)
 
                 val newEnemyVelocity = VelocityComponent(
-                  currentVelocity.x + (enemyPosition.x - newEnemyX) * elapsedTime * 0.0001,
+                  currentVelocity.x + (enemyPosition.x - newEnemyX) * elapsedTime ,
                   currentVelocity.y
                 )
 
