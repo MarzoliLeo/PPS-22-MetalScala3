@@ -4,7 +4,6 @@ import model.ecs.components.*
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.BulletEntity
 import model.ecs.entities.{EnemyEntity, Entity, EntityManager}
-import model.ecs.systems.Systems.{gravitySystem, notifyObservers}
 
 object Command:
   def jump(entity: Entity): Unit =

@@ -29,28 +29,6 @@ object Systems extends Observable[Event]:
         inputsQueue = inputsQueue.pop.getOrElse(Empty)
     }
 
-  val gravitySystem: Long => Unit = elapsedTime =>
-    if (model.isGravityEnabled) {
-      EntityManager()
-        .getEntitiesWithComponent(
-          classOf[PositionComponent],
-          classOf[GravityComponent],
-          classOf[VelocityComponent]
-        )
-        .foreach { entity =>
-          val position = entity.getComponent[PositionComponent].get
-          val velocity = entity.getComponent[VelocityComponent].get
-          val isTouchingGround =
-            position.y + VERTICAL_COLLISION_SIZE >= model.GUIHEIGHT && velocity.y >= 0
-          if isTouchingGround then
-            entity.replaceComponent(VelocityComponent(velocity.x, 0))
-          else
-            entity.replaceComponent(
-              velocity + VelocityComponent(0, GRAVITY_VELOCITY * elapsedTime)
-            )
-        }
-    }
-
 
   val AISystem: Long => Unit = elapsedTime => {
     import alice.tuprolog._
