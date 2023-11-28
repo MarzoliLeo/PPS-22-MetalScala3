@@ -4,8 +4,10 @@ import model.{GRAVITY_VELOCITY, VERTICAL_COLLISION_SIZE}
 import model.ecs.components.{GravityComponent, PositionComponent, VelocityComponent}
 import model.ecs.entities.EntityManager
 
-object GravitySystem:
-  val gravitySystem: Long => Unit = elapsedTime =>
+trait GravitySystem extends SystemWithElapsedTime
+
+private class GravitySystemImpl extends GravitySystem:
+  override def update(elapsedTime: Long): Unit =
     if (model.isGravityEnabled) {
       EntityManager()
         .getEntitiesWithComponent(
@@ -26,3 +28,7 @@ object GravitySystem:
             )
         }
     }
+
+
+object GravitySystem:
+  def apply(): GravitySystem = GravitySystemImpl()

@@ -5,8 +5,8 @@ import model.ecs.entities.weapons.BulletEntity
 import model.ecs.entities.EntityManager
 import model.ecs.entities.player.PlayerEntity
 
+
 trait SystemManager:
-  protected type System = Long => Unit
   var systems: List[System]
   def addSystem(system: System): SystemManager
   def removeSystem(system: System): SystemManager
@@ -25,7 +25,10 @@ private class SystemManagerImpl(var entityManager: EntityManager)
     this
 
   override def updateAll(elapsedTime: Long): Unit =
-    systems.foreach(_(elapsedTime))
+    systems.foreach {
+      case sys: SystemWithoutTime => sys.update()
+      case sys: SystemWithElapsedTime => sys.update(elapsedTime)
+    }
 
 object SystemManager {
   private var singleton: Option[SystemManager] = None

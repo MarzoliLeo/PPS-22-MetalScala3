@@ -14,10 +14,7 @@ import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.MachineGunEntity
 import model.ecs.entities.{EnemyEntity, EntityManager}
-import model.ecs.systems.BulletMovementSystem.bulletMovementSystem
-import model.ecs.systems.GravitySystem.gravitySystem
-import model.ecs.systems.Systems.{AISystem, inputMovementSystem}
-import model.ecs.systems.{CollisionChecker, PositionUpdateSystem, SystemManager, Systems}
+import model.ecs.systems.{AISystem, BulletMovementSystem, CollisionChecker, GravitySystem, InputSystem, PositionUpdateSystem, SystemManager}
 import model.engine.Engine
 import model.{GUIHEIGHT, HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
 import view.{GameView, View}
@@ -55,7 +52,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
 
   def handleStartButton(): Unit =
     val gameView =
-      GameView(parentStage, Set(entityManager, Systems, gameEngine))
+      GameView(parentStage, Set(entityManager, gameEngine))
     // Imposta il backend ECS.
     entityManager
       .addEntity(
@@ -111,11 +108,11 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
           .addComponent(JumpingComponent(false))
       )
     systemManager
-      .addSystem(inputMovementSystem)
-      .addSystem(gravitySystem)
+      .addSystem(InputSystem())
+      .addSystem(GravitySystem())
       .addSystem(PositionUpdateSystem())
-      .addSystem(bulletMovementSystem)
-      .addSystem(AISystem)
+      .addSystem(BulletMovementSystem())
+      .addSystem(AISystem())
     parentStage.getScene.setRoot(gameView)
     gameEngine.start()
 

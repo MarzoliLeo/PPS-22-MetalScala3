@@ -1,6 +1,7 @@
 package model.utilities
 
-import alice.tuprolog._
+import alice.tuprolog.*
+import scala.language.implicitConversions
 
 /**
   * Utilities for 2p usage in scala
