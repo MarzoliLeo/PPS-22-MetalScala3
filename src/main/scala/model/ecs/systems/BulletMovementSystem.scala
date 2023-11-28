@@ -6,7 +6,7 @@ import model.ecs.entities.weapons.BulletEntity
 
 trait BulletMovementSystem extends SystemWithElapsedTime
 
-private class BullletMovementSystemImpl extends BulletMovementSystem:
+private class BulletMovementSystemImpl extends BulletMovementSystem:
   override def update(elapsedTime: Long): Unit =
     EntityManager().getEntitiesByClass(classOf[BulletEntity]).foreach {
       bullet =>
@@ -23,4 +23,4 @@ private class BullletMovementSystemImpl extends BulletMovementSystem:
 
 
 object BulletMovementSystem:
-  def apply(): BulletMovementSystem = BullletMovementSystemImpl()
+  def apply(): BulletMovementSystem = BulletMovementSystemImpl()

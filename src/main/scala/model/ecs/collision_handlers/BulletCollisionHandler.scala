@@ -1,7 +1,8 @@
 package model.ecs.collision_handlers
 
 import model.ecs.components.PositionComponent
-import model.ecs.entities.{EnemyEntity, Entity, EntityManager}
+import model.ecs.entities.enemies.EnemyEntity
+import model.ecs.entities.{Entity, EntityManager}
 import model.ecs.systems.CollisionChecker
 import model.{GUIWIDTH, HORIZONTAL_COLLISION_SIZE}
 

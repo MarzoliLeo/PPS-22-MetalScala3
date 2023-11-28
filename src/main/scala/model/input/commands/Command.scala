@@ -1,9 +1,10 @@
 package model.input.commands
 
 import model.ecs.components.*
+import model.ecs.entities.enemies.EnemyEntity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.BulletEntity
-import model.ecs.entities.{EnemyEntity, Entity, EntityManager}
+import model.ecs.entities.{Entity, EntityManager}
 
 object Command:
   def jump(entity: Entity): Unit =

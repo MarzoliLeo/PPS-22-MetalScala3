@@ -2,7 +2,8 @@ package model.ecs.systems
 
 import model.FRICTION_FACTOR
 import model.ecs.components.*
-import model.ecs.entities.{EnemyEntity, Entity, EntityManager}
+import model.ecs.entities.enemies.EnemyEntity
+import model.ecs.entities.{Entity, EntityManager}
 import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.{BulletEntity, MachineGunEntity}
@@ -37,31 +38,10 @@ private class PositionUpdateSystemImpl() extends PositionUpdateSystem:
           case None => ()
       )
 
-  private def getUpdatedVelocity(entity: Entity)(using velocity: VelocityComponent
-  ): VelocityComponent = {
-    val newHorizontalVelocity = velocity.x * FRICTION_FACTOR match {
+  private def getUpdatedVelocity(entity: Entity)(using velocity: VelocityComponent): VelocityComponent = {
+    val newHorizontalVelocity = velocity.x * FRICTION_FACTOR match
       case x if -0.1 < x && x < 0.1 => 0.0
       case x => x
-    }
-    entity match {
-      case _: PlayerEntity =>
-        val sprite = velocity match {
-          case VelocityComponent(0, 0) => model.marcoRossiSprite
-          case VelocityComponent(_, y) if y != 0 => model.marcoRossiJumpSprite
-          case VelocityComponent(x, y) if x != 0 && y == 0 =>
-            model.marcoRossiMoveSprite
-        }
-        entity.replaceComponent(SpriteComponent(sprite))
-      case _: BulletEntity =>
-        entity.replaceComponent(SpriteComponent("sprites/Bullet.png"))
-      case _: MachineGunEntity =>
-        entity.replaceComponent(SpriteComponent("sprites/h.png"))
-      case _: BoxEntity =>
-        entity.replaceComponent(SpriteComponent("sprites/box.jpg"))
-      case _: EnemyEntity =>
-        entity.replaceComponent(SpriteComponent("sprites/MarcoRossi.png"))
-    }
-
     VelocityComponent(newHorizontalVelocity, velocity.y)
   }
 
