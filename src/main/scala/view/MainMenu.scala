@@ -91,7 +91,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
           .addComponent(SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE))
           .addComponent(BulletComponent(Bullet.StandardBullet))
           .addComponent(VelocityComponent(0, 0))
-          .addComponent(DirectionComponent(LEFT))
+          .addComponent(DirectionComponent(RIGHT))
           .addComponent(JumpingComponent(false))
           .addComponent(SpriteComponent("sprites/Enemy.jpg"))
           .addComponent(AIComponent())

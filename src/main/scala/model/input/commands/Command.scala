@@ -37,9 +37,6 @@ object Command:
     val vx = bulletDirection.d match
       case RIGHT => model.BULLET_VELOCITY
       case LEFT  => -model.BULLET_VELOCITY
-    if entity.isInstanceOf[EnemyEntity] then
-      println("enemy at position " + p)
-      println("enemy bullet at position " + (p.x + vx * 000.1, p.y))
     EntityManager().addEntity {
       entity.getComponent[BulletComponent].getOrElse(throw new Exception) match
         case BulletComponent(Bullet.StandardBullet) =>

@@ -29,7 +29,7 @@ package object model:
   val s_MarcoRossi = "sprites/MarcoRossi.png"
   val s_MarcoRossiMove = "sprites/MarcoRossiMove.png"
   val s_MarcoRossiJump = "sprites/MarcoRossiJump.png"
-  val s_MarcoRossiJumpingMoving = "sprites/MarcoRossiJumpingMoving2.jpg"
+  val s_MarcoRossiJumpingMoving = "sprites/MarcoRossiJumpingMoving.png"
   val s_BigBullet = "sprites/BigBullet.png"
   val s_SmallBullet = "sprites/SmallBullet.png"
   val s_Weapon_H = "sprites/Weapon_H.png"

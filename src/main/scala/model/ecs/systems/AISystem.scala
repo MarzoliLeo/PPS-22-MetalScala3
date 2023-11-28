@@ -57,6 +57,7 @@ private case class AISystemImpl() extends AISystem :
                 newEnemyVelocity match {
                   case VelocityComponent(x,0) if x > 0 => entity.replaceComponent(DirectionComponent(RIGHT))
                   case VelocityComponent(x,0) if x < 0=> entity.replaceComponent(DirectionComponent(LEFT))
+                  case _ => ()
                 }
 
                 entity.replaceComponent(newEnemyVelocity)
