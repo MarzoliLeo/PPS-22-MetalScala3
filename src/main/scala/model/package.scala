@@ -15,11 +15,7 @@ package object model:
   val GRAVITY_VELOCITY = 0.5
   var isGravityEnabled = true
   var isTouchingGround = false
-  val marcoRossiSprite = "sprites/MarcoRossi.png"
-  val marcoRossiMoveSprite = "sprites/MarcoRossiMove.png"
-  val marcoRossiJumpSprite = "sprites/MarcoRossiJump.png"
-  val standardBulletSprite = "sprites/Bullet.png"
-  val machineGunBulletSprite = "sprites/h.png"
+
   val VERTICAL_COLLISION_SIZE = 100
   val HORIZONTAL_COLLISION_SIZE = 100
   var inputsQueue: Stack[Entity => Unit] = Empty
@@ -28,6 +24,18 @@ package object model:
   var AItimeElapsedSinceLastExecution = 0
   val AIexecutionInterval = 20
   val AIexecutionSpeed = 1
+
+  //Sprites
+  val s_MarcoRossi = "sprites/MarcoRossi.png"
+  val s_MarcoRossiMove = "sprites/MarcoRossiMove.png"
+  val s_MarcoRossiJump = "sprites/MarcoRossiJump.png"
+  val s_MarcoRossiJumpingMoving = "sprites/MarcoRossiJumpingMoving2.jpg"
+  val s_BigBullet = "sprites/BigBullet.png"
+  val s_SmallBullet = "sprites/SmallBullet.png"
+  val s_Weapon_H = "sprites/Weapon_H.png"
+  val s_EnemyCrab = "sprites/EnemyCrab.jpg"
+  val s_EnemyCrabMoving = "sprites/EnemyCrabMoving.png"
+  val s_Box = "sprites/Box.jpg"
 
 
 

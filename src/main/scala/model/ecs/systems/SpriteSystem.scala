@@ -25,23 +25,28 @@ private case class SpriteSystemImpl() extends SpriteSystem:
         entity match {
           case playerEntity: PlayerEntity =>
             val sprite = summon[VelocityComponent] match {
-              case VelocityComponent(0, 0) => model.marcoRossiSprite
-              case VelocityComponent(_, y) if y != 0 => model.marcoRossiJumpSprite
-              case VelocityComponent(x, 0) if x != 0 => model.marcoRossiMoveSprite
+              case VelocityComponent(0, 0) => model.s_MarcoRossi
+              case VelocityComponent(0, y) if y != 0 => model.s_MarcoRossiJump
+              case VelocityComponent(x, 0) if x != 0 => model.s_MarcoRossiMove
+              case VelocityComponent(x,y) if x != 0 && y != 0 => model.s_MarcoRossiJumpingMoving
             }
             playerEntity.replaceComponent(SpriteComponent(sprite))
 
           case bulletEntity: BulletEntity =>
-            bulletEntity.replaceComponent(SpriteComponent("sprites/Bullet.png"))
+            bulletEntity.replaceComponent(SpriteComponent(model.s_SmallBullet))
 
           case machineGunEntity: MachineGunEntity =>
-            machineGunEntity.replaceComponent(SpriteComponent("sprites/h.png"))
+            machineGunEntity.replaceComponent(SpriteComponent(model.s_Weapon_H))
 
           case boxEntity: BoxEntity =>
-            boxEntity.replaceComponent(SpriteComponent("sprites/box.jpg"))
+            boxEntity.replaceComponent(SpriteComponent(model.s_Box))
 
           case enemyEntity: EnemyEntity =>
-            enemyEntity.replaceComponent(SpriteComponent("sprites/MarcoRossi.png"))
+            val sprite = summon[VelocityComponent] match {
+              case VelocityComponent(0, 0) => model.s_EnemyCrab
+              case VelocityComponent(x, 0) if x != 0 => model.s_EnemyCrabMoving
+            }
+            enemyEntity.replaceComponent(SpriteComponent(sprite))
         }
       }
 

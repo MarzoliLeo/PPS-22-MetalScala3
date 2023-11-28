@@ -47,12 +47,12 @@ object Command:
             .addComponent(PositionComponent(p.x + vx * 000.1, p.y))
             .addComponent(VelocityComponent(vx, 0))
             .addComponent(SizeComponent(100, 100))
-            .addComponent(SpriteComponent(model.standardBulletSprite))
+            .addComponent(SpriteComponent(model.s_SmallBullet))
             .addComponent(DirectionComponent(bulletDirection.d))
         case BulletComponent(Bullet.MachineGunBullet) =>
           BulletEntity()
             .addComponent(PositionComponent(p.x, p.y))
             .addComponent(VelocityComponent(vx, 0))
-            .addComponent(SpriteComponent(model.machineGunBulletSprite))
+            .addComponent(SpriteComponent(model.s_Weapon_H))
             .addComponent(DirectionComponent(bulletDirection.d))
     }
