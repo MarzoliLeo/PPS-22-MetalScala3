@@ -4,8 +4,9 @@ import javafx.event.{ActionEvent, EventHandler}
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
 import javafx.scene.control.Button
+import javafx.scene.image.Image
 import javafx.scene.input.{KeyCode, KeyEvent}
-import javafx.scene.layout.{GridPane, Pane}
+import javafx.scene.layout.{Background, BackgroundImage, BackgroundPosition, BackgroundRepeat, BackgroundSize, GridPane, Pane}
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.Box
 import javafx.stage.{Stage, WindowEvent}
@@ -17,7 +18,7 @@ import model.ecs.entities.EntityManager
 import model.ecs.entities.enemies.EnemyEntity
 import model.ecs.systems.*
 import model.engine.Engine
-import model.{GUIHEIGHT, HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
+import model.{GUIHEIGHT, HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE, s_Logo}
 import view.{GameView, View}
 
 trait MainMenu extends View:
@@ -41,14 +42,15 @@ trait MainMenu extends View:
 private class MainMenuImpl(parentStage: Stage) extends MainMenu:
 
   val loader: FXMLLoader = FXMLLoader(getClass.getResource("/main.fxml"))
-  val root: GridPane = loader.load[javafx.scene.layout.GridPane]()
+  val root: Pane = loader.load[javafx.scene.layout.GridPane]()
 
   private val entityManager = EntityManager()
   private val systemManager = SystemManager(entityManager)
   private val gameEngine = Engine()
+
+  //Gestione dei pulsanti.
   getButton(root, "Start").setOnAction((_: ActionEvent) => handleStartButton())
   getButton(root, "Exit").setOnAction((_: ActionEvent) => handleExitButton())
-  // Set the onCloseRequest handler
   parentStage.setOnCloseRequest((event: WindowEvent) => handleWindowCloseRequest())
 
   def handleStartButton(): Unit =
