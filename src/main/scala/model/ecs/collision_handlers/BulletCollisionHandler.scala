@@ -31,17 +31,14 @@ trait BulletCollisionHandler extends CollisionHandler:
   ): Option[PositionComponent] = {
     val collidingEntity = CollisionChecker
       .getCollidingEntity(this, proposedPosition)
-    if collidingEntity
-      .isEmpty && !CollisionChecker.isOutOfHorizontalBoundaries(
-      proposedPosition
-    )
+    if collidingEntity.isEmpty && !CollisionChecker.isOutOfHorizontalBoundaries(proposedPosition)
     then Some(proposedPosition)
     else
       collidingEntity match
         case Some(collidingEntity) if collidingEntity.isInstanceOf[EnemyEntity] =>
           println("bullet destroyed with enemy")
         case _ =>
-          println("bullet destroyed")
+          println("bullet destroyed inside BulletCollision.")
       EntityManager().removeEntity(this)
       None
   }

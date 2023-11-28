@@ -50,6 +50,7 @@ object Command:
           BulletEntity()
             .addComponent(PositionComponent(p.x, p.y))
             .addComponent(VelocityComponent(vx, 0))
+            .addComponent(SizeComponent(100, 100))
             .addComponent(SpriteComponent(model.s_BigBullet))
             .addComponent(DirectionComponent(bulletDirection.d))
     }

@@ -19,7 +19,6 @@ private case class SpriteSystemImpl() extends SpriteSystem:
       )
       .foreach { entity =>
         // Given instances
-        //given PositionComponent = entity.getComponent[PositionComponent].get
         given VelocityComponent = entity.getComponent[VelocityComponent].get
 
         entity match {
@@ -34,7 +33,6 @@ private case class SpriteSystemImpl() extends SpriteSystem:
 
           case bulletEntity: BulletEntity =>
             bulletEntity.replaceComponent(SpriteComponent(model.s_SmallBullet))
-
 
           case machineGunEntity: MachineGunEntity =>
             machineGunEntity.replaceComponent(SpriteComponent(model.s_Weapon_H))
