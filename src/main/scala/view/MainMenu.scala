@@ -14,8 +14,8 @@ import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.MachineGunEntity
 import model.ecs.entities.{EnemyEntity, EntityManager}
-import model.ecs.systems.Systems.{AISystem, bulletMovementSystem, gravitySystem, inputMovementSystem, positionUpdateSystem}
-import model.ecs.systems.{CollisionChecker, SystemManager, Systems}
+import model.ecs.systems.Systems.{AISystem, bulletMovementSystem, gravitySystem, inputMovementSystem}
+import model.ecs.systems.{CollisionChecker, PositionUpdateSystem, SystemManager, Systems}
 import model.engine.Engine
 import model.{GUIHEIGHT, HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
 import view.{GameView, View}
@@ -111,7 +111,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
     systemManager
       .addSystem(inputMovementSystem)
       .addSystem(gravitySystem)
-      .addSystem(positionUpdateSystem)
+      .addSystem(PositionUpdateSystem())
       .addSystem(bulletMovementSystem)
       .addSystem(AISystem)
     parentStage.getScene.setRoot(gameView)

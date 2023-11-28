@@ -1,7 +1,12 @@
 package model.ecs.systems
 
 import model.FRICTION_FACTOR
-import model.ecs.components.{JumpingComponent, PositionComponent, SpriteComponent, VelocityComponent}
+import model.ecs.components.{
+  JumpingComponent,
+  PositionComponent,
+  SpriteComponent,
+  VelocityComponent
+}
 import model.ecs.entities.{EnemyEntity, Entity, EntityManager}
 import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.PlayerEntity
@@ -49,14 +54,14 @@ object PositionUpdateSystem:
     VelocityComponent(newHorizontalVelocity, velocity.y)
   }
 
-  val positionUpdateSystem: Long => Unit = elapsedTime =>
+  def apply(): Long => Unit = elapsedTime =>
     EntityManager()
       .getEntitiesWithComponent(
         classOf[PositionComponent],
         classOf[VelocityComponent],
         classOf[JumpingComponent]
       )
-      .foreach( entity =>
+      .foreach(entity =>
         given currentPosition: PositionComponent =
           entity.getComponent[PositionComponent].get
         given currentVelocity: VelocityComponent =
@@ -64,12 +69,12 @@ object PositionUpdateSystem:
 
         entity.replaceComponent(getUpdatedVelocity(entity))
 
-        val proposedPosition = getUpdatedPosition( elapsedTime)
+        val proposedPosition = getUpdatedPosition(elapsedTime)
         val handledPosition: Option[PositionComponent] =
           entity.handleCollision(proposedPosition)
 
         handledPosition match
           case Some(handledPosition) => entity.replaceComponent(handledPosition)
-        // keep the current position
+          // keep the current position
           case None => ()
       )
