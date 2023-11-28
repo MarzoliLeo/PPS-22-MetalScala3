@@ -21,20 +21,6 @@ import java.util.{Timer, TimerTask}
 
 object Systems extends Observable[Event]:
 
-  val bulletMovementSystem: Long => Unit = elapsedTime =>
-    EntityManager().getEntitiesByClass(classOf[BulletEntity]).foreach {
-      bullet =>
-        given position: PositionComponent =
-          bullet.getComponent[PositionComponent].get
-        given velocity: VelocityComponent =
-          bullet.getComponent[VelocityComponent].get
-
-        val proposedPosition = getUpdatedPosition(elapsedTime)
-        bullet.handleCollision(proposedPosition) match
-          case Some(handledPosition) => bullet.replaceComponent(handledPosition)
-          case None                  => ()
-    }
-
   val inputMovementSystem: Long => Unit = * =>
     EntityManager().getEntitiesWithComponent(classOf[PlayerComponent]).foreach {
       entity =>

@@ -14,7 +14,8 @@ import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.MachineGunEntity
 import model.ecs.entities.{EnemyEntity, EntityManager}
-import model.ecs.systems.Systems.{AISystem, bulletMovementSystem, gravitySystem, inputMovementSystem}
+import model.ecs.systems.BulletMovementSystem.bulletMovementSystem
+import model.ecs.systems.Systems.{AISystem, gravitySystem, inputMovementSystem}
 import model.ecs.systems.{CollisionChecker, PositionUpdateSystem, SystemManager, Systems}
 import model.engine.Engine
 import model.{GUIHEIGHT, HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
