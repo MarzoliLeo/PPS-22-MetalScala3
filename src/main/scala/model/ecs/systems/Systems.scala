@@ -8,7 +8,6 @@ import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.{BulletEntity, MachineGunEntity, WeaponEntity}
 import model.ecs.systems.CollisionChecker.{boundaryCheck, getCollidingEntity, isOutOfHorizontalBoundaries}
-import model.ecs.systems.PositionUpdateSystem.getUpdatedPosition
 import model.event.Event
 import model.event.observer.Observable
 import model.input.commands.*
@@ -29,7 +28,7 @@ object Systems extends Observable[Event]:
         given velocity: VelocityComponent =
           bullet.getComponent[VelocityComponent].get
 
-        val proposedPosition = getUpdatedPosition(elapsedTime)
+        val proposedPosition = position.getUpdatedPosition(elapsedTime, velocity)
         bullet.handleCollision(proposedPosition) match
           case Some(handledPosition) => bullet.replaceComponent(handledPosition)
           case None                  => ()
