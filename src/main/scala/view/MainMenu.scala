@@ -14,7 +14,7 @@ import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.MachineGunEntity
 import model.ecs.entities.{EnemyEntity, EntityManager}
-import model.ecs.systems.{AISystem, BulletMovementSystem, CollisionChecker, GravitySystem, InputSystem, PositionUpdateSystem, SystemManager}
+import model.ecs.systems.*
 import model.engine.Engine
 import model.{GUIHEIGHT, HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
 import view.{GameView, View}
@@ -48,7 +48,9 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
   getButton(root, "Start").setOnAction((_: ActionEvent) => handleStartButton())
   getButton(root, "Exit").setOnAction((_: ActionEvent) => handleExitButton())
   // Set the onCloseRequest handler
-  parentStage.setOnCloseRequest((event: WindowEvent) => handleWindowCloseRequest())
+  parentStage.setOnCloseRequest((event: WindowEvent) =>
+    handleWindowCloseRequest()
+  )
 
   def handleStartButton(): Unit =
     val gameView =
@@ -87,7 +89,9 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
         EnemyEntity()
           .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
           .addComponent(PositionComponent(1000, GUIHEIGHT))
-          .addComponent(SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE))
+          .addComponent(
+            SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
+          )
           .addComponent(BulletComponent(Bullet.StandardBullet))
           .addComponent(VelocityComponent(0, 0))
           .addComponent(DirectionComponent(LEFT))
@@ -121,7 +125,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
     gameEngine.stop()
     System.exit(0)
 
-  def handleWindowCloseRequest(): Unit = {
+  private def handleWindowCloseRequest(): Unit = {
     parentStage.close()
     gameEngine.stop()
     System.exit(0)

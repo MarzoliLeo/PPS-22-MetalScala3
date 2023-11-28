@@ -38,9 +38,8 @@ case class SizeComponent(width: Double, height: Double) extends Component
   */
 case class PositionComponent(x: Double, y: Double) extends Component:
   def getUpdatedPosition(
-      elapsedTime: Long,
-      velocity: VelocityComponent
-  ): PositionComponent = {
+      elapsedTime: Long
+  )(using velocity: VelocityComponent): PositionComponent = {
     val newPositionX = this.x + velocity.x * elapsedTime * 0.001
     val newPositionY = this.y + velocity.y * elapsedTime * 0.001
 
