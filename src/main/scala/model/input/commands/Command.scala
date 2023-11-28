@@ -3,8 +3,7 @@ package model.input.commands
 import model.ecs.components.*
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.BulletEntity
-import model.ecs.entities.{Entity, EntityManager}
-import model.ecs.systems.Systems.{gravitySystem, notifyObservers}
+import model.ecs.entities.{EnemyEntity, Entity, EntityManager}
 
 object Command:
   def jump(entity: Entity): Unit =
@@ -37,16 +36,19 @@ object Command:
     val vx = bulletDirection.d match
       case RIGHT => model.BULLET_VELOCITY
       case LEFT  => -model.BULLET_VELOCITY
+    if entity.isInstanceOf[EnemyEntity] then
+      println("enemy at position " + p)
+      println("enemy bullet at position " + (p.x + vx * 000.1, p.y))
     EntityManager().addEntity {
       entity.getComponent[BulletComponent].getOrElse(throw new Exception) match
-        case BulletComponent(Bullet.StandardBullet) =>
+        case BulletComponent(StandardBullet()) =>
           BulletEntity()
             .addComponent(PositionComponent(p.x + vx * 000.1, p.y))
             .addComponent(VelocityComponent(vx, 0))
             .addComponent(SizeComponent(100, 100))
             .addComponent(SpriteComponent(model.standardBulletSprite))
             .addComponent(DirectionComponent(bulletDirection.d))
-        case BulletComponent(Bullet.MachineGunBullet) =>
+        case BulletComponent(MachineGunBullet()) =>
           BulletEntity()
             .addComponent(PositionComponent(p.x, p.y))
             .addComponent(VelocityComponent(vx, 0))

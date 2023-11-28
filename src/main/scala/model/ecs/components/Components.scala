@@ -10,17 +10,18 @@ import scala.math.sqrt
   */
 sealed trait Component
 
-enum Bullet:
-    case StandardBullet
-    case MachineGunBullet
+trait Bullet
+case class StandardBullet() extends Bullet
+case class MachineGunBullet() extends Bullet
 case class BulletComponent(bullet: Bullet) extends Component
 
-case class CollisionComponent(entities: scala.collection.mutable.Set[Entity]) extends Component
+case class CollisionComponent(entities: scala.collection.mutable.Set[Entity])
+    extends Component
 
-/**
- * An Entity has this component if it's a trigger
- */
+/** An Entity has this component if it's a trigger
+  */
 case class TriggerComponent() extends Component
+
 /** Represents the size of an entity.
   * @param width
   *   The width of the entity.
@@ -36,6 +37,15 @@ case class SizeComponent(width: Double, height: Double) extends Component
   *   The y-coordinate of the entity.
   */
 case class PositionComponent(x: Double, y: Double) extends Component:
+  def getUpdatedPosition(
+      elapsedTime: Long
+  )(using velocity: VelocityComponent): PositionComponent = {
+    val newPositionX = this.x + velocity.x * elapsedTime * 0.001
+    val newPositionY = this.y + velocity.y * elapsedTime * 0.001
+
+    PositionComponent(newPositionX, newPositionY)
+  }
+
   /** Adds a velocity component to the current position component.
     * @param v
     *   The velocity component to add.
@@ -120,6 +130,6 @@ case class VelocityComponent(var x: Double, var y: Double) extends Component:
   /** Returns a string representation of the velocity component.
     *
     * @return
-    * The string representation of the velocity component.
+    *   The string representation of the velocity component.
     */
   override def toString: String = s"VelocityComponent($x,$y)"
