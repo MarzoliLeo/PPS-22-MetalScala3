@@ -10,9 +10,9 @@ import scala.math.sqrt
   */
 sealed trait Component
 
-enum Bullet:
-  case StandardBullet
-  case MachineGunBullet
+trait Bullet
+case class StandardBullet() extends Bullet
+case class MachineGunBullet() extends Bullet
 case class BulletComponent(bullet: Bullet) extends Component
 
 case class CollisionComponent(entities: scala.collection.mutable.Set[Entity])
