@@ -11,20 +11,8 @@ import model.ecs.entities.{EnemyEntity, Entity, EntityManager}
 import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.{BulletEntity, MachineGunEntity}
-import model.ecs.systems.PositionUpdateSystem.getUpdatedPosition
 
 object PositionUpdateSystem:
-  def getUpdatedPosition(elapsedTime: Long)(using
-      position: PositionComponent,
-      velocity: VelocityComponent
-  ): PositionComponent = {
-
-    val newPositionX = position.x + velocity.x * elapsedTime * 0.001
-    val newPositionY = position.y + velocity.y * elapsedTime * 0.001
-
-    PositionComponent(newPositionX, newPositionY)
-  }
-
   private def getUpdatedVelocity(entity: Entity)(using
       velocity: VelocityComponent
   ): VelocityComponent = {
@@ -69,7 +57,7 @@ object PositionUpdateSystem:
 
         entity.replaceComponent(getUpdatedVelocity(entity))
 
-        val proposedPosition = getUpdatedPosition(elapsedTime)
+        val proposedPosition = currentPosition.getUpdatedPosition(elapsedTime, currentVelocity)
         val handledPosition: Option[PositionComponent] =
           entity.handleCollision(proposedPosition)
 
