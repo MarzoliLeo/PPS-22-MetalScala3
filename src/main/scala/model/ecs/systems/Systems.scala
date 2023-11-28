@@ -8,7 +8,6 @@ import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.{BulletEntity, MachineGunEntity, WeaponEntity}
 import model.ecs.systems.CollisionChecker.{boundaryCheck, getCollidingEntity, isOutOfHorizontalBoundaries}
-import model.ecs.systems.PositionUpdateSystem.getUpdatedPosition
 import model.event.Event
 import model.event.observer.Observable
 import model.input.commands.*
