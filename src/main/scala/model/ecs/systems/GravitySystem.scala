@@ -22,7 +22,7 @@ object GravitySystem:
             entity.replaceComponent(VelocityComponent(velocity.x, 0))
           else
             entity.replaceComponent(
-              velocity + VelocityComponent(0, GRAVITY_VELOCITY * elapsedTime)
+              velocity + VelocityComponent(0, entity.getComponent[GravityComponent].get.gravity * elapsedTime)
             )
         }
     }
