@@ -68,7 +68,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
     entityManager
       .addEntity(createPlayerEntity())
       .addEntity(createBoxEntity())
-      .addEntity(createEnemyEntity())
+      //.addEntity(createEnemyEntity())
       .addEntity(createMachineGunEntity())
     systemManager
       .addSystem(InputSystem())
