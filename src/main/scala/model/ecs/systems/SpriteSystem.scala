@@ -1,9 +1,9 @@
 package model.ecs.systems
 
-import model.ecs.components.{PositionComponent, SpriteComponent, VelocityComponent}
+import model.ecs.components.*
 import model.ecs.entities.EntityManager
 import model.ecs.entities.player.PlayerEntity
-import model.ecs.entities.weapons.{BulletEntity, MachineGunEntity}
+import model.ecs.entities.weapons.*
 import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.enemies.EnemyEntity
 
@@ -34,6 +34,7 @@ private case class SpriteSystemImpl() extends SpriteSystem:
 
           case bulletEntity: BulletEntity =>
             bulletEntity.replaceComponent(SpriteComponent(model.s_SmallBullet))
+
 
           case machineGunEntity: MachineGunEntity =>
             machineGunEntity.replaceComponent(SpriteComponent(model.s_Weapon_H))

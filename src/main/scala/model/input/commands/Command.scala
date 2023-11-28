@@ -39,17 +39,17 @@ object Command:
       case LEFT  => -model.BULLET_VELOCITY
     EntityManager().addEntity {
       entity.getComponent[BulletComponent].getOrElse(throw new Exception) match
-        case BulletComponent(Bullet.StandardBullet) =>
+        case BulletComponent(StandardBullet()) =>
           BulletEntity()
             .addComponent(PositionComponent(p.x + vx * 000.1, p.y))
             .addComponent(VelocityComponent(vx, 0))
             .addComponent(SizeComponent(100, 100))
             .addComponent(SpriteComponent(model.s_SmallBullet))
             .addComponent(DirectionComponent(bulletDirection.d))
-        case BulletComponent(Bullet.MachineGunBullet) =>
+        case BulletComponent(MachineGunBullet()) =>
           BulletEntity()
             .addComponent(PositionComponent(p.x, p.y))
             .addComponent(VelocityComponent(vx, 0))
-            .addComponent(SpriteComponent(model.s_Weapon_H))
+            .addComponent(SpriteComponent(model.s_BigBullet))
             .addComponent(DirectionComponent(bulletDirection.d))
     }

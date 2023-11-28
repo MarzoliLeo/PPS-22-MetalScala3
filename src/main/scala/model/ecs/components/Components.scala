@@ -10,9 +10,6 @@ import scala.math.sqrt
   */
 sealed trait Component
 
-enum Bullet:
-  case StandardBullet
-  case MachineGunBullet
 case class BulletComponent(bullet: Bullet) extends Component
 
 case class CollisionComponent(entities: scala.collection.mutable.Set[Entity])
@@ -134,3 +131,4 @@ case class VelocityComponent(var x: Double, var y: Double) extends Component:
     *   The string representation of the velocity component.
     */
   override def toString: String = s"VelocityComponent($x,$y)"
+
