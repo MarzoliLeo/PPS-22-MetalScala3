@@ -2,6 +2,7 @@ import App.main
 import javafx.application.Application
 import javafx.event.{ActionEvent, EventHandler}
 import javafx.scene.Scene
+import javafx.scene.image.Image
 import javafx.scene.input.KeyEvent
 import javafx.scene.layout.*
 import javafx.scene.paint.{Color, PhongMaterial}
@@ -20,6 +21,7 @@ class App extends Application:
     val GAME_TITLE = "Metal Scala 3"
     val WINDOW_WIDTH = model.GUIWIDTH
     val WINDOW_HEIGHT = model.GUIHEIGHT
+    
     primaryStage.setTitle(GAME_TITLE)
 
     //La creazione della GameView avviene dentro il pulsante start di Main Menu.

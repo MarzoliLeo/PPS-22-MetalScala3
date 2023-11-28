@@ -5,7 +5,7 @@ import javafx.application.Platform
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.scene.image.{Image, ImageView}
 import javafx.scene.input.KeyCode
-import javafx.scene.layout.Pane
+import javafx.scene.layout.{Background, BackgroundImage, BackgroundPosition, BackgroundRepeat, BackgroundSize, Pane}
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.*
 import javafx.scene.{Node, Scene}
@@ -42,6 +42,25 @@ private class GameViewImpl(
       case KeyCode.SPACE => handleInput(Command.shoot)
       case _             => ()
   }
+  // Load the background image
+  private val backgroundImage = new Image(model.s_GameBackground)
+  // Create a BackgroundImage object
+  private val background = new Background(new BackgroundImage(
+    backgroundImage,
+    BackgroundRepeat.NO_REPEAT,
+    BackgroundRepeat.NO_REPEAT,
+    BackgroundPosition.DEFAULT,
+    new BackgroundSize(
+      BackgroundSize.AUTO,
+      BackgroundSize.AUTO,
+      false,
+      false,
+      true,
+      true
+    )
+  ))
+  // Set the background of the root using the Background object
+  root.setBackground(background)
   primaryStage.setScene(scene)
   observables.foreach(_.addObserver(this))
 

@@ -82,7 +82,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
           .addComponent(VelocityComponent(0, 0))
           .addComponent(DirectionComponent(RIGHT))
           .addComponent(JumpingComponent(false))
-          .addComponent(SpriteComponent("sprites/Box.jpg"))
+          .addComponent(SpriteComponent("sprites/Box.png"))
       )
       .addEntity(
         EnemyEntity()
@@ -93,7 +93,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
           .addComponent(VelocityComponent(0, 0))
           .addComponent(DirectionComponent(RIGHT))
           .addComponent(JumpingComponent(false))
-          .addComponent(SpriteComponent("sprites/Enemy.jpg"))
+          .addComponent(SpriteComponent("sprites/EnemyCrab.png"))
           .addComponent(AIComponent())
       )
       .addEntity(

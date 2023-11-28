@@ -8,7 +8,8 @@ import model.ecs.entities.Entity
   */
 trait WeaponEntity extends Entity:
   val damage: Int
-trait ShootingWeaponEntity extends WeaponEntity
 
+//questo è il mixin.
+trait ShootingWeaponEntity extends WeaponEntity
 case class MachineGunEntity() extends ShootingWeaponEntity with PlayerCollisionHandler:
   val damage = 1
