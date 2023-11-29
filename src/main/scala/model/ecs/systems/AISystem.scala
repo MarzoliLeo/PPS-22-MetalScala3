@@ -54,14 +54,18 @@ private case class AISystemImpl() extends AISystem {
 
                 if (randomInt == 3) {
                   Command.shoot(entity)
-                } else {
-                  val newEnemyX = extractTerm(s, 3)
+                }
+                else {
 
+                  val prologPositionX = extractTerm(s, 3)
+
+                  //Velocity.
                   val newEnemyVelocity = VelocityComponent(
-                    enemyVelocity.x + (enemyPosition.x - newEnemyX) * elapsedTime,
+                    enemyVelocity.x + (enemyPosition.x - prologPositionX) * elapsedTime,
                     enemyVelocity.y
                   )
 
+                  //Direction.
                   newEnemyVelocity match {
                     case VelocityComponent(x, 0) if x > 0 => entity.replaceComponent(DirectionComponent(RIGHT))
                     case VelocityComponent(x, 0) if x < 0 => entity.replaceComponent(DirectionComponent(LEFT))
@@ -70,8 +74,18 @@ private case class AISystemImpl() extends AISystem {
 
                   entity.replaceComponent(newEnemyVelocity)
 
-                  val newEnemyPosition = PositionComponent(x = newEnemyX, y = enemyPosition.y)
-                  entity.replaceComponent(newEnemyPosition)
+                  //Position.
+                  //NUOVO CODICE:
+                  val proposedPosition = PositionComponent(prologPositionX, enemyPosition.y)
+                  val handledPosition: Option[PositionComponent] = entity.handleCollision(proposedPosition)
+                  handledPosition match
+                    case Some(handledPosition) => entity.replaceComponent(handledPosition)
+                    // keep the current position
+                    case None => ()
+
+                  //CODICE ORIGINALE:
+                  /*val newEnemyPosition = PositionComponent(x = newEnemyX, y = enemyPosition.y)
+                  entity.replaceComponent(newEnemyPosition)*/
                 }
               } catch {
                 case e: Exception => e match {
