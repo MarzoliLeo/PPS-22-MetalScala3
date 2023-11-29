@@ -38,42 +38,30 @@ trait PlayerCollisionHandler extends CollisionHandler:
         throw new Exception("No JumpingComponent found")
       )
 
-  /**
-   * Handles the collision of the PlayerEntity with the proposed position.
-   * @param proposedPosition
-   *   The proposed position before the collision is handled.
-   *  @return
-   *   An optional PositionComponent representing the new position after
-   *   handling the collision. Returns None if no position update is necessary.
-   */
   override def handleCollision(
       proposedPosition: PositionComponent
   ): Option[PositionComponent] =
-    // TODO: check if the collision is with a weapon:
-    //  if so, delete the weapon entity and change the type of bullets shot
-
     for {
       currentPosition <- getComponent[PositionComponent]
       velocity <- getComponent[VelocityComponent]
+      collidingEntity = getCollidingEntity(this, proposedPosition)
     } yield {
       val updatedJumpingComponent =
         updateJumpingComponent(currentPosition, proposedPosition, velocity)
       replaceComponent(updatedJumpingComponent)
 
-    if canJump then replaceComponent(JumpingComponent(false))
+      collidingEntity match {
+        case Some(entity) if entity.isInstanceOf[WeaponEntity] =>
+          println("Collided with WeaponEntity, updating bullets.")
+          EntityManager().removeEntity(entity)
+          EntityManager().getEntitiesByClass(classOf[PlayerBulletEntity]).foreach(
+            entity =>
+              entity.replaceComponent(SpriteComponent(model.s_BigBullet))
+          )
+        case _ =>
+          println("Bullet destroyed inside PlayerCollision!")
+      }
 
-    val finalPositionX = getFinalPosition(
-      proposedPosition.x,
-      currentPosition.x,
-      PositionComponent(_, currentPosition.y)
-    )
-    val finalPositionY = getFinalPosition(
-      proposedPosition.y,
-      currentPosition.y,
-      PositionComponent(currentPosition.x, _)
-    )
-
-    Some(
       PositionComponent(
         boundaryCheck(
           getFinalPosition(
@@ -92,21 +80,4 @@ trait PlayerCollisionHandler extends CollisionHandler:
           VERTICAL_COLLISION_SIZE
         )
       )
-    )
-    else
-      collidingEntity match
-        case Some(collidingEntity) if collidingEntity.isInstanceOf[WeaponEntity] =>
-          println("Ho colliso con il WeaponEntity e ora devo avere i miei nuovi proiettili.")
-          EntityManager().removeEntity(collidingEntity) // rimuovo il WeaponEntity, così scompare.
-          //TODO Aggiungo il nuovo proiettile al player.
-          // questo codice (sotto) è ciò che deve fare ma non qua... perché così lo cambierà solo se sto collidendo con essa, invece io devo salvarmi il fatto che ho colliso
-          // e aggiornare i colpi in base al fatto che sia avvenuta o meno la collisione.
-          EntityManager().getEntitiesByClass(classOf[PlayerBulletEntity]).foreach(
-            entity =>
-              entity.replaceComponent(SpriteComponent(model.s_BigBullet))
-          )
-        case _ =>
-          println("bullet destroyed inside PlayerCollision!")
-      None
-
-
+    }
