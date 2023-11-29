@@ -13,13 +13,11 @@ import javafx.stage.Stage
 import javafx.util.Duration
 import model.ecs.components.*
 import model.ecs.entities.weapons.EnemyBulletEntity
-import model.ecs.entities.{Entity, EntityManager}
 import model.event.Event
 import model.event.Event.*
 import model.event.observer.{Observable, Observer}
 import model.input.CommandsStackHandler
 import model.input.commands.Command
-
 import java.util.UUID
 
 trait GameView extends View
