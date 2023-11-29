@@ -28,7 +28,7 @@ private class PositionUpdateSystemImpl() extends PositionUpdateSystem:
 
         entity.replaceComponent(getUpdatedVelocity(entity))
 
-        val proposedPosition = currentPosition.getUpdatedPosition(elapsedTime, currentVelocity)
+        val proposedPosition = currentPosition.getUpdatedPosition(elapsedTime)
         val handledPosition: Option[PositionComponent] = entity.handleCollision(proposedPosition)
         handledPosition match
           case Some(handledPosition) => entity.replaceComponent(handledPosition)

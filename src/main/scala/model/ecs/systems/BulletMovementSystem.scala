@@ -18,7 +18,7 @@ private class BulletMovementSystemImpl extends BulletMovementSystem:
         given velocity: VelocityComponent =
           bullet.getComponent[VelocityComponent].get
 
-        bullet.handleCollision(position.getUpdatedPosition(elapsedTime, velocity)) match
+        bullet.handleCollision(position.getUpdatedPosition(elapsedTime)) match
           case Some(handledPosition) => bullet.replaceComponent(handledPosition)
           case None => ()
     }

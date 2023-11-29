@@ -51,77 +51,29 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
   //Gestione dei pulsanti.
   getButton(root, "Start").setOnAction((_: ActionEvent) => handleStartButton())
   getButton(root, "Exit").setOnAction((_: ActionEvent) => handleExitButton())
-  parentStage.setOnCloseRequest((event: WindowEvent) => handleWindowCloseRequest())
+  parentStage.setOnCloseRequest((event: WindowEvent) =>
+    handleWindowCloseRequest()
+  )
+
+  def handleExitButton(): Unit =
+    parentStage.close()
+    gameEngine.stop()
+    System.exit(0)
+
+  private def handleWindowCloseRequest(): Unit = {
+    parentStage.close()
+    gameEngine.stop()
+    System.exit(0)
+  }
 
   def handleStartButton(): Unit =
-    val gameView =
-      GameView(parentStage, Set(entityManager, gameEngine))
-    // Imposta il backend ECS.
+    val gameView = GameView(parentStage, Set(entityManager, gameEngine))
     entityManager
-      .addEntity(
-        PlayerEntity()
-          .addComponent(PlayerComponent())
-          .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
-          .addComponent(PositionComponent(250, GUIHEIGHT))
-          .addComponent(
-            SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
-          )
-          .addComponent(CollisionComponent(scala.collection.mutable.Set()))
-          .addComponent(BulletComponent(StandardBullet()))
-          .addComponent(VelocityComponent(0, 0))
-          .addComponent(DirectionComponent(RIGHT))
-          .addComponent(JumpingComponent(false))
-          .addComponent(SpriteComponent(model.s_MarcoRossi))
-      )
-      .addEntity(
-        // Used for testing collisions
-        BoxEntity()
-          .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
-          .addComponent(PositionComponent(400, GUIHEIGHT))
-          .addComponent(
-            SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
-          )
-          .addComponent(VelocityComponent(0, 0))
-          .addComponent(DirectionComponent(RIGHT))
-          .addComponent(JumpingComponent(false))
-          .addComponent(SpriteComponent("sprites/Box.png"))
-      )
-      .addEntity(
-        EnemyEntity()
-          .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
-          .addComponent(PositionComponent(800, GUIHEIGHT))
-          .addComponent(SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE))
-          .addComponent(BulletComponent(EnemyBullet()))
-          .addComponent(VelocityComponent(0, 0))
-          .addComponent(DirectionComponent(RIGHT))
-          .addComponent(JumpingComponent(false))
-          .addComponent(SpriteComponent("sprites/EnemyCrab.png"))
-          .addComponent(AIComponent())
-      )
-      .addEntity(
-        EnemyEntity()
-          .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
-          .addComponent(PositionComponent(1100, GUIHEIGHT))
-          .addComponent(SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE))
-          .addComponent(BulletComponent(EnemyBullet()))
-          .addComponent(VelocityComponent(0, 0))
-          .addComponent(DirectionComponent(RIGHT))
-          .addComponent(JumpingComponent(false))
-          .addComponent(SpriteComponent("sprites/EnemyCrab.png"))
-          .addComponent(AIComponent())
-      )
-      .addEntity(
-        MachineGunEntity()
-          .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
-          .addComponent(PositionComponent(600, GUIHEIGHT))
-          .addComponent(DirectionComponent(RIGHT))
-          .addComponent(SpriteComponent("sprites/H.png"))
-          .addComponent(
-            SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
-          )
-          .addComponent(VelocityComponent(0, 0))
-          .addComponent(JumpingComponent(false))
-      )
+      .addEntity(createPlayerEntity())
+      .addEntity(createBoxEntity())
+      .addEntity(createEnemyEntity())
+      .addEntity(createEnemyEntity())
+      .addEntity(createMachineGunEntity())
     systemManager
       .addSystem(InputSystem())
       .addSystem(GravitySystem())
@@ -132,16 +84,60 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
     parentStage.getScene.setRoot(gameView)
     gameEngine.start()
 
-  def handleExitButton(): Unit =
-    parentStage.close()
-    gameEngine.stop()
-    System.exit(0)
 
-  def handleWindowCloseRequest(): Unit = {
-    parentStage.close()
-    gameEngine.stop()
-    System.exit(0)
-  }
+  def createPlayerEntity(): Entity =
+    PlayerEntity()
+      .addComponent(PlayerComponent())
+      .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
+      .addComponent(PositionComponent(250, GUIHEIGHT))
+      .addComponent(
+        SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
+      )
+      .addComponent(CollisionComponent(scala.collection.mutable.Set()))
+      .addComponent(BulletComponent(StandardBullet()))
+      .addComponent(VelocityComponent(0, 0))
+      .addComponent(DirectionComponent(RIGHT))
+      .addComponent(JumpingComponent(false))
+      .addComponent(SpriteComponent(model.s_MarcoRossi))
+
+  def createBoxEntity(): Entity =
+    BoxEntity()
+      .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
+      .addComponent(PositionComponent(400, GUIHEIGHT))
+      .addComponent(
+        SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
+      )
+      .addComponent(VelocityComponent(0, 0))
+      .addComponent(DirectionComponent(RIGHT))
+      .addComponent(JumpingComponent(false))
+      .addComponent(SpriteComponent(model.s_Box))
+
+  def createEnemyEntity(): Entity =
+    EnemyEntity()
+      .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
+      .addComponent(PositionComponent(800, GUIHEIGHT))
+      .addComponent(
+        SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
+      )
+      .addComponent(BulletComponent(EnemyBullet()))
+      .addComponent(VelocityComponent(0, 0))
+      .addComponent(DirectionComponent(RIGHT))
+      .addComponent(JumpingComponent(false))
+      .addComponent(SpriteComponent(model.s_EnemyCrab))
+      .addComponent(AIComponent())
+
+  def createMachineGunEntity(): Entity =
+    MachineGunEntity()
+      .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
+      .addComponent(PositionComponent(600, GUIHEIGHT))
+      .addComponent(DirectionComponent(RIGHT))
+      .addComponent(SpriteComponent(model.s_Weapon_H))
+      .addComponent(
+        SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
+      )
+      .addComponent(VelocityComponent(0, 0))
+      .addComponent(JumpingComponent(false))
+
 
   override def startButton: Button = getButton(root, "Start")
 
