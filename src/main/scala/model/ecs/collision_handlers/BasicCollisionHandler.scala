@@ -1,14 +1,14 @@
 package model.ecs.collision_handlers
 
-import model.{HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
 import model.ecs.components.{JumpingComponent, PositionComponent, SizeComponent, VelocityComponent}
 import model.ecs.entities.Entity
 import model.ecs.systems.CollisionChecker.{boundaryCheck, getCollidingEntity}
+import model.{HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
 
-/**
- * The BasicCollisionHandler trait implements collision handling logic for entities.
- * It extends the CollisionHandler trait and requires the entity to mix in the Entity trait.
- */
+/** The BasicCollisionHandler trait implements collision handling logic for
+  * entities. It extends the CollisionHandler trait and requires the entity to
+  * mix in the Entity trait.
+  */
 trait BasicCollisionHandler extends CollisionHandler:
   self: Entity =>
 
@@ -17,36 +17,29 @@ trait BasicCollisionHandler extends CollisionHandler:
       currentPosition: PositionComponent
   ): PositionComponent =
     getCollidingEntity(this, proposedPosition)
-      // if there is a colliding entity, do not change the position
-      .map(_ => currentPosition)
-      // otherwise, change the position
-      .getOrElse(proposedPosition)
+      .fold(proposedPosition)(_ => currentPosition)
 
-  private def updateJumpingComponent(
+  private def getUpdatedJumpingComponent(
       currentPosition: PositionComponent,
       proposedPosition: PositionComponent,
       velocity: VelocityComponent,
       collisionSize: Double
   ): JumpingComponent =
-    if (
-      (currentPosition.y + collisionSize >= model.GUIHEIGHT && velocity.y >= 0)
-      || getCollidingEntity(
-        this,
-        PositionComponent(currentPosition.x, proposedPosition.y)
-      ).isDefined
-    )
-      JumpingComponent(false)
+    val isOnGround =
+      currentPosition.y + collisionSize >= model.GUIHEIGHT && velocity.y >= 0
+    val isColliding = getCollidingEntity(
+      this,
+      PositionComponent(currentPosition.x, proposedPosition.y)
+    ).isDefined
+    if (isOnGround || isColliding) JumpingComponent(false)
     else
       getComponent[JumpingComponent].getOrElse(
         throw new Exception("No JumpingComponent found")
       )
 
-  /**
-   * Handles a special collision with an optional colliding entity.
-   *
-   * @param collidingEntity the optional colliding entity involved in the collision
-   */
-  protected def handleSpecialCollision(collidingEntity: Option[Entity]): Unit = {}
+  protected def handleSpecialCollision(
+      collidingEntity: Option[Entity]
+  ): Unit = {}
 
   def handleCollision(
       proposedPosition: PositionComponent
@@ -54,19 +47,14 @@ trait BasicCollisionHandler extends CollisionHandler:
     for
       currentPosition <- getComponent[PositionComponent]
       velocity <- getComponent[VelocityComponent]
-      collidingEntity = getCollidingEntity(this, proposedPosition)
+      sizeComponent <- getComponent[SizeComponent]
     yield
-      val sizeComponent = getComponent[SizeComponent]
-        .getOrElse(throw new Exception("No SizeComponent found"))
-      val updatedJumpingComponent = updateJumpingComponent(
-        currentPosition,
-        proposedPosition,
-        velocity,
-        sizeComponent.height
-      )
-      replaceComponent(updatedJumpingComponent)
-
-      handleSpecialCollision(collidingEntity)
+      replaceComponent {
+        getUpdatedJumpingComponent(currentPosition, proposedPosition, velocity, sizeComponent.height)
+      }
+      handleSpecialCollision {
+        getCollidingEntity(this, proposedPosition)
+      }
 
       PositionComponent(
         boundaryCheck(
@@ -83,7 +71,6 @@ trait BasicCollisionHandler extends CollisionHandler:
             currentPosition
           ).y,
           model.GUIHEIGHT,
-            sizeComponent.height
+          sizeComponent.height
         )
       )
-
