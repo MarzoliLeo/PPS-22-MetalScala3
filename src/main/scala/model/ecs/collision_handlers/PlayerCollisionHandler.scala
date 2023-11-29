@@ -1,84 +1,63 @@
 package model.ecs.collision_handlers
-import model.ecs.components.{JumpingComponent, PositionComponent, VelocityComponent}
+import model.HORIZONTAL_COLLISION_SIZE
+import model.VERTICAL_COLLISION_SIZE
+import model.ecs.components.JumpingComponent
+import model.ecs.components.PositionComponent
+import model.ecs.components.VelocityComponent
 import model.ecs.entities.Entity
 import model.ecs.systems.CollisionChecker
-import model.ecs.systems.CollisionChecker.{boundaryCheck, getCollidingEntity}
-import model.{HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
+import model.ecs.systems.CollisionChecker.boundaryCheck
+import model.ecs.systems.CollisionChecker.getCollidingEntity
 
 trait PlayerCollisionHandler extends CollisionHandler:
   self: Entity =>
 
-  /** Calculates the final position for an entity based on the proposed
-    * coordinate, current coordinate, and a function to retrieve the position
-    * component of a specific coordinate.
-    *
-    * @param proposedCoordinate
-    *   The proposed coordinate for the entity.
-    * @param currentCoordinate
-    *   The current coordinate of the entity.
-    * @param getCoordinate
-    *   A function that takes a coordinate and returns the position component of
-    *   that coordinate.
-    * @return
-    *   The final position of the entity. If there is no colliding entity at the
-    *   proposed coordinate, the proposed coordinate is returned. Otherwise, the
-    *   current coordinate is returned.
-    */
   private def getFinalPosition(
-      proposedCoordinate: Double,
-      currentCoordinate: Double,
-      getCoordinate: Double => PositionComponent
-  ): Double =
-    if getCollidingEntity(this, getCoordinate(proposedCoordinate)).isEmpty
-    then proposedCoordinate
-    else currentCoordinate
+      proposedPosition: PositionComponent,
+      currentPosition: PositionComponent
+  ): PositionComponent =
+    getCollidingEntity(this, proposedPosition)
+      // if there is a colliding entity, do not change the position
+      .map(_ => currentPosition)
+      // otherwise, change the position
+      .getOrElse(proposedPosition)
 
+  private def updateJumpingComponent(
+      currentPosition: PositionComponent,
+      proposedPosition: PositionComponent,
+      velocity: VelocityComponent
+  ): JumpingComponent =
+    if ((currentPosition.y + VERTICAL_COLLISION_SIZE >= model.GUIHEIGHT && velocity.y >= 0)
+      || getCollidingEntity(this, PositionComponent(currentPosition.x, proposedPosition.y)).isDefined)
+      JumpingComponent(false)
+    else
+      getComponent[JumpingComponent].getOrElse(throw new Exception("No JumpingComponent found"))
   override def handleCollision(
       proposedPosition: PositionComponent
   ): Option[PositionComponent] =
-    val currentPosition = getComponent[PositionComponent].getOrElse(
-      throw new Exception(
-        "No position component in handleCollision for ${this}"
-      )
-    )
+    for {
+      currentPosition <- getComponent[PositionComponent]
+      velocity <- getComponent[VelocityComponent]
+    } yield {
+      val updatedJumpingComponent = updateJumpingComponent(currentPosition, proposedPosition, velocity)
+      replaceComponent(updatedJumpingComponent)
 
-    val velocity = getComponent[VelocityComponent]
-      .getOrElse(
-        throw new Exception(
-          "No velocity component in handleCollision for ${this}"
-        )
-      )
-
-    val canJump =
-      (currentPosition.y + VERTICAL_COLLISION_SIZE >= model.GUIHEIGHT && velocity.y >= 0) || getCollidingEntity(
-        this,
-        proposedPosition
-      ).isDefined
-
-    if canJump then replaceComponent(JumpingComponent(false))
-
-    val finalPositionX = getFinalPosition(
-      proposedPosition.x,
-      currentPosition.x,
-      PositionComponent(_, currentPosition.y)
-    )
-    val finalPositionY = getFinalPosition(
-      proposedPosition.y,
-      currentPosition.y,
-      PositionComponent(currentPosition.x, _)
-    )
-
-    Some(
       PositionComponent(
         boundaryCheck(
-          finalPositionX,
+          getFinalPosition(
+            PositionComponent(proposedPosition.x, currentPosition.y),
+            currentPosition
+          ).x,
           model.GUIWIDTH,
           HORIZONTAL_COLLISION_SIZE
         ),
         boundaryCheck(
-          finalPositionY,
+          getFinalPosition(
+            PositionComponent(currentPosition.x, proposedPosition.y),
+            currentPosition
+          ).y,
           model.GUIHEIGHT,
           VERTICAL_COLLISION_SIZE
         )
       )
-    )
+    }
