@@ -12,6 +12,7 @@ import javafx.scene.{Node, Scene}
 import javafx.stage.Stage
 import javafx.util.Duration
 import model.ecs.components.*
+import model.ecs.entities.weapons.EnemyBulletEntity
 import model.ecs.entities.{Entity, EntityManager}
 import model.event.Event
 import model.event.Event.*
@@ -93,6 +94,13 @@ private class GameViewImpl(
                   entityToShow.setScaleX(1)
                 case LEFT =>
                   entityToShow.setScaleX(-1)
+
+              if entity.isInstanceOf[EnemyBulletEntity] then
+                direction.d match
+                  case RIGHT =>
+                    entityToShow.setScaleX(-1)
+                  case LEFT =>
+                    entityToShow.setScaleX(1)
 
 
           )
