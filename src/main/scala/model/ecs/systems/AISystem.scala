@@ -1,17 +1,22 @@
 package model.ecs.systems
 
-import model.ecs.entities.EntityManager
-
+import javafx.scene.Node
+import model.ecs.entities.{Entity, EntityManager}
+import java.util.concurrent.{Executors, ExecutorService}
 import model.*
 import model.ecs.components.*
 import model.ecs.entities.player.PlayerEntity
 import model.input.commands.Command
+
 import java.io.FileInputStream
+import java.util.UUID
 
 trait AISystem extends SystemWithElapsedTime
 
-private case class AISystemImpl() extends AISystem :
-  override def update(elapsedTime: Long): Unit =
+private case class AISystemImpl() extends AISystem {
+  private val threadPool: ExecutorService = Executors.newFixedThreadPool(NUMBER_OF_ENEMIES) //Numero di Thread pari al numero di nemici.
+
+  override def update(elapsedTime: Long): Unit = {
     import alice.tuprolog.*
     import utilities.Scala2P.*
 
@@ -24,67 +29,73 @@ private case class AISystemImpl() extends AISystem :
       .head
       .getComponent[PositionComponent].get
 
-    EntityManager()
-      .getEntitiesWithComponent(classOf[AIComponent])
-      .foreach(entity => {
-        val enemyPosition = entity.getComponent[PositionComponent].get
-        val currentVelocity = entity.getComponent[VelocityComponent].get
+    AItimeElapsedSinceLastExecution += AIexecutionSpeed
 
-        val daemonThread = new Thread(new Runnable {
-          override def run(): Unit = {
-            val randomInt = scala.util.Random.nextInt(3) + 1
+    if (AItimeElapsedSinceLastExecution >= AIexecutionInterval) {
+      EntityManager()
+        .getEntitiesWithComponent(classOf[AIComponent])
+        .foreach(entity => {
+          val enemyPosition = entity.getComponent[PositionComponent].get
+          val enemyVelocity = entity.getComponent[VelocityComponent].get
 
-            val query = new Struct("move_toward_player",
-              randomInt,
-              (playerPosition.x, playerPosition.y),
-              (enemyPosition.x, enemyPosition.y),
-              new Var()
-            )
+          val task = new Runnable {
+            override def run(): Unit = {
+              val randomInt = scala.util.Random.nextInt(3) + 1
 
-            try {
-              val s = engine.solve(query).getSolution
+              val query = new Struct("move_toward_player",
+                randomInt,
+                (playerPosition.x, playerPosition.y),
+                (enemyPosition.x, enemyPosition.y),
+                new Var()
+              )
 
-              if (randomInt == 3) {
-                Command.shoot(entity)
-              } else {
-                val newEnemyX = extractTerm(s, 3)
+              try {
+                val s = engine.solve(query).getSolution
 
-                val newEnemyVelocity = VelocityComponent(
-                  currentVelocity.x + (enemyPosition.x - newEnemyX) * elapsedTime ,
-                  currentVelocity.y
-                )
+                if (randomInt == 3) {
+                  Command.shoot(entity)
+                } else {
+                  val newEnemyX = extractTerm(s, 3)
 
-                newEnemyVelocity match
-                  case VelocityComponent(x,0) if x > 0 => entity.replaceComponent(DirectionComponent(RIGHT))
-                  case VelocityComponent(x,0) if x < 0=> entity.replaceComponent(DirectionComponent(LEFT))
-                  case _ => ()
+                  val newEnemyVelocity = VelocityComponent(
+                    enemyVelocity.x + (enemyPosition.x - newEnemyX) * elapsedTime,
+                    enemyVelocity.y
+                  )
 
-                entity.replaceComponent(newEnemyVelocity)
+                  newEnemyVelocity match {
+                    case VelocityComponent(x, 0) if x > 0 => entity.replaceComponent(DirectionComponent(RIGHT))
+                    case VelocityComponent(x, 0) if x < 0 => entity.replaceComponent(DirectionComponent(LEFT))
+                    case _ => ()
+                  }
 
-                val newEnemyPosition = PositionComponent(x = newEnemyX, y = enemyPosition.y)
-                entity.replaceComponent(newEnemyPosition)
-              }
-            } catch {
-              case e: Exception => e match {
-                case e: NoSolutionException => println("Prolog query failed: No.")
-                case e: MalformedGoalException => println("Prolog query failed: Malformed.")
-                case e: NoMoreSolutionException => println("Prolog query failed: No more solutions.")
-                case _ => println("Raised exception: " + e)
+                  entity.replaceComponent(newEnemyVelocity)
+
+                  val newEnemyPosition = PositionComponent(x = newEnemyX, y = enemyPosition.y)
+                  entity.replaceComponent(newEnemyPosition)
+                }
+              } catch {
+                case e: Exception => e match {
+                  case e: NoSolutionException => println("Prolog query failed: No.")
+                  case e: MalformedGoalException => println("Prolog query failed: Malformed.")
+                  case e: NoMoreSolutionException => println("Prolog query failed: No more solutions.")
+                  case _ => println("Raised exception: " + e)
+                }
               }
             }
           }
+
+          threadPool.submit(task)
         })
 
-      AItimeElapsedSinceLastExecution += AIexecutionSpeed
+      AItimeElapsedSinceLastExecution = 0
+    }
+  }
+}
 
-      //println("timeElapsedSinceLastExecution: " + AItimeElapsedSinceLastExecution)
 
-      if (AItimeElapsedSinceLastExecution >= AIexecutionInterval) {
-        daemonThread.setDaemon(true)
-        daemonThread.start()
-        AItimeElapsedSinceLastExecution = 0
-      }
-    })
 
-object AISystem:
+
+
+object AISystem {
   def apply(): AISystem = AISystemImpl()
+}

@@ -21,6 +21,7 @@ package object model:
   var inputsQueue: Stack[Entity => Unit] = Empty
 
   //Variabili di AI.
+  val NUMBER_OF_ENEMIES = 2
   var AItimeElapsedSinceLastExecution = 0
   val AIexecutionInterval = 20
   val AIexecutionSpeed = 1

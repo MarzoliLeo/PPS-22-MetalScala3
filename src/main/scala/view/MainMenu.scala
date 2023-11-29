@@ -89,7 +89,19 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       .addEntity(
         EnemyEntity()
           .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
-          .addComponent(PositionComponent(1000, GUIHEIGHT))
+          .addComponent(PositionComponent(800, GUIHEIGHT))
+          .addComponent(SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE))
+          .addComponent(BulletComponent(StandardBullet()))
+          .addComponent(VelocityComponent(0, 0))
+          .addComponent(DirectionComponent(RIGHT))
+          .addComponent(JumpingComponent(false))
+          .addComponent(SpriteComponent("sprites/EnemyCrab.png"))
+          .addComponent(AIComponent())
+      )
+      .addEntity(
+        EnemyEntity()
+          .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
+          .addComponent(PositionComponent(1100, GUIHEIGHT))
           .addComponent(SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE))
           .addComponent(BulletComponent(StandardBullet()))
           .addComponent(VelocityComponent(0, 0))
@@ -101,7 +113,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       .addEntity(
         MachineGunEntity()
           .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
-          .addComponent(PositionComponent(800, GUIHEIGHT))
+          .addComponent(PositionComponent(600, GUIHEIGHT))
           .addComponent(DirectionComponent(RIGHT))
           .addComponent(SpriteComponent("sprites/H.png"))
           .addComponent(
