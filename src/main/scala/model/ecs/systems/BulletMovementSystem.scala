@@ -2,13 +2,15 @@ package model.ecs.systems
 
 import model.ecs.components.{PositionComponent, VelocityComponent}
 import model.ecs.entities.EntityManager
-import model.ecs.entities.weapons.BulletEntity
+import model.ecs.entities.weapons.{EnemyBulletEntity, PlayerBulletEntity}
 
 trait BulletMovementSystem extends SystemWithElapsedTime
 
-private class BullletMovementSystemImpl extends BulletMovementSystem:
+private class BulletMovementSystemImpl extends BulletMovementSystem:
   override def update(elapsedTime: Long): Unit =
-    EntityManager().getEntitiesByClass(classOf[BulletEntity]).foreach {
+    val playerBullets = EntityManager().getEntitiesByClass(classOf[PlayerBulletEntity])
+    val enemyBullets = EntityManager().getEntitiesByClass(classOf[EnemyBulletEntity])
+    (playerBullets ++ enemyBullets).foreach {
       bullet =>
         given position: PositionComponent =
           bullet.getComponent[PositionComponent].get
@@ -23,4 +25,4 @@ private class BullletMovementSystemImpl extends BulletMovementSystem:
 
 
 object BulletMovementSystem:
-  def apply(): BulletMovementSystem = BullletMovementSystemImpl()
+  def apply(): BulletMovementSystem = BulletMovementSystemImpl()

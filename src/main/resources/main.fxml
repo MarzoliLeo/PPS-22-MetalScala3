@@ -3,11 +3,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
 <GridPane maxHeight="-Infinity" maxWidth="-Infinity"
           minHeight="720.0" minWidth="1080.0"
           prefHeight="720.0" prefWidth="1080.0"
           xmlns="http://javafx.com/javafx/8"
-          style="-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, orange, red)">
+          style="-fx-background-image: url('sprites/Logo.jpg'); -fx-background-size: cover;">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
@@ -27,17 +30,13 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
     </rowConstraints>
-    <Button mnemonicParsing="false" prefWidth="600.0" style="-fx-background-radius: 50;" text="Start"
-            GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="3"
+
+
+    <Button mnemonicParsing="false" prefWidth="350.0" style="-fx-background-radius: 50; -fx-font-family: 'Arial'; -fx-font-size: 18px; -fx-font-weight: bold;" text="Start"
+            GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="5"
             GridPane.halignment="CENTER" GridPane.valignment="CENTER"/>
-    <Button mnemonicParsing="false" prefWidth="600.0" style="-fx-background-radius: 50;" text="Exit"
-            GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="4"
+    <Button mnemonicParsing="false" prefWidth="200.0" style="-fx-background-radius: 50; -fx-font-family: 'Arial'; -fx-font-size: 14px;" text="Exit"
+            GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="6"
             GridPane.halignment="CENTER" GridPane.valignment="CENTER"/>
-    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Metal Scala 3" GridPane.columnIndex="3"
-          GridPane.columnSpan="2" GridPane.rowIndex="1"
-          GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-        <font>
-            <Font name="Impact" size="55.0"/>
-        </font>
-    </Text>
+
 </GridPane>

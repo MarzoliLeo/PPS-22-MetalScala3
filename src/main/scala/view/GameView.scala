@@ -5,20 +5,19 @@ import javafx.application.Platform
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.scene.image.{Image, ImageView}
 import javafx.scene.input.KeyCode
-import javafx.scene.layout.Pane
+import javafx.scene.layout.{Background, BackgroundImage, BackgroundPosition, BackgroundRepeat, BackgroundSize, Pane}
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.*
 import javafx.scene.{Node, Scene}
 import javafx.stage.Stage
 import javafx.util.Duration
 import model.ecs.components.*
-import model.ecs.entities.{Entity, EntityManager}
+import model.ecs.entities.weapons.EnemyBulletEntity
 import model.event.Event
 import model.event.Event.*
 import model.event.observer.{Observable, Observer}
 import model.input.CommandsStackHandler
 import model.input.commands.Command
-
 import java.util.UUID
 
 trait GameView extends View
@@ -42,6 +41,25 @@ private class GameViewImpl(
       case KeyCode.SPACE => handleInput(Command.shoot)
       case _             => ()
   }
+  // Load the background image
+  private val backgroundImage = new Image(model.s_GameBackground)
+  // Create a BackgroundImage object
+  private val background = new Background(new BackgroundImage(
+    backgroundImage,
+    BackgroundRepeat.NO_REPEAT,
+    BackgroundRepeat.NO_REPEAT,
+    BackgroundPosition.DEFAULT,
+    new BackgroundSize(
+      BackgroundSize.AUTO,
+      BackgroundSize.AUTO,
+      false,
+      false,
+      true,
+      true
+    )
+  ))
+  // Set the background of the root using the Background object
+  root.setBackground(background)
   primaryStage.setScene(scene)
   observables.foreach(_.addObserver(this))
 
@@ -49,8 +67,8 @@ private class GameViewImpl(
     Platform.runLater { () =>
       subject match
         case Tick(entities) =>
-          entityIdToView.foreach((_, view) => root.getChildren.remove(view))
-          entityIdToView = Map()
+          entityIdToView.foreach((_, view) => root.getChildren.remove(view)) //Reset delle entità di ECS.
+          entityIdToView = Map() //Solo per il reset delle entità che vengono rimosse (in questo caso Bullet).
           entities.foreach(entity =>
             if entity.hasComponent(classOf[PositionComponent])
               && entity.hasComponent(classOf[SpriteComponent])
@@ -69,9 +87,20 @@ private class GameViewImpl(
               val entityToShow = entityIdToView(entity.id)
               entityToShow.setTranslateX(position.x)
               entityToShow.setTranslateY(position.y)
-              direction match
-                case DirectionComponent(RIGHT) => entityToShow.setScaleX(1)
-                case DirectionComponent(LEFT)  => entityToShow.setScaleX(-1)
+              direction.d match
+                case RIGHT =>
+                  entityToShow.setScaleX(1)
+                case LEFT =>
+                  entityToShow.setScaleX(-1)
+
+              if entity.isInstanceOf[EnemyBulletEntity] then
+                direction.d match
+                  case RIGHT =>
+                    entityToShow.setScaleX(-1)
+                  case LEFT =>
+                    entityToShow.setScaleX(1)
+
+
           )
           entityIdToView.foreach((_, view) => root.getChildren.add(view))
     }

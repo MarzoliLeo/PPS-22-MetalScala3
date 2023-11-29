@@ -1,6 +1,8 @@
 package model.ecs.collision_handlers
-import model.ecs.components.{JumpingComponent, PositionComponent, VelocityComponent}
-import model.ecs.entities.Entity
+import model.ecs.components.{JumpingComponent, PositionComponent, SpriteComponent, VelocityComponent}
+import model.ecs.entities.{Entity, EntityManager}
+import model.ecs.entities.enemies.EnemyEntity
+import model.ecs.entities.weapons.{PlayerBulletEntity, WeaponEntity}
 import model.ecs.systems.CollisionChecker
 import model.ecs.systems.CollisionChecker.{boundaryCheck, getCollidingEntity}
 import model.{HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
@@ -68,7 +70,9 @@ trait PlayerCollisionHandler extends CollisionHandler:
       PositionComponent(currentPosition.x, _)
     )
 
-    Some(
+    val collidingEntity = CollisionChecker.getCollidingEntity(this, proposedPosition)
+    if collidingEntity.isEmpty && !CollisionChecker.isOutOfHorizontalBoundaries(proposedPosition)
+    then Some(
       PositionComponent(
         boundaryCheck(
           finalPositionX,
@@ -82,3 +86,20 @@ trait PlayerCollisionHandler extends CollisionHandler:
         )
       )
     )
+    else
+      collidingEntity match
+        case Some(collidingEntity) if collidingEntity.isInstanceOf[WeaponEntity] =>
+          println("Ho colliso con il WeaponEntity e ora devo avere i miei nuovi proiettili.")
+          EntityManager().removeEntity(collidingEntity) // rimuovo il WeaponEntity, così scompare.
+          //TODO Aggiungo il nuovo proiettile al player.
+          // questo codice (sotto) è ciò che deve fare ma non qua... perché così lo cambierà solo se sto collidendo con essa, invece io devo salvarmi il fatto che ho colliso
+          // e aggiornare i colpi in base al fatto che sia avvenuta o meno la collisione.
+          EntityManager().getEntitiesByClass(classOf[PlayerBulletEntity]).foreach(
+            entity =>
+              entity.replaceComponent(SpriteComponent(model.s_BigBullet))
+          )
+        case _ =>
+          println("bullet destroyed inside PlayerCollision!")
+      None
+
+

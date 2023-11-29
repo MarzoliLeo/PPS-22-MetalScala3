@@ -1,9 +1,10 @@
 package model.input.commands
 
 import model.ecs.components.*
+import model.ecs.entities.enemies.EnemyEntity
 import model.ecs.entities.player.PlayerEntity
-import model.ecs.entities.weapons.BulletEntity
-import model.ecs.entities.{EnemyEntity, Entity, EntityManager}
+import model.ecs.entities.weapons.{EnemyBulletEntity, PlayerBulletEntity}
+import model.ecs.entities.{Entity, EntityManager}
 
 object Command:
   def jump(entity: Entity): Unit =
@@ -33,25 +34,35 @@ object Command:
   def shoot(entity: Entity): Unit =
     val p = entity.getComponent[PositionComponent].get
     val bulletDirection = entity.getComponent[DirectionComponent].get
-    val vx = bulletDirection.d match
-      case RIGHT => model.BULLET_VELOCITY
-      case LEFT  => -model.BULLET_VELOCITY
-    if entity.isInstanceOf[EnemyEntity] then
-      println("enemy at position " + p)
-      println("enemy bullet at position " + (p.x + vx * 000.1, p.y))
+    val vx  = entity match
+      case entity: PlayerEntity => bulletDirection.d match
+        case RIGHT => model.BULLET_VELOCITY
+        case LEFT => -model.BULLET_VELOCITY
+      case entity: EnemyEntity => bulletDirection.d match
+        case RIGHT => -model.BULLET_VELOCITY
+        case LEFT => model.BULLET_VELOCITY
+
     EntityManager().addEntity {
       entity.getComponent[BulletComponent].getOrElse(throw new Exception) match
         case BulletComponent(StandardBullet()) =>
-          BulletEntity()
+          PlayerBulletEntity()
             .addComponent(PositionComponent(p.x + vx * 000.1, p.y))
             .addComponent(VelocityComponent(vx, 0))
             .addComponent(SizeComponent(100, 100))
-            .addComponent(SpriteComponent(model.standardBulletSprite))
+            .addComponent(SpriteComponent(model.s_SmallBullet))
+            .addComponent(DirectionComponent(bulletDirection.d))
+        case BulletComponent(EnemyBullet()) =>
+          EnemyBulletEntity()
+            .addComponent(PositionComponent(p.x + vx * 000.1, p.y))
+            .addComponent(VelocityComponent(vx, 0))
+            .addComponent(SizeComponent(100, 100))
+            .addComponent(SpriteComponent(model.s_SmallBullet))
             .addComponent(DirectionComponent(bulletDirection.d))
         case BulletComponent(MachineGunBullet()) =>
-          BulletEntity()
+          PlayerBulletEntity()
             .addComponent(PositionComponent(p.x, p.y))
             .addComponent(VelocityComponent(vx, 0))
-            .addComponent(SpriteComponent(model.machineGunBulletSprite))
+            .addComponent(SizeComponent(100, 100))
+            .addComponent(SpriteComponent(model.s_BigBullet))
             .addComponent(DirectionComponent(bulletDirection.d))
     }
