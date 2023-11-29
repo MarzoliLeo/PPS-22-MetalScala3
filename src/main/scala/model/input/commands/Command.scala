@@ -66,3 +66,17 @@ object Command:
             .addComponent(SpriteComponent(model.s_BigBullet))
             .addComponent(DirectionComponent(bulletDirection.d))
     }
+
+  def clutch(entity: Entity): Unit =
+    entity.getComponent[SizeComponent] match
+      case Some(size) =>
+        entity.replaceComponent(SizeComponent(size.width, size.height / model.CLUTCHFACTOR))
+      case None => ()
+
+  def standUp(entity: Entity): Unit =
+    entity.getComponent[SizeComponent] match
+      case Some(_) =>
+        entity.replaceComponent(SizeComponent(model.HORIZONTAL_COLLISION_SIZE, model.VERTICAL_COLLISION_SIZE))
+      case None => ()
+
+

@@ -88,7 +88,7 @@ trait PlayerCollisionHandler extends CollisionHandler:
     )
     else
       collidingEntity match
-        case Some(collidingEntity) if collidingEntity.isInstanceOf[WeaponEntity] =>
+        case Some(collidingEntity) if collidingEntity.isInstanceOf[WeaponEntity]  =>
           println("Ho colliso con il WeaponEntity e ora devo avere i miei nuovi proiettili.")
           EntityManager().removeEntity(collidingEntity) // rimuovo il WeaponEntity, così scompare.
           //TODO Aggiungo il nuovo proiettile al player.

@@ -20,14 +20,19 @@ private case class SpriteSystemImpl() extends SpriteSystem:
       .foreach { entity =>
         // Given instances
         given VelocityComponent = entity.getComponent[VelocityComponent].get
+        given SizeComponent = entity.getComponent[SizeComponent].get
 
         entity match {
           case playerEntity: PlayerEntity =>
-            val sprite = summon[VelocityComponent] match {
+            var sprite = summon[VelocityComponent] match {
               case VelocityComponent(0, 0) => model.s_MarcoRossi
               case VelocityComponent(0, y) if y != 0 => model.s_MarcoRossiJump
               case VelocityComponent(x, 0) if x != 0 => model.s_MarcoRossiMove
               case VelocityComponent(x,y) if x != 0 && y != 0 => model.s_MarcoRossiJumpingMoving
+            }
+            sprite = summon[SizeComponent] match {
+              case SizeComponent(_,y) if y < model.VERTICAL_COLLISION_SIZE => model.s_MarcoRossiCluch
+              case _ => sprite
             }
             playerEntity.replaceComponent(SpriteComponent(sprite))
 
