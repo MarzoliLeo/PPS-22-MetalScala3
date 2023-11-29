@@ -31,8 +31,11 @@ private case class SpriteSystemImpl() extends SpriteSystem:
             }
             playerEntity.replaceComponent(SpriteComponent(sprite))
 
-          case bulletEntity: BulletEntity =>
-            bulletEntity.replaceComponent(SpriteComponent(model.s_SmallBullet))
+          case playerBulletEntity: PlayerBulletEntity =>
+            playerBulletEntity.replaceComponent(SpriteComponent(model.s_SmallBullet))
+
+          case enemyBulletEntity: EnemyBulletEntity =>
+            enemyBulletEntity.replaceComponent(SpriteComponent(model.s_BigBullet))
 
           case machineGunEntity: MachineGunEntity =>
             machineGunEntity.replaceComponent(SpriteComponent(model.s_Weapon_H))

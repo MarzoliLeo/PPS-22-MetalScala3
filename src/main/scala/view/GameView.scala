@@ -68,8 +68,8 @@ private class GameViewImpl(
     Platform.runLater { () =>
       subject match
         case Tick(entities) =>
-          entityIdToView.foreach((_, view) => root.getChildren.remove(view))
-          entityIdToView = Map()
+          entityIdToView.foreach((_, view) => root.getChildren.remove(view)) //Reset delle entità di ECS.
+          entityIdToView = Map() //Solo per il reset delle entità che vengono rimosse (in questo caso Bullet).
           entities.foreach(entity =>
             if entity.hasComponent(classOf[PositionComponent])
               && entity.hasComponent(classOf[SpriteComponent])
@@ -88,9 +88,13 @@ private class GameViewImpl(
               val entityToShow = entityIdToView(entity.id)
               entityToShow.setTranslateX(position.x)
               entityToShow.setTranslateY(position.y)
-              direction match
-                case DirectionComponent(RIGHT) => entityToShow.setScaleX(1)
-                case DirectionComponent(LEFT)  => entityToShow.setScaleX(-1)
+              direction.d match
+                case RIGHT =>
+                  entityToShow.setScaleX(1)
+                case LEFT =>
+                  entityToShow.setScaleX(-1)
+
+
           )
           entityIdToView.foreach((_, view) => root.getChildren.add(view))
     }

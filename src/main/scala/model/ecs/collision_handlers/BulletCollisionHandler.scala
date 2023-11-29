@@ -2,6 +2,7 @@ package model.ecs.collision_handlers
 
 import model.ecs.components.PositionComponent
 import model.ecs.entities.enemies.EnemyEntity
+import model.ecs.entities.weapons.{EnemyBulletEntity, PlayerBulletEntity}
 import model.ecs.entities.{Entity, EntityManager}
 import model.ecs.systems.CollisionChecker
 import model.{GUIWIDTH, HORIZONTAL_COLLISION_SIZE}
@@ -35,10 +36,13 @@ trait BulletCollisionHandler extends CollisionHandler:
     then Some(proposedPosition)
     else
       collidingEntity match
-        case Some(collidingEntity) if collidingEntity.isInstanceOf[EnemyEntity] =>
-          println("bullet destroyed with enemy")
+        case Some(collidingEntity) if collidingEntity.isInstanceOf[EnemyEntity] && this.isInstanceOf[EnemyBulletEntity] =>
+          println("Sono un nemico che spara ad un nemico, perciò non distruggo il mio proiettile")
+        case Some(collidingEntity) if collidingEntity.isInstanceOf[EnemyEntity] && this.isInstanceOf[PlayerBulletEntity] =>
+          println("Sono un player che spara ad un nemico quindi uccido/rimuovo il nemico")
+          EntityManager().removeEntity(collidingEntity)
         case _ =>
-          println("bullet destroyed inside BulletCollision.")
+          println("Bullet distrutto da altri tipi di collisioni.")
       EntityManager().removeEntity(this)
       None
   }

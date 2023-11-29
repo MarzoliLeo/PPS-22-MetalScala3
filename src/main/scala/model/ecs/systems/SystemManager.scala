@@ -1,7 +1,7 @@
 package model.ecs.systems
 
 import model.ecs.components.GravityComponent
-import model.ecs.entities.weapons.BulletEntity
+import model.ecs.entities.weapons.PlayerBulletEntity
 import model.ecs.entities.EntityManager
 import model.ecs.entities.player.PlayerEntity
 

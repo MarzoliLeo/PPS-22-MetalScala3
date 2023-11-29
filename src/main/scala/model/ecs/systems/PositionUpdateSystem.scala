@@ -6,7 +6,7 @@ import model.ecs.entities.enemies.EnemyEntity
 import model.ecs.entities.{Entity, EntityManager}
 import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.PlayerEntity
-import model.ecs.entities.weapons.{BulletEntity, MachineGunEntity}
+import model.ecs.entities.weapons.{PlayerBulletEntity, MachineGunEntity}
 
 trait PositionUpdateSystem extends SystemWithElapsedTime
 

@@ -2,7 +2,7 @@ package model.ecs.collision_handlers
 import model.ecs.components.{JumpingComponent, PositionComponent, SpriteComponent, VelocityComponent}
 import model.ecs.entities.{Entity, EntityManager}
 import model.ecs.entities.enemies.EnemyEntity
-import model.ecs.entities.weapons.{BulletEntity, WeaponEntity}
+import model.ecs.entities.weapons.{PlayerBulletEntity, WeaponEntity}
 import model.ecs.systems.CollisionChecker
 import model.ecs.systems.CollisionChecker.{boundaryCheck, getCollidingEntity}
 import model.{HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
@@ -90,7 +90,7 @@ trait PlayerCollisionHandler extends CollisionHandler:
       collidingEntity match
         case Some(collidingEntity) if collidingEntity.isInstanceOf[WeaponEntity] =>
           println("bullet destroyed with Weapon.")
-          EntityManager().getEntitiesByClass(classOf[BulletEntity]).foreach(
+          EntityManager().getEntitiesByClass(classOf[PlayerBulletEntity]).foreach(
             entity =>
               entity.replaceComponent(SpriteComponent(model.s_BigBullet))
           )
