@@ -51,7 +51,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
   //Gestione dei pulsanti.
   getButton(root, "Start").setOnAction((_: ActionEvent) => handleStartButton())
   getButton(root, "Exit").setOnAction((_: ActionEvent) => handleExitButton())
-  parentStage.setOnCloseRequest((event: WindowEvent) =>
+  parentStage.setOnCloseRequest((* : WindowEvent) =>
     handleWindowCloseRequest()
   )
 
@@ -71,7 +71,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
     entityManager
       .addEntity(createPlayerEntity(250))
       .addEntity(createBoxEntity(400))
-      //.addEntity(createEnemyEntity(800))
+      .addEntity(createEnemyEntity(800))
       .addEntity(createEnemyEntity(1100))
       .addEntity(createMachineGunEntity(600))
     systemManager
@@ -85,7 +85,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
     gameEngine.start()
 
 
-  def createPlayerEntity(positionInTheGUI: Int): Entity =
+  private def createPlayerEntity(positionInTheGUI: Int): Entity =
     PlayerEntity()
       .addComponent(PlayerComponent())
       .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
@@ -100,7 +100,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       .addComponent(JumpingComponent(false))
       .addComponent(SpriteComponent(model.s_MarcoRossi))
 
-  def createBoxEntity(positionInTheGUI: Int): Entity =
+  private def createBoxEntity(positionInTheGUI: Int): Entity =
     BoxEntity()
       .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
       .addComponent(PositionComponent(positionInTheGUI, GUIHEIGHT))
@@ -112,7 +112,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       .addComponent(JumpingComponent(false))
       .addComponent(SpriteComponent(model.s_Box))
 
-  def createEnemyEntity(positionInTheGUI: Int): Entity =
+  private def createEnemyEntity(positionInTheGUI: Int): Entity =
     EnemyEntity()
       .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
       .addComponent(PositionComponent(positionInTheGUI, GUIHEIGHT))
@@ -126,7 +126,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       .addComponent(SpriteComponent(model.s_EnemyCrab))
       .addComponent(AIComponent())
 
-  def createMachineGunEntity(positionInTheGUI: Int): Entity =
+  private def createMachineGunEntity(positionInTheGUI: Int): Entity =
     MachineGunEntity()
       .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
       .addComponent(PositionComponent(positionInTheGUI, GUIHEIGHT))
