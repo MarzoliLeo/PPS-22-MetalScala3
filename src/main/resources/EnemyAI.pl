@@ -9,6 +9,7 @@ move_toward_player(RANDOMNESS, (PLAYER_X, PLAYER_Y), (ENEMY_X, ENEMY_Y), NEW_ENE
     );
     RANDOMNESS = 2 ->
     (
+        %Decido di stare fermo e non fare niente.
         ENEMY_X < PLAYER_X ->
             NEW_ENEMY_X is ENEMY_X
         ;
@@ -16,7 +17,7 @@ move_toward_player(RANDOMNESS, (PLAYER_X, PLAYER_Y), (ENEMY_X, ENEMY_Y), NEW_ENE
     );
     RANDOMNESS = 3 ->
     (
-       %SHOOT BULLET, quindi sto fermo nella mia posizione
+       %Sto effettuando lo shooting del bullet quindi rimango fermo nella mia posizione.
        ENEMY_X < PLAYER_X ->
            NEW_ENEMY_X is ENEMY_X
        ;
