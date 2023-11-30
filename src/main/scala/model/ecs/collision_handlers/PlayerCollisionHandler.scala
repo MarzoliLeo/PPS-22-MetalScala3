@@ -89,17 +89,17 @@ trait PlayerCollisionHandler extends CollisionHandler:
     else
       collidingEntity match
         case Some(collidingEntity) if collidingEntity.isInstanceOf[WeaponEntity]  =>
-          println("Ho colliso con il WeaponEntity e ora devo avere i miei nuovi proiettili.")
-          EntityManager().removeEntity(collidingEntity) // rimuovo il WeaponEntity, così scompare.
+         // println("Ho colliso con il WeaponEntity e ora devo avere i miei nuovi proiettili.")
+/*          EntityManager().removeEntity(collidingEntity) */// rimuovo il WeaponEntity, così scompare.
           //TODO Aggiungo il nuovo proiettile al player.
           // questo codice (sotto) è ciò che deve fare ma non qua... perché così lo cambierà solo se sto collidendo con essa, invece io devo salvarmi il fatto che ho colliso
           // e aggiornare i colpi in base al fatto che sia avvenuta o meno la collisione.
-          EntityManager().getEntitiesByClass(classOf[PlayerBulletEntity]).foreach(
+/*          EntityManager().getEntitiesByClass(classOf[PlayerBulletEntity]).foreach(
             entity =>
               entity.replaceComponent(SpriteComponent(model.s_BigBullet))
-          )
+          )*/
         case _ =>
-          println("bullet destroyed inside PlayerCollision!")
+          //println("bullet destroyed inside PlayerCollision!")
       None
 
 

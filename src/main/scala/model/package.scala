@@ -38,7 +38,7 @@ package object model:
   val s_Weapon_H = "sprites/Weapon_H.png"
   val s_EnemyCrab = "sprites/EnemyCrab.png"
   val s_EnemyCrabMoving = "sprites/EnemyCrabMoving.png"
-  val s_Box = "sprites/Box.png"
+  val s_Box = "sprites/Box.jpg"
   val s_Logo = "sprites/Logo.jpg"
   val s_GameBackground ="sprites/Background1230x700.png"
   

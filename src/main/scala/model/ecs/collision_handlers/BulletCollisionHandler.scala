@@ -37,12 +37,12 @@ trait BulletCollisionHandler extends CollisionHandler:
     else
       collidingEntity match
         case Some(collidingEntity) if collidingEntity.isInstanceOf[EnemyEntity] && this.isInstanceOf[EnemyBulletEntity] =>
-          println("Sono un nemico che spara ad un nemico, perciò non distruggo il mio proiettile")
+          //println("Sono un nemico che spara ad un nemico, perciò non distruggo il mio proiettile")
         case Some(collidingEntity) if collidingEntity.isInstanceOf[EnemyEntity] && this.isInstanceOf[PlayerBulletEntity] =>
-          println("Sono un player che spara ad un nemico quindi uccido/rimuovo il nemico")
+          //println("Sono un player che spara ad un nemico quindi uccido/rimuovo il nemico")
           EntityManager().removeEntity(collidingEntity)
         case _ =>
-          println("Bullet distrutto da altri tipi di collisioni.")
+          //println("Bullet distrutto da altri tipi di collisioni.")
       EntityManager().removeEntity(this)
       None
   }
