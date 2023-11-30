@@ -107,7 +107,7 @@ private class GameViewImpl(
                 playerEntity =>
                   playerEntity.getComponent[AmmoComponent] match
                     case Some(ammoComponent) =>
-                      val ammo = ammoComponent.remainingAmmo
+                      val ammo = ammoComponent.ammo
                       ammoText.setText(s"Ammo: $ammo")
                     case None => ammoText.setText("Ammo: 0")
               }

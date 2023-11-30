@@ -1,16 +1,15 @@
 package model.ecs.collision_handlers
 import model.ecs.components.*
 import model.ecs.entities.enemies.EnemyEntity
-import model.ecs.entities.weapons.{
-  AmmoBoxEntity,
-  PlayerBulletEntity,
-  WeaponEntity
-}
+import model.ecs.entities.weapons.{AmmoBoxEntity, PlayerBulletEntity, WeaponEntity}
 import model.ecs.entities.{Entity, EntityManager}
 import model.ecs.systems.CollisionChecker
-import model.ecs.systems.CollisionChecker.{boundaryCheck, getCollidingEntity}
+import model.ecs.systems.CollisionChecker.{boundaryCheck, getCollidingEntity, isImmediatelyAbove}
 import model.{HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
 import model.ammoBoxRefill
+import model.ecs.entities.environment.BoxEntity
+
+import scala.language.postfixOps
 
 trait PlayerCollisionHandler extends BasicCollisionHandler:
   self: Entity =>
@@ -29,6 +28,13 @@ trait PlayerCollisionHandler extends BasicCollisionHandler:
           case Some(ammoComponent) => ammoComponent
           case None => throw new Exception("Ammo component not found")
         }
-        this.replaceComponent(ammoBoxComponent)
-        println("Current player ammo: " + this.getComponent[AmmoComponent].get)
+        val currentAmmo = this.getComponent[AmmoComponent] match {
+          case Some(ammoComponent) => ammoComponent
+          case None => throw new Exception("Ammo component not found")
+        }
+        this.replaceComponent(AmmoComponent(currentAmmo.ammo + ammoBoxComponent.ammo))
+      case Some(boxEntity: BoxEntity) =>
+        if isImmediatelyAbove(this, boxEntity) then
+          println("Player is on top of box")
+          this.replaceComponent(GravityComponent(0))
       case _ => ()

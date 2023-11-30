@@ -1,7 +1,11 @@
 package model.ecs.systems
 
 import model.{GRAVITY_VELOCITY, VERTICAL_COLLISION_SIZE}
-import model.ecs.components.{GravityComponent, PositionComponent, VelocityComponent}
+import model.ecs.components.{
+  GravityComponent,
+  PositionComponent,
+  VelocityComponent
+}
 import model.ecs.entities.EntityManager
 
 trait GravitySystem extends SystemWithElapsedTime
@@ -23,12 +27,15 @@ private class GravitySystemImpl extends GravitySystem:
           if isTouchingGround then
             entity.replaceComponent(VelocityComponent(velocity.x, 0))
           else
+            entity.replaceComponent(GravityComponent(GRAVITY_VELOCITY))
             entity.replaceComponent(
-              velocity + VelocityComponent(0, entity.getComponent[GravityComponent].get.gravity * elapsedTime)
+              velocity + VelocityComponent(
+                0,
+                entity.getComponent[GravityComponent].get.gravity * elapsedTime
+              )
             )
         }
     }
-
 
 object GravitySystem:
   def apply(): GravitySystem = GravitySystemImpl()

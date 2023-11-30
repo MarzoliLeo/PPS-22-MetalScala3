@@ -26,6 +26,9 @@ private class PositionUpdateSystemImpl() extends PositionUpdateSystem:
         given currentVelocity: VelocityComponent =
           entity.getComponent[VelocityComponent].get
 
+        if entity.isInstanceOf[PlayerEntity] then
+          println(currentVelocity)
+
         entity.replaceComponent(getUpdatedVelocity(entity))
 
         val proposedPosition = currentPosition.getUpdatedPosition(elapsedTime)
