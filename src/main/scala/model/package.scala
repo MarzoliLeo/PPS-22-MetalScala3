@@ -22,6 +22,9 @@ package object model:
   val HORIZONTAL_COLLISION_SIZE = 100
   var inputsQueue: Stack[Entity => Unit] = Empty
 
+  // Weapon variables
+  val ammoBoxRefill = 10
+
   // Variabili di AI.
   val NUMBER_OF_ENEMIES = 2
   var AItimeElapsedSinceLastExecution = 0
@@ -80,5 +83,6 @@ package object model:
 
   val ammoBoxComponents: Set[Component] =
     defaultComponents ++ Set(
-      SpriteComponent(s_AmmoBox)
+      SpriteComponent(s_AmmoBox),
+      AmmoComponent(ammoBoxRefill)
     )
