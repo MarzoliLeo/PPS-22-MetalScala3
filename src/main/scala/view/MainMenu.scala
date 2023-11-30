@@ -10,9 +10,10 @@ import javafx.scene.layout.{Background, BackgroundImage, BackgroundPosition, Bac
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.Box
 import javafx.stage.{Stage, WindowEvent}
+import jdk.internal.vm.ThreadContainers.root
 import model.ecs.components.*
 import model.ecs.entities.environment.BoxEntity
-import model.ecs.entities.player.PlayerEntity
+import model.ecs.entities.player.{PlayerEntity, SlugEntity}
 import model.ecs.entities.weapons.MachineGunEntity
 import model.ecs.entities.{Entity, EntityManager}
 import model.ecs.entities.enemies.EnemyEntity
@@ -70,14 +71,17 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
     val gameView = GameView(parentStage, Set(entityManager, gameEngine))
     entityManager
       .addEntity(createPlayerEntity(50,700))
-      .addEntity(createEnemyEntity(550, 700))
+      .addEntity(createEnemyEntity(900, 250))
       .addEntity(createEnemyEntity(1100, 700))
       .addEntity(createBoxEntity(250, 700))
-      .addEntity(createBoxEntity(350, 400))
+      .addEntity(createBoxEntity(400, 400))
+      .addEntity(createBoxEntity(500, 300))
+      .addEntity(createBoxEntity(750, 150))
       .addEntity(createBoxEntity(650, 700))
       .addEntity(createBoxEntity(750, 700))
-      .addEntity(createBoxEntity(900, 350))
-      .addEntity(createMachineGunEntity(900,250))
+      .addEntity(createBoxEntity(900, 500))
+      .addEntity(createMachineGunEntity(750,50))
+      .addEntity(createSlugEntity(500,700))
     systemManager
       .addSystem(InputSystem())
       .addSystem(GravitySystem())
@@ -89,7 +93,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
     gameEngine.start()
 
 
-  def createPlayerEntity(positionInTheGUIX: Int, positionIntheGUIY: Int): Entity =
+  private def createPlayerEntity(positionInTheGUIX: Int, positionIntheGUIY: Int): Entity =
     PlayerEntity()
       .addComponent(PlayerComponent())
       .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
@@ -104,7 +108,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       .addComponent(JumpingComponent(false))
       .addComponent(SpriteComponent(model.s_MarcoRossi))
 
-  def createBoxEntity(positionInTheGUIX: Int, positionIntheGUIY: Int): Entity =
+  private def createBoxEntity(positionInTheGUIX: Int, positionIntheGUIY: Int): Entity =
     BoxEntity()
       .addComponent(PositionComponent(positionInTheGUIX, positionIntheGUIY))
       .addComponent(
@@ -115,7 +119,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       .addComponent(JumpingComponent(false))
       .addComponent(SpriteComponent(model.s_Box))
 
-  def createEnemyEntity(positionInTheGUIX: Int, positionIntheGUIY: Int): Entity =
+  private def createEnemyEntity(positionInTheGUIX: Int, positionIntheGUIY: Int): Entity =
     EnemyEntity()
       .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
       .addComponent(PositionComponent(positionInTheGUIX, positionIntheGUIY))
@@ -129,7 +133,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       .addComponent(SpriteComponent(model.s_EnemyCrab))
       .addComponent(AIComponent())
 
-  def createMachineGunEntity(positionInTheGUIX: Int, positionIntheGUIY: Int): Entity =
+  private def createMachineGunEntity(positionInTheGUIX: Int, positionIntheGUIY: Int): Entity =
     MachineGunEntity()
       .addComponent(PositionComponent(positionInTheGUIX, positionIntheGUIY))
       .addComponent(DirectionComponent(RIGHT))
@@ -140,6 +144,21 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       .addComponent(VelocityComponent(0, 0))
       .addComponent(JumpingComponent(false))
 
+  private def createSlugEntity(positionInTheGUIX: Int, positionIntheGUIY: Int) =
+    SlugEntity()
+      .addComponent(PlayerComponent())
+      .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
+      .addComponent(PositionComponent(positionInTheGUIX, positionIntheGUIY))
+      .addComponent(
+        SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
+      )
+      .addComponent(CollisionComponent(scala.collection.mutable.Set()))
+      .addComponent(BulletComponent(StandardBullet()))
+      .addComponent(SlugComponent())
+      .addComponent(VelocityComponent(0, 0))
+      .addComponent(DirectionComponent(RIGHT))
+      .addComponent(JumpingComponent(false))
+      .addComponent(SpriteComponent(model.s_Slug))
 
   override def startButton: Button = getButton(root, "Start")
 

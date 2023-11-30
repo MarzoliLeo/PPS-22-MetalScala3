@@ -10,6 +10,8 @@ import scala.math.sqrt
   */
 sealed trait Component
 
+case class SlugComponent() extends Component
+
 case class BulletComponent(bullet: Bullet) extends Component
 
 case class CollisionComponent(entities: scala.collection.mutable.Set[Entity])

@@ -42,6 +42,7 @@ package object model:
   val s_Box = "sprites/Box.jpg"
   val s_Logo = "sprites/Logo.jpg"
   val s_GameBackground ="sprites/Background1230x700.png"
+  val s_Slug = "sprites/Slug.png"
   
 
 
