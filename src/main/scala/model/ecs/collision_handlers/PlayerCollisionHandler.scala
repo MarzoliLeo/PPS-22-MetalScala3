@@ -12,12 +12,7 @@ trait PlayerCollisionHandler extends BasicCollisionHandler:
 
   override protected def handleSpecialCollision(collidingEntity: Option[Entity]): Unit =
     collidingEntity match
-      case Some(otherEntity) if otherEntity.isInstanceOf[WeaponEntity] =>
-        EntityManager().removeEntity(otherEntity)
-        EntityManager()
-          .getEntitiesByClass(classOf[PlayerBulletEntity])
-          .foreach(entity =>
-            entity.replaceComponent(SpriteComponent(model.s_BigBullet))
-          )
-      case _ =>
-        println("Player colliding with entity of type " + collidingEntity)
+      case Some(weaponEntity) if weaponEntity.isInstanceOf[WeaponEntity] =>
+        EntityManager().removeEntity(weaponEntity)
+        this.replaceComponent(BulletComponent(MachineGunBullet()))
+      case _ => ()
