@@ -11,6 +11,7 @@ trait SpriteSystem extends SystemWithoutTime
 
 private case class SpriteSystemImpl() extends SpriteSystem:
   def update(): Unit =
+    // FIXME: Throw exceptions when SPRITE ARE NOT FOUND!!!!
     EntityManager()
       .getEntitiesWithComponent(
         classOf[PositionComponent],
@@ -65,6 +66,11 @@ private case class SpriteSystemImpl() extends SpriteSystem:
               case VelocityComponent(x, 0) if x != 0 => model.s_EnemyCrabMoving
             }
             enemyEntity.replaceComponent(SpriteComponent(sprite))
+
+          case ammoBoxEntity: AmmoBoxEntity =>
+            ammoBoxEntity.replaceComponent(SpriteComponent(model.s_AmmoBox))
+
+          case _ => throw new Exception("Entity not managed")
         }
       }
 

@@ -65,7 +65,6 @@ object Command:
             .addComponent(SpriteComponent(model.s_SmallBullet))
             .addComponent(DirectionComponent(bulletDirection.d))
         case BulletComponent(MachineGunBullet()) =>
-          println("machine gun bullet")
           PlayerBulletEntity()
             .addComponent(PositionComponent(p.x + vx * 000.1, p.y))
             .addComponent(VelocityComponent(vx, 0))
@@ -75,11 +74,3 @@ object Command:
             .addComponent(SpriteComponent(model.s_BigBullet))
             .addComponent(DirectionComponent(bulletDirection.d))
     }
-
-    // Check if EntityManager() contains now the new bullet
-//    println(EntityManager()
-//      .getEntitiesWithComponent(
-//        classOf[PositionComponent],
-//        classOf[VelocityComponent],
-//        classOf[SpriteComponent]
-//      ).filter(_.isInstanceOf[PlayerBulletEntity]))

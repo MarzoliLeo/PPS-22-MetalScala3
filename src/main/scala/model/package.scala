@@ -1,7 +1,9 @@
+import model.ecs.components.*
 import model.ecs.entities.Entity
 import model.utilities.{Cons, Empty, Stack}
 
 package object model:
+  // Game
   val GUIWIDTH = 1230
   val GUIHEIGHT = 700
   val Fps = 60
@@ -20,13 +22,13 @@ package object model:
   val HORIZONTAL_COLLISION_SIZE = 100
   var inputsQueue: Stack[Entity => Unit] = Empty
 
-  //Variabili di AI.
+  // Variabili di AI.
   val NUMBER_OF_ENEMIES = 2
   var AItimeElapsedSinceLastExecution = 0
   val AIexecutionInterval = 20
   val AIexecutionSpeed = 1
 
-  //Sprites
+  // Sprites
   val s_MarcoRossi = "sprites/MarcoRossi.png"
   val s_MarcoRossiMove = "sprites/MarcoRossiMove.png"
   val s_MarcoRossiJump = "sprites/MarcoRossiJump.png"
@@ -38,7 +40,45 @@ package object model:
   val s_EnemyCrabMoving = "sprites/EnemyCrabMoving.png"
   val s_Box = "sprites/Box.png"
   val s_Logo = "sprites/Logo.jpg"
-  val s_GameBackground ="sprites/Background1230x700.png"
+  val s_GameBackground = "sprites/Background1230x700.png"
+  val s_AmmoBox = "sprites/Munitions.png"
 
+  // Components
+  private val defaultComponents: Set[Component] = Set(
+    PositionComponent(0, 0),
+    GravityComponent(model.GRAVITY_VELOCITY),
+    SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE),
+    VelocityComponent(0, 0),
+    DirectionComponent(RIGHT),
+    JumpingComponent(false)
+  )
 
+  val playerComponents: Set[Component] =
+    defaultComponents ++
+      Set(
+        PlayerComponent(),
+        SpriteComponent(s_MarcoRossi),
+        BulletComponent(StandardBullet())
+      )
 
+  val enemyComponents: Set[Component] =
+    defaultComponents ++ Set(
+      AIComponent(),
+      SpriteComponent(s_EnemyCrab),
+      BulletComponent(EnemyBullet())
+    )
+
+  val boxComponents: Set[Component] =
+    defaultComponents ++ Set(
+      SpriteComponent(s_Box)
+    )
+
+  val machineGunWeaponComponents: Set[Component] =
+    defaultComponents ++ Set(
+      SpriteComponent(s_Weapon_H)
+    )
+
+  val ammoBoxComponents: Set[Component] =
+    defaultComponents ++ Set(
+      SpriteComponent(s_AmmoBox)
+    )
