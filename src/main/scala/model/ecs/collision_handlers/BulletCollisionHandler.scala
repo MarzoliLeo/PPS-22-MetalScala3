@@ -32,17 +32,20 @@ trait BulletCollisionHandler extends CollisionHandler:
   ): Option[PositionComponent] = {
     val collidingEntity = CollisionChecker
       .getCollidingEntity(this, proposedPosition)
-    if collidingEntity.isEmpty && !CollisionChecker.isOutOfHorizontalBoundaries(proposedPosition)
+    if collidingEntity.isEmpty && !CollisionChecker.isOutOfHorizontalBoundaries(
+        proposedPosition
+      )
     then Some(proposedPosition)
     else
       collidingEntity match
-        case Some(collidingEntity) if collidingEntity.isInstanceOf[EnemyEntity] && this.isInstanceOf[EnemyBulletEntity] =>
-          println("Sono un nemico che spara ad un nemico, perciò non distruggo il mio proiettile")
-        case Some(collidingEntity) if collidingEntity.isInstanceOf[EnemyEntity] && this.isInstanceOf[PlayerBulletEntity] =>
-          println("Sono un player che spara ad un nemico quindi uccido/rimuovo il nemico")
+        case Some(collidingEntity)
+            if collidingEntity.isInstanceOf[EnemyEntity] && this
+              .isInstanceOf[EnemyBulletEntity] => ()
+        case Some(collidingEntity)
+            if collidingEntity.isInstanceOf[EnemyEntity] && this
+              .isInstanceOf[PlayerBulletEntity] =>
           EntityManager().removeEntity(collidingEntity)
-        case _ =>
-          println("Bullet distrutto da altri tipi di collisioni.")
+        case _ => ()
       EntityManager().removeEntity(this)
       None
   }

@@ -1,6 +1,9 @@
 package model.ecs.entities.weapons
 
-import model.ecs.collision_handlers.PlayerCollisionHandler
+import model.ecs.collision_handlers.{
+  BasicCollisionHandler,
+  PlayerCollisionHandler
+}
 import model.ecs.entities.Entity
 
 /** A weapon usable from a player. It has a damage value and can be used to
@@ -11,5 +14,7 @@ trait WeaponEntity extends Entity:
 
 //questo è il mixin.
 trait ShootingWeaponEntity extends WeaponEntity
-case class MachineGunEntity() extends ShootingWeaponEntity with PlayerCollisionHandler:
+case class MachineGunEntity()
+    extends ShootingWeaponEntity
+    with BasicCollisionHandler:
   val damage = 1
