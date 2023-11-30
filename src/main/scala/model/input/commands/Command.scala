@@ -6,6 +6,8 @@ import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.{EnemyBulletEntity, PlayerBulletEntity}
 import model.ecs.entities.{Entity, EntityManager}
 
+import scala.util.Try
+
 object Command:
   def jump(entity: Entity): Unit =
     entity.getComponent[JumpingComponent] match
@@ -76,13 +78,19 @@ object Command:
             .addComponent(DirectionComponent(bulletDirection.d))
     }
 
-  def clutch(entity: Entity): Unit =
-    (entity.getComponent[SizeComponent], entity.getComponent[PositionComponent]) match
-      case (Some(size), Some(pos)) =>
-        entity.replaceComponent(SizeComponent(size.width, size.height / model.CLUTCHFACTOR))
-      case _ => ()
+  def crouch(entity: Entity): Unit =
+    try{
+      if model.isCrouching then
+        (entity.getComponent[SizeComponent], entity.getComponent[PositionComponent]) match
+          case (Some(size), Some(pos)) =>
+            entity.replaceComponent(SizeComponent(size.width, size.height / model.CLUTCHFACTOR))
+          case _ => ()
+    }
+    finally 
+      model.isCrouching = false
 
   def standUp(entity: Entity): Unit =
+    model.isCrouching = true
     (entity.getComponent[SizeComponent], entity.getComponent[PositionComponent]) match
       case (Some(size), Some(pos)) =>
         entity.replaceComponent(SizeComponent(model.HORIZONTAL_COLLISION_SIZE, model.VERTICAL_COLLISION_SIZE))

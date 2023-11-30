@@ -39,7 +39,7 @@ private class GameViewImpl(
       case KeyCode.RIGHT => handleInput(Command.right)
       case KeyCode.UP    => handleInput(Command.jump)
       case KeyCode.SPACE => handleInput(Command.shoot)
-      case KeyCode.DOWN  => handleInput(Command.clutch)
+      case KeyCode.DOWN  => handleInput(Command.crouch)
       case _             =>
   }
   scene.setOnKeyReleased { k =>
