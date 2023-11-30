@@ -13,7 +13,7 @@ package object model:
   val JUMP_MOVEMENT_VELOCITY = 500
   val BULLET_VELOCITY = 1000
   val GRAVITY_VELOCITY = 0.5
-  val CLUTCHFACTOR = 2
+  val CLUTCHFACTOR = 15
   var isGravityEnabled = true
   var isTouchingGround = false
   var isCrouching = true
