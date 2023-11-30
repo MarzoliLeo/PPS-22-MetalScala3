@@ -4,10 +4,8 @@ import model.ecs.entities.enemies.EnemyEntity
 import model.ecs.entities.weapons.{AmmoBoxEntity, PlayerBulletEntity, WeaponEntity}
 import model.ecs.entities.{Entity, EntityManager}
 import model.ecs.systems.CollisionChecker
-import model.ecs.systems.CollisionChecker.{boundaryCheck, getCollidingEntity, isImmediatelyAbove}
-import model.{HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
-import model.ammoBoxRefill
-import model.ecs.entities.environment.BoxEntity
+import model.ecs.systems.CollisionChecker.{boundaryCheck, getCollidingEntity, isImmediatelyAboveAPlatform}
+import model.{HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE, ammoBoxRefill}
 
 import scala.language.postfixOps
 
@@ -32,9 +30,7 @@ trait PlayerCollisionHandler extends BasicCollisionHandler:
           case Some(ammoComponent) => ammoComponent
           case None => throw new Exception("Ammo component not found")
         }
-        this.replaceComponent(AmmoComponent(currentAmmo.ammo + ammoBoxComponent.ammo))
-      case Some(boxEntity: BoxEntity) =>
-        if isImmediatelyAbove(this, boxEntity) then
-          println("Player is on top of box")
-          this.replaceComponent(GravityComponent(0))
+        this.replaceComponent(
+          AmmoComponent(currentAmmo.ammo + ammoBoxComponent.ammo)
+        )
       case _ => ()

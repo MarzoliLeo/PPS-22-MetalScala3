@@ -1,6 +1,7 @@
 package model.ecs.systems
 
 import model.ecs.components.{PositionComponent, SizeComponent}
+import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.WeaponEntity
 import model.ecs.entities.{Entity, EntityManager}
@@ -44,24 +45,24 @@ object CollisionChecker {
     }
   }
 
-  
-  /**
-   * Determines whether `entity1` is immediately above `entity2`.
-   *
-   * @param entity1 The first entity to compare.
-   * @param entity2 The second entity to compare.
-   * @return `true` if `entity1` is immediately above `entity2`, `false` otherwise.
-   */
-  def isImmediatelyAbove(entity1: Entity, entity2: Entity): Boolean = {
-    val pos1 = entity1.getComponent[PositionComponent].get
-    val size1 = entity1.getComponent[SizeComponent].get
-    val pos2 = entity2.getComponent[PositionComponent].get
-    val size2 = entity2.getComponent[SizeComponent].get
-    val bottom1 = pos1.y + size1.height
-    val top2 = pos2.y + size2.height
-    // check if entity1 is immediately above entity2
-    val isVerticallyAligned = top2 - bottom1 <= VERTICAL_COLLISION_SIZE
-    isVerticallyAligned
+  /** Determines whether `entity1` is immediately above another entity
+    *
+    * @param entity1
+    *   The first entity to compare.
+    * @return
+    *   `true` if `entity1` is immediately above another entity, `false`
+    *   otherwise.
+    */
+  def isImmediatelyAboveAPlatform(entity1: Entity): Option[Entity] = {
+    val entity1Position = entity1.getComponent[PositionComponent].get
+
+    getCollidingEntity(
+      entity1,
+      PositionComponent(
+        entity1Position.x,
+        entity1Position.y + 5
+      )
+    )
   }
 
   /** Applies a boundary check to a currentPosition value, ensuring it stays

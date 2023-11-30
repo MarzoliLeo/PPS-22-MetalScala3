@@ -1,9 +1,9 @@
 package model.ecs.collision_handlers
 
-import model.ecs.components.{JumpingComponent, PositionComponent, SizeComponent, VelocityComponent}
+import model.ecs.components.{GravityComponent, JumpingComponent, PositionComponent, SizeComponent, VelocityComponent}
 import model.ecs.entities.Entity
-import model.ecs.systems.CollisionChecker.{boundaryCheck, getCollidingEntity}
-import model.{HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
+import model.ecs.systems.CollisionChecker.{boundaryCheck, getCollidingEntity, isImmediatelyAboveAPlatform}
+import model.{GRAVITY_VELOCITY, HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
 
 /** The BasicCollisionHandler trait implements collision handling logic for
   * entities. It extends the CollisionHandler trait and requires the entity to
@@ -31,7 +31,9 @@ trait BasicCollisionHandler extends CollisionHandler:
       this,
       PositionComponent(currentPosition.x, proposedPosition.y)
     ).isDefined
-    if (isOnGround || isColliding) JumpingComponent(false)
+    if (isOnGround || isColliding)
+      this.replaceComponent(GravityComponent(0))
+      JumpingComponent(false)
     else
       getComponent[JumpingComponent].getOrElse(
         throw new Exception("No JumpingComponent found")
@@ -50,7 +52,12 @@ trait BasicCollisionHandler extends CollisionHandler:
       sizeComponent <- getComponent[SizeComponent]
     yield
       replaceComponent {
-        getUpdatedJumpingComponent(currentPosition, proposedPosition, velocity, sizeComponent.height)
+        getUpdatedJumpingComponent(
+          currentPosition,
+          proposedPosition,
+          velocity,
+          sizeComponent.height
+        )
       }
       handleSpecialCollision {
         getCollidingEntity(this, proposedPosition)
