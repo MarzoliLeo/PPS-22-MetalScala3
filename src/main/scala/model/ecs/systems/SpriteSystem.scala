@@ -63,6 +63,7 @@ private case class SpriteSystemImpl() extends SpriteSystem:
             val sprite = summon[VelocityComponent] match {
               case VelocityComponent(0, 0)           => model.s_EnemyCrab
               case VelocityComponent(x, 0) if x != 0 => model.s_EnemyCrabMoving
+              case _ => model.s_EnemyCrab
             }
             enemyEntity.replaceComponent(SpriteComponent(sprite))
         }

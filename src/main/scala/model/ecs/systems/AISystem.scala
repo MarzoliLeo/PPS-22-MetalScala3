@@ -83,9 +83,6 @@ private case class AISystemImpl() extends AISystem {
                     // keep the current position
                     case None => ()
 
-                  //CODICE ORIGINALE:
-                  /*val newEnemyPosition = PositionComponent(x = newEnemyX, y = enemyPosition.y)
-                  entity.replaceComponent(newEnemyPosition)*/
                 }
               } catch {
                 case e: Exception => e match {
