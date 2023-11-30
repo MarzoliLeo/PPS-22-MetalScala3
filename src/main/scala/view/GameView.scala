@@ -37,7 +37,7 @@ private class GameViewImpl(
   // Create the ammo text
   private val ammoText: Text = Text()
   ammoText.setFont(Font.font("Verdana", 20))
-  ammoText.setFill(Color.WHITE)
+  ammoText.setFill(Color.BLACK)
   ammoText.setX(10) // Set the position of the text
   ammoText.setY(30) // Set the position of the text
   root.getChildren.add(ammoText) // Add the text to the root pane
