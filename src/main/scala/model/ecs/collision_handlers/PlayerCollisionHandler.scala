@@ -10,6 +10,7 @@ import model.ecs.entities.{Entity, EntityManager}
 import model.ecs.systems.CollisionChecker
 import model.ecs.systems.CollisionChecker.{boundaryCheck, getCollidingEntity}
 import model.{HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
+import model.ammoBoxRefill
 
 trait PlayerCollisionHandler extends BasicCollisionHandler:
   self: Entity =>
@@ -20,6 +21,7 @@ trait PlayerCollisionHandler extends BasicCollisionHandler:
     collidingEntity match
       case Some(weaponEntity) if weaponEntity.isInstanceOf[WeaponEntity] =>
         EntityManager().removeEntity(weaponEntity)
+        this.replaceComponent(AmmoComponent(ammoBoxRefill))
         this.replaceComponent(BulletComponent(MachineGunBullet()))
       case Some(ammoBoxEntity: AmmoBoxEntity) =>
         EntityManager().removeEntity(ammoBoxEntity)

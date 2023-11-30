@@ -65,6 +65,14 @@ object Command:
             .addComponent(SpriteComponent(model.s_SmallBullet))
             .addComponent(DirectionComponent(bulletDirection.d))
         case BulletComponent(MachineGunBullet()) =>
+          entity
+            .getComponent[AmmoComponent]
+            .getOrElse(throw new Exception) match
+            case AmmoComponent(1) =>
+              entity.replaceComponent(AmmoComponent(0))
+              entity.replaceComponent(BulletComponent(StandardBullet()))
+            case AmmoComponent(n) =>
+              entity.replaceComponent(AmmoComponent(n - 1))
           PlayerBulletEntity()
             .addComponent(PositionComponent(p.x + vx * 000.1, p.y))
             .addComponent(VelocityComponent(vx, 0))
