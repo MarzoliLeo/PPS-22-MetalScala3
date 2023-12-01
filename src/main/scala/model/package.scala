@@ -53,7 +53,6 @@ package object model:
   // Components
   private val defaultComponents: Seq[Component] = Seq(
     PositionComponent(0, 0),
-    GravityComponent(model.GRAVITY_VELOCITY),
     SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE),
     VelocityComponent(0, 0),
     DirectionComponent(RIGHT),
@@ -75,7 +74,9 @@ package object model:
       pos,
       PlayerComponent(),
       SpriteComponent(s_MarcoRossi),
-      BulletComponent(StandardBullet())
+      GravityComponent(model.GRAVITY_VELOCITY),
+      BulletComponent(StandardBullet()),
+      JumpingComponent(false)
     )
 
   val enemyComponents: PositionComponent => Seq[Component] = pos =>
@@ -83,13 +84,13 @@ package object model:
       pos,
       AIComponent(),
       SpriteComponent(s_EnemyCrab),
-      BulletComponent(EnemyBullet())
+      GravityComponent(model.GRAVITY_VELOCITY),
+      BulletComponent(EnemyBullet()),
+      JumpingComponent(false)
     )
 
   val boxComponents: PositionComponent => Seq[Component] = pos =>
-    createComponents(pos, SpriteComponent(s_Box)).filter(
-      !_.isInstanceOf[GravityComponent]
-    )
+    createComponents(pos, SpriteComponent(s_Box))
 
   val machineGunWeaponComponents: PositionComponent => Seq[Component] = pos =>
     createComponents(pos, SpriteComponent(s_Weapon_H))
@@ -99,7 +100,13 @@ package object model:
       pos,
       SpriteComponent(s_AmmoBox),
       AmmoComponent(ammoBoxRefill)
-    ).filter(!_.isInstanceOf[GravityComponent])
+    )
 
   val slugComponents: PositionComponent => Seq[Component] = pos =>
-    createComponents(pos, SpriteComponent(s_Slug), SlugComponent())
+    createComponents(
+      pos,
+      SpriteComponent(s_Slug),
+      SlugComponent(),
+      GravityComponent(model.GRAVITY_VELOCITY),
+      JumpingComponent(false)
+    )

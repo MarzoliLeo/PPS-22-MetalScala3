@@ -147,6 +147,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       )
     systemManager
       .addSystem(InputSystem())
+      .addSystem(JumpingSystem())
       .addSystem(PositionUpdateSystem())
       .addSystem(GravitySystem())
       .addSystem(BulletMovementSystem())

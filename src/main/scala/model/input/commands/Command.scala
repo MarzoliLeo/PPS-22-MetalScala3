@@ -76,7 +76,7 @@ object Command:
             case AmmoComponent(n) =>
               entity.replaceComponent(AmmoComponent(n - 1))
           PlayerBulletEntity()
-            .addComponent(PositionComponent(p.x + vx * 0.1, p.y))
+            .addComponent(PositionComponent(p.x + vx * 0.001, p.y))
             .addComponent(VelocityComponent(vx, 0))
             .addComponent(BulletComponent(MachineGunBullet()))
             // fixme: set a specific size for bullets

@@ -15,10 +15,12 @@ trait GravitySystem extends SystemWithElapsedTime
 private class GravitySystemImpl extends GravitySystem:
   override def update(elapsedTime: Long): Unit =
     EntityManager()
-      .entities
-      .filter(e => e.isInstanceOf[PlayerEntity] || e.isInstanceOf[EnemyEntity])
+      .getEntitiesWithComponent(
+        classOf[GravityComponent],
+        classOf[VelocityComponent],
+        classOf[PositionComponent]
+      )
       .map { entity =>
-
         if entity.isInstanceOf[BoxEntity] then
           throw new Exception("BoxEntity should not have gravity")
 

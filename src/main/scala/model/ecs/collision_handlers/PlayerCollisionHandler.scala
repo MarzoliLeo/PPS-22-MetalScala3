@@ -1,5 +1,6 @@
 package model.ecs.collision_handlers
 import model.ecs.components.*
+import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.SlugEntity
 import model.ecs.entities.weapons.{AmmoBoxEntity, PlayerBulletEntity, WeaponEntity}
 import model.ecs.entities.{Entity, EntityManager}
@@ -13,7 +14,8 @@ trait PlayerCollisionHandler extends BasicCollisionHandler:
       collidingEntity: Option[Entity]
   ): Unit =
     collidingEntity match
-      case Some(weaponEntity) if weaponEntity.isInstanceOf[WeaponEntity] =>
+      case Some(bulletEntity: PlayerBulletEntity) => ()
+      case Some(weaponEntity: WeaponEntity) =>
         EntityManager().removeEntity(weaponEntity)
         this.replaceComponent(AmmoComponent(ammoBoxRefill))
         this.replaceComponent(BulletComponent(MachineGunBullet()))
@@ -39,7 +41,9 @@ trait PlayerCollisionHandler extends BasicCollisionHandler:
         this.replaceComponent(
           AmmoComponent(currentAmmo.ammo + ammoBoxComponent.ammo)
         )
-      case Some(slugEntity) if slugEntity.isInstanceOf[SlugEntity] =>
+      case Some(slugEntity: SlugEntity) =>
         EntityManager().removeEntity(slugEntity)
         this.addComponent(SlugComponent())
+      case Some(_: BoxEntity) =>
+        this.replaceComponent(JumpingComponent(false))
       case _ => ()

@@ -55,6 +55,9 @@ case class PositionComponent(x: Double, y: Double) extends Component:
   def +(v: VelocityComponent): PositionComponent =
     PositionComponent(x + v.x, y + v.y)
 
+  override def toString: String =
+    s"PositionComponent($x,$y)"
+
 /** Represents the gravity applied to an entity.
   * @param gravity
   *   The gravity value.

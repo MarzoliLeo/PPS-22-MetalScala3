@@ -26,13 +26,13 @@ object CollisionChecker {
       entity: Entity,
       newPosition: PositionComponent
   ): Option[Entity] = {
-    val potentialCollisions = EntityManager().getEntitiesWithComponent(
-      classOf[PositionComponent],
-      classOf[SizeComponent]
-    )
+    val potentialCollisions = EntityManager()
+      .getEntitiesWithComponent(
+        classOf[PositionComponent],
+        classOf[SizeComponent]
+      )
     val size = entity.getComponent[SizeComponent].get
 
-    // [ATTENTION] We are hypothesizing that there is at most one collision
     potentialCollisions.find { otherEntity =>
       if (!otherEntity.isSameEntity(entity)) {
         isOverlapping(
@@ -47,17 +47,17 @@ object CollisionChecker {
 
   /** Determines whether `entity1` is immediately above another entity
     *
-    * @param entity1
+    * @param entity
     *   The first entity to compare.
     * @return
     *   `true` if `entity1` is immediately above another entity, `false`
     *   otherwise.
     */
-  def isImmediatelyAboveAPlatform(entity1: Entity): Option[Entity] = {
-    val entity1Position = entity1.getComponent[PositionComponent].get
+  def isImmediatelyAboveAPlatform(entity: Entity): Option[Entity] = {
+    val entityPosition = entity.getComponent[PositionComponent].get
 
     getCollidingEntity(
-      entity1,
+      entity,
       PositionComponent(
         entityPosition.x,
         entityPosition.y

@@ -20,9 +20,12 @@ trait Entity extends CollisionHandler:
     this
 
   def replaceComponent(component: Component): Entity =
-    removeComponent(component.getClass)
-    addComponent(component)
-    this
+    if hasComponent(component.getClass) then
+      removeComponent(component.getClass)
+      addComponent(component)
+      this
+    else
+      this
 
   def getComponent[T <: Component: ClassTag]: Option[T] =
     signature.collectFirst {
