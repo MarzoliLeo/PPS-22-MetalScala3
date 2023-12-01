@@ -50,7 +50,13 @@ private class GameViewImpl(
       case KeyCode.RIGHT => handleInput(Command.right)
       case KeyCode.UP    => handleInput(Command.jump)
       case KeyCode.SPACE => handleInput(Command.shoot)
-      case _             => ()
+      case KeyCode.DOWN  => handleInput(Command.crouch)
+      case _             =>
+  }
+  scene.setOnKeyReleased { k =>
+    k.getCode match
+      case KeyCode.DOWN => handleInput(Command.standUp)
+      case _            =>
   }
   // Load the background image
   private val backgroundImage = new Image(model.s_GameBackground)
@@ -92,14 +98,10 @@ private class GameViewImpl(
             then
               val position = entity
                 .getComponent[PositionComponent]
-                .getOrElse(
-                  throw new Exception("PositionComponent not found in $entity")
-                )
+                .get
               val sprite = entity
                 .getComponent[SpriteComponent]
-                .getOrElse(
-                  throw new Exception("SpriteComponent not found in $entity")
-                )
+                .get
               val direction = entity.getComponent[DirectionComponent].get
 
               // Update the ammo text

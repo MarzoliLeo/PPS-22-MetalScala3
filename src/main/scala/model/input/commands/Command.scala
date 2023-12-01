@@ -6,6 +6,8 @@ import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.{EnemyBulletEntity, PlayerBulletEntity}
 import model.ecs.entities.{Entity, EntityManager}
 
+import scala.util.Try
+
 object Command:
   def jump(entity: Entity): Unit =
     entity.getComponent[JumpingComponent] match
@@ -48,7 +50,7 @@ object Command:
       entity.getComponent[BulletComponent].getOrElse(throw new Exception) match
         case BulletComponent(StandardBullet()) =>
           PlayerBulletEntity()
-            .addComponent(PositionComponent(p.x + vx * 000.1, p.y))
+            .addComponent(PositionComponent(p.x + vx * 0.1, p.y))
             .addComponent(VelocityComponent(vx, 0))
             .addComponent(BulletComponent(StandardBullet()))
             // fixme: set a specific size for bullets
@@ -57,7 +59,7 @@ object Command:
             .addComponent(DirectionComponent(bulletDirection.d))
         case BulletComponent(EnemyBullet()) =>
           EnemyBulletEntity()
-            .addComponent(PositionComponent(p.x + vx * 000.1, p.y))
+            .addComponent(PositionComponent(p.x + vx * 0.1, p.y))
             .addComponent(VelocityComponent(vx, 0))
             .addComponent(BulletComponent(EnemyBullet()))
             // fixme: set a specific size for bullets
@@ -74,7 +76,7 @@ object Command:
             case AmmoComponent(n) =>
               entity.replaceComponent(AmmoComponent(n - 1))
           PlayerBulletEntity()
-            .addComponent(PositionComponent(p.x + vx * 000.1, p.y))
+            .addComponent(PositionComponent(p.x + vx * 0.1, p.y))
             .addComponent(VelocityComponent(vx, 0))
             .addComponent(BulletComponent(MachineGunBullet()))
             // fixme: set a specific size for bullets
@@ -82,3 +84,26 @@ object Command:
             .addComponent(SpriteComponent(model.s_BigBullet))
             .addComponent(DirectionComponent(bulletDirection.d))
     }
+
+  def crouch(entity: Entity): Unit =
+    try{
+      if model.isCrouching then
+        (entity.getComponent[SizeComponent], entity.getComponent[PositionComponent]) match
+          case (Some(size), Some(pos))  =>
+            entity.replaceComponent(SizeComponent(size.width, size.height - model.CLUTCHFACTOR))
+            entity.replaceComponent(PositionComponent(pos.x, pos.y + model.CLUTCHFACTOR))
+          case _ => ()
+    }
+    finally {
+      model.isCrouching = false
+    }
+
+  def standUp(entity: Entity): Unit =
+    model.isCrouching = true
+    (entity.getComponent[SizeComponent], entity.getComponent[PositionComponent]) match
+      case (Some(size), Some(pos)) =>
+        entity.replaceComponent(SizeComponent(model.HORIZONTAL_COLLISION_SIZE, model.VERTICAL_COLLISION_SIZE))
+        entity.replaceComponent(PositionComponent(pos.x, pos.y - model.CLUTCHFACTOR))
+      case _ => ()
+
+

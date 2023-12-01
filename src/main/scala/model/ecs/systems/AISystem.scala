@@ -75,7 +75,6 @@ private case class AISystemImpl() extends AISystem {
                   entity.replaceComponent(newEnemyVelocity)
 
                   //Position.
-                  //NUOVO CODICE:
                   val proposedPosition = PositionComponent(prologPositionX, enemyPosition.y)
                   val handledPosition: Option[PositionComponent] = entity.handleCollision(proposedPosition)
                   handledPosition match
@@ -83,9 +82,6 @@ private case class AISystemImpl() extends AISystem {
                     // keep the current position
                     case None => ()
 
-                  //CODICE ORIGINALE:
-                  /*val newEnemyPosition = PositionComponent(x = newEnemyX, y = enemyPosition.y)
-                  entity.replaceComponent(newEnemyPosition)*/
                 }
               } catch {
                 case e: Exception => e match {

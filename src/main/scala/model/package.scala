@@ -15,8 +15,10 @@ package object model:
   val JUMP_MOVEMENT_VELOCITY = 500
   val BULLET_VELOCITY = 1000
   val GRAVITY_VELOCITY = 0.5
+  val CLUTCHFACTOR = 15
   var isGravityEnabled = true
   var isTouchingGround = false
+  var isCrouching = true
 
   val VERTICAL_COLLISION_SIZE = 100
   val HORIZONTAL_COLLISION_SIZE = 100
@@ -36,14 +38,16 @@ package object model:
   val s_MarcoRossiMove = "sprites/MarcoRossiMove.png"
   val s_MarcoRossiJump = "sprites/MarcoRossiJump.png"
   val s_MarcoRossiJumpingMoving = "sprites/MarcoRossiJumpingMoving.png"
+  val s_MarcoRossiCluch = "sprites/MarcoRossiCluch.png"
   val s_BigBullet = "sprites/BigBullet.png"
   val s_SmallBullet = "sprites/SmallBullet.png"
   val s_Weapon_H = "sprites/Weapon_H.png"
   val s_EnemyCrab = "sprites/EnemyCrab.png"
   val s_EnemyCrabMoving = "sprites/EnemyCrabMoving.png"
-  val s_Box = "sprites/Box.png"
+  val s_Box = "sprites/Box.jpg"
   val s_Logo = "sprites/Logo.jpg"
   val s_GameBackground = "sprites/Background1230x700.png"
+  val s_Slug = "sprites/Slug.png"
   val s_AmmoBox = "sprites/Munitions.png"
 
   // Components
@@ -55,6 +59,8 @@ package object model:
     DirectionComponent(RIGHT),
     JumpingComponent(false)
   )
+
+
 
   private def createComponents(pos: PositionComponent, additionalComponents: Component*): Seq[Component] = {
     defaultComponents.collect {

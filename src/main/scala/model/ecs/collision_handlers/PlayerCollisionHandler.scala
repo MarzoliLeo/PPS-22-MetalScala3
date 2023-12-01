@@ -1,6 +1,6 @@
 package model.ecs.collision_handlers
 import model.ecs.components.*
-import model.ecs.entities.enemies.EnemyEntity
+import model.ecs.entities.player.SlugEntity
 import model.ecs.entities.weapons.{AmmoBoxEntity, PlayerBulletEntity, WeaponEntity}
 import model.ecs.entities.{Entity, EntityManager}
 import model.ecs.systems.CollisionChecker
@@ -42,4 +42,7 @@ trait PlayerCollisionHandler extends BasicCollisionHandler:
         this.replaceComponent(
           AmmoComponent(currentAmmo.ammo + ammoBoxComponent.ammo)
         )
+      case Some(slugEntity) if slugEntity.isInstanceOf[SlugEntity] =>
+        EntityManager().removeEntity(slugEntity)
+        this.addComponent(SlugComponent())
       case _ => ()
