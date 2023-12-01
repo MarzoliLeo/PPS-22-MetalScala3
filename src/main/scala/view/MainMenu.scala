@@ -70,38 +70,81 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
     System.exit(0)
   }
 
-  /*.addEntity(createPlayerEntity(50,700))
-      .addEntity(createEnemyEntity(900, 250))
-      .addEntity(createEnemyEntity(1100, 700))
-      .addEntity(createBoxEntity(250, 700))
-      .addEntity(createBoxEntity(400, 400))
-      .addEntity(createBoxEntity(500, 300))
-      .addEntity(createBoxEntity(750, 150))
-      .addEntity(createBoxEntity(650, 700))
-      .addEntity(createBoxEntity(750, 700))
-      .addEntity(createBoxEntity(900, 500))
-      .addEntity(createMachineGunEntity(750,50))
-      .addEntity(createSlugEntity(500,700))
-   * */
-
   def handleStartButton(): Unit =
     val gameView = GameView(parentStage, Set(entityManager, gameEngine))
     entityManager
-      .addEntity(createEntity(
+      .addEntity(
+        createEntity(
           PlayerEntity(),
           playerComponents(PositionComponent(50, 700)): _*
-        ))
-      .addEntity(createEntity(EnemyEntity(), enemyComponents(PositionComponent(900, 250)): _*))
-      .addEntity(createEntity(EnemyEntity(), enemyComponents(PositionComponent(1100, 700)): _*))
-      .addEntity(createEntity(BoxEntity(), boxComponents(PositionComponent(250, 700)): _*))
-      .addEntity(createEntity(BoxEntity(), boxComponents(PositionComponent(400, 400)): _*))
-      .addEntity(createEntity(BoxEntity(), boxComponents(PositionComponent(500, 300)): _*))
-      .addEntity(createEntity(BoxEntity(), boxComponents(PositionComponent(750, 150)): _*))
-      .addEntity(createEntity(BoxEntity(), boxComponents(PositionComponent(650, 700)): _*))
-      .addEntity(createEntity(BoxEntity(), boxComponents(PositionComponent(750, 700)): _*))
-      .addEntity(createEntity(BoxEntity(), boxComponents(PositionComponent(900, 500)): _*))
-      .addEntity(createEntity(MachineGunEntity(), machineGunWeaponComponents(PositionComponent(750, 50)): _*))
-      .addEntity(createEntity(SlugEntity(), slugComponents(PositionComponent(500, 700)): _*))
+        )
+      )
+      .addEntity(
+        createEntity(
+          EnemyEntity(),
+          enemyComponents(PositionComponent(900, 250)): _*
+        )
+      )
+      .addEntity(
+        createEntity(
+          EnemyEntity(),
+          enemyComponents(PositionComponent(1100, 700)): _*
+        )
+      )
+      .addEntity(
+        createEntity(
+          BoxEntity(),
+          boxComponents(PositionComponent(250, 700)): _*
+        )
+      )
+      .addEntity(
+        createEntity(
+          BoxEntity(),
+          boxComponents(PositionComponent(400, 400)): _*
+        )
+      )
+      .addEntity(
+        createEntity(
+          BoxEntity(),
+          boxComponents(PositionComponent(500, 300)): _*
+        )
+      )
+      .addEntity(
+        createEntity(
+          BoxEntity(),
+          boxComponents(PositionComponent(750, 150)): _*
+        )
+      )
+      .addEntity(
+        createEntity(
+          BoxEntity(),
+          boxComponents(PositionComponent(650, 700)): _*
+        )
+      )
+      .addEntity(
+        createEntity(
+          BoxEntity(),
+          boxComponents(PositionComponent(750, 700)): _*
+        )
+      )
+      .addEntity(
+        createEntity(
+          BoxEntity(),
+          boxComponents(PositionComponent(900, 500)): _*
+        )
+      )
+      .addEntity(
+        createEntity(
+          MachineGunEntity(),
+          machineGunWeaponComponents(PositionComponent(750, 50)): _*
+        )
+      )
+      .addEntity(
+        createEntity(
+          SlugEntity(),
+          slugComponents(PositionComponent(500, 700)): _*
+        )
+      )
     systemManager
       .addSystem(InputSystem())
       .addSystem(PositionUpdateSystem())

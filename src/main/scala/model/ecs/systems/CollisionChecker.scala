@@ -59,13 +59,13 @@ object CollisionChecker {
     getCollidingEntity(
       entity1,
       PositionComponent(
-        entity1Position.x,
-        entity1Position.y + 5
+        entityPosition.x,
+        entityPosition.y
       )
     ) match
       case Some(boxEntity: BoxEntity) => Some(boxEntity)
-      case Some(_) => None
-      case _ => None
+      case Some(_)                    => None
+      case _                          => None
   }
 
   /** Applies a boundary check to a currentPosition value, ensuring it stays

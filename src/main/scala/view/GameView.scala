@@ -137,14 +137,6 @@ private class GameViewImpl(
           entityIdToView.foreach((_, view) => root.getChildren.add(view))
     }
 
-  // TODO lo userò per creare il terreno di gioco.
-  private def createBoxView(position: PositionComponent): Node =
-    val box = Box(100, 100, 100)
-    box.setTranslateX(position.x)
-    box.setTranslateY(position.y)
-    box.setMaterial(PhongMaterial(Color.RED))
-    box
-
   private def createSpriteView(
       spriteComponent: SpriteComponent,
       position: PositionComponent
