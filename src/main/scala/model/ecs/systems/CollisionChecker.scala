@@ -62,7 +62,10 @@ object CollisionChecker {
         entity1Position.x,
         entity1Position.y + 5
       )
-    )
+    ) match
+      case Some(boxEntity: BoxEntity) => Some(boxEntity)
+      case Some(_) => None
+      case _ => None
   }
 
   /** Applies a boundary check to a currentPosition value, ensuring it stays

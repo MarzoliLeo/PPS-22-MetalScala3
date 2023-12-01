@@ -26,8 +26,6 @@ private class GravitySystemImpl extends GravitySystem:
           else if isImmediatelyAboveAPlatform(entity).isDefined then
             entity.replaceComponent(GravityComponent(0))
             entity.replaceComponent(JumpingComponent(false))
-            // non si accumula più
-
             entity.replaceComponent(VelocityComponent(velocity.x, 0))
           else
             entity.replaceComponent(GravityComponent(GRAVITY_VELOCITY))
