@@ -47,7 +47,7 @@ package object model:
   val s_AmmoBox = "sprites/Munitions.png"
 
   // Components
-  private val defaultComponents: Set[Component] = Set(
+  private val defaultComponents: Seq[Component] = Seq(
     PositionComponent(0, 0),
     GravityComponent(model.GRAVITY_VELOCITY),
     SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE),
@@ -56,33 +56,24 @@ package object model:
     JumpingComponent(false)
   )
 
-  val playerComponents: Set[Component] =
-    defaultComponents ++
-      Set(
-        PlayerComponent(),
-        SpriteComponent(s_MarcoRossi),
-        BulletComponent(StandardBullet())
-      )
+  private def createComponents(pos: PositionComponent, additionalComponents: Component*): Seq[Component] = {
+    defaultComponents.collect {
+      case pc: PositionComponent => pc.copy(x = pos.x, y = pos.y)
+      case other => other
+    } ++ additionalComponents
+  }
 
-  val enemyComponents: Set[Component] =
-    defaultComponents ++ Set(
-      AIComponent(),
-      SpriteComponent(s_EnemyCrab),
-      BulletComponent(EnemyBullet())
-    )
+  val playerComponents: PositionComponent => Seq[Component] = pos =>
+    createComponents(pos, PlayerComponent(), SpriteComponent(s_MarcoRossi), BulletComponent(StandardBullet()))
 
-  val boxComponents: Set[Component] =
-    defaultComponents ++ Set(
-      SpriteComponent(s_Box)
-    )
+  val enemyComponents: PositionComponent => Seq[Component] = pos =>
+    createComponents(pos, AIComponent(), SpriteComponent(s_EnemyCrab), BulletComponent(EnemyBullet()))
 
-  val machineGunWeaponComponents: Set[Component] =
-    defaultComponents ++ Set(
-      SpriteComponent(s_Weapon_H)
-    )
+  val boxComponents: PositionComponent => Seq[Component] = pos =>
+    createComponents(pos, SpriteComponent(s_Box))
 
-  val ammoBoxComponents: Set[Component] =
-    defaultComponents ++ Set(
-      SpriteComponent(s_AmmoBox),
-      AmmoComponent(ammoBoxRefill)
-    )
+  val machineGunWeaponComponents: PositionComponent => Seq[Component] = pos =>
+    createComponents(pos, SpriteComponent(s_Weapon_H))
+
+  val ammoBoxComponents: PositionComponent => Seq[Component] = pos =>
+    createComponents(pos, SpriteComponent(s_AmmoBox), AmmoComponent(ammoBoxRefill))

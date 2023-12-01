@@ -22,10 +22,19 @@ trait PlayerCollisionHandler extends BasicCollisionHandler:
         this.replaceComponent(BulletComponent(MachineGunBullet()))
       case Some(ammoBoxEntity: AmmoBoxEntity) =>
         EntityManager().removeEntity(ammoBoxEntity)
-        val ammoBoxComponent = ammoBoxEntity.getComponent[AmmoComponent] match {
-          case Some(ammoComponent) => ammoComponent
-          case None => throw new Exception("Ammo component not found")
-        }
+        val ammoBoxComponent: AmmoComponent =
+          ammoBoxEntity.getComponent[AmmoComponent] match {
+            case Some(ammoComponent) =>
+              this.getComponent[BulletComponent] match
+                case Some(currentBullet)
+                    if currentBullet.bullet == MachineGunBullet() =>
+                  ammoComponent
+                case Some(currentBullet)
+                    if currentBullet.bullet == StandardBullet() =>
+                  ammoComponent.copy(0)
+                case _ => throw new Exception("Bullet component not found")
+            case None => throw new Exception("Ammo component not found")
+          }
         val currentAmmo = this.getComponent[AmmoComponent] match {
           case Some(ammoComponent) => ammoComponent
           case None => throw new Exception("Ammo component not found")

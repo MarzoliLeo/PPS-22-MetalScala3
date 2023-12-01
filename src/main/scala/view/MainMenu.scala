@@ -76,19 +76,13 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       .addEntity(
         createEntity(
           PlayerEntity(),
-          playerComponents.collect {
-            case pc: PositionComponent => pc.copy(250, GUIHEIGHT)
-            case other                 => other
-          }.toSeq: _*
+          playerComponents(PositionComponent(0, GUIHEIGHT)): _*
         )
       )
       .addEntity {
         createEntity(
           BoxEntity(),
-          boxComponents.collect {
-            case pc: PositionComponent => pc.copy(400, GUIHEIGHT)
-            case other                 => other
-          }.toSeq: _*
+          boxComponents(PositionComponent(400, GUIHEIGHT)): _*
         )
       }
 //      .addEntity(
@@ -103,28 +97,19 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       .addEntity(
         createEntity(
           EnemyEntity(),
-          enemyComponents.collect {
-            case pc: PositionComponent => pc.copy(1100, GUIHEIGHT)
-            case other                 => other
-          }.toSeq: _*
+          enemyComponents(PositionComponent(1100, GUIHEIGHT)): _*
         )
       )
       .addEntity(
         createEntity(
           MachineGunEntity(),
-          machineGunWeaponComponents.collect {
-            case pc: PositionComponent => pc.copy(600, GUIHEIGHT)
-            case other                 => other
-          }.toSeq: _*
+          machineGunWeaponComponents(PositionComponent(600, GUIHEIGHT)): _*
         )
       )
       .addEntity(
         createEntity(
           AmmoBoxEntity(),
-          ammoBoxComponents.collect {
-            case pc: PositionComponent => pc.copy(900, GUIHEIGHT)
-            case other                 => other
-          }.toSeq: _*
+          ammoBoxComponents(PositionComponent(900, GUIHEIGHT)): _*
         )
       )
     systemManager
