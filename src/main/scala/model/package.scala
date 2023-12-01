@@ -60,26 +60,46 @@ package object model:
     JumpingComponent(false)
   )
 
-
-
-  private def createComponents(pos: PositionComponent, additionalComponents: Component*): Seq[Component] = {
+  private def createComponents(
+      pos: PositionComponent,
+      additionalComponents: Component*
+  ): Seq[Component] = {
     defaultComponents.collect {
       case pc: PositionComponent => pc.copy(x = pos.x, y = pos.y)
-      case other => other
+      case other                 => other
     } ++ additionalComponents
   }
 
   val playerComponents: PositionComponent => Seq[Component] = pos =>
-    createComponents(pos, PlayerComponent(), SpriteComponent(s_MarcoRossi), BulletComponent(StandardBullet()))
+    createComponents(
+      pos,
+      PlayerComponent(),
+      SpriteComponent(s_MarcoRossi),
+      BulletComponent(StandardBullet())
+    )
 
   val enemyComponents: PositionComponent => Seq[Component] = pos =>
-    createComponents(pos, AIComponent(), SpriteComponent(s_EnemyCrab), BulletComponent(EnemyBullet()))
+    createComponents(
+      pos,
+      AIComponent(),
+      SpriteComponent(s_EnemyCrab),
+      BulletComponent(EnemyBullet())
+    )
 
   val boxComponents: PositionComponent => Seq[Component] = pos =>
-    createComponents(pos, SpriteComponent(s_Box))
+    createComponents(pos, SpriteComponent(s_Box)).filter(
+      !_.isInstanceOf[GravityComponent]
+    )
 
   val machineGunWeaponComponents: PositionComponent => Seq[Component] = pos =>
     createComponents(pos, SpriteComponent(s_Weapon_H))
 
   val ammoBoxComponents: PositionComponent => Seq[Component] = pos =>
-    createComponents(pos, SpriteComponent(s_AmmoBox), AmmoComponent(ammoBoxRefill))
+    createComponents(
+      pos,
+      SpriteComponent(s_AmmoBox),
+      AmmoComponent(ammoBoxRefill)
+    ).filter(!_.isInstanceOf[GravityComponent])
+
+  val slugComponents: PositionComponent => Seq[Component] = pos =>
+    createComponents(pos, SpriteComponent(s_Slug), SlugComponent())

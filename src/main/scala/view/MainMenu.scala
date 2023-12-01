@@ -11,6 +11,7 @@ import javafx.scene.layout.*
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.Box
 import javafx.stage.{Stage, WindowEvent}
+import model.*
 import model.ecs.components.*
 import model.ecs.entities.enemies.EnemyEntity
 import model.ecs.entities.environment.BoxEntity
@@ -81,50 +82,26 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       .addEntity(createBoxEntity(900, 500))
       .addEntity(createMachineGunEntity(750,50))
       .addEntity(createSlugEntity(500,700))
-  * */
+   * */
 
   def handleStartButton(): Unit =
     val gameView = GameView(parentStage, Set(entityManager, gameEngine))
     entityManager
-      .addEntity(
-        createEntity(
+      .addEntity(createEntity(
           PlayerEntity(),
-          playerComponents(PositionComponent(0, GUIHEIGHT)): _*
-        )
-      )
-      .addEntity {
-        createEntity(
-          BoxEntity(),
-          boxComponents(PositionComponent(400, GUIHEIGHT)): _*
-        )
-      }
-//      .addEntity(
-//        createEntity(
-//          EnemyEntity(),
-//          enemyComponents.collect {
-//            case pc: PositionComponent => pc.copy(800, GUIHEIGHT)
-//            case other                 => other
-//          }.toSeq: _*
-//        )
-//      )
-      .addEntity(
-        createEntity(
-          EnemyEntity(),
-          enemyComponents(PositionComponent(1100, GUIHEIGHT)): _*
-        )
-      )
-      .addEntity(
-        createEntity(
-          MachineGunEntity(),
-          machineGunWeaponComponents(PositionComponent(600, GUIHEIGHT)): _*
-        )
-      )
-      .addEntity(
-        createEntity(
-          AmmoBoxEntity(),
-          ammoBoxComponents(PositionComponent(900, GUIHEIGHT)): _*
-        )
-      )
+          playerComponents(PositionComponent(50, 700)): _*
+        ))
+      .addEntity(createEntity(EnemyEntity(), enemyComponents(PositionComponent(900, 250)): _*))
+      .addEntity(createEntity(EnemyEntity(), enemyComponents(PositionComponent(1100, 700)): _*))
+      .addEntity(createEntity(BoxEntity(), boxComponents(PositionComponent(250, 700)): _*))
+      .addEntity(createEntity(BoxEntity(), boxComponents(PositionComponent(400, 400)): _*))
+      .addEntity(createEntity(BoxEntity(), boxComponents(PositionComponent(500, 300)): _*))
+      .addEntity(createEntity(BoxEntity(), boxComponents(PositionComponent(750, 150)): _*))
+      .addEntity(createEntity(BoxEntity(), boxComponents(PositionComponent(650, 700)): _*))
+      .addEntity(createEntity(BoxEntity(), boxComponents(PositionComponent(750, 700)): _*))
+      .addEntity(createEntity(BoxEntity(), boxComponents(PositionComponent(900, 500)): _*))
+      .addEntity(createEntity(MachineGunEntity(), machineGunWeaponComponents(PositionComponent(750, 50)): _*))
+      .addEntity(createEntity(SlugEntity(), slugComponents(PositionComponent(500, 700)): _*))
     systemManager
       .addSystem(InputSystem())
       .addSystem(PositionUpdateSystem())
@@ -134,61 +111,6 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       .addSystem(SpriteSystem())
     parentStage.getScene.setRoot(gameView)
     gameEngine.start()
-
-
-  private def createPlayerEntity(positionInTheGUI: Int): Entity =
-    PlayerEntity()
-      .addComponent(PlayerComponent())
-      .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
-      .addComponent(PositionComponent(positionInTheGUI, GUIHEIGHT))
-      .addComponent(
-        SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
-      )
-      .addComponent(CollisionComponent(scala.collection.mutable.Set()))
-      .addComponent(BulletComponent(StandardBullet()))
-      .addComponent(VelocityComponent(0, 0))
-      .addComponent(DirectionComponent(RIGHT))
-      .addComponent(JumpingComponent(false))
-      .addComponent(SpriteComponent(model.s_MarcoRossi))
-
-  private def createBoxEntity(positionInTheGUI: Int): Entity =
-    BoxEntity()
-      .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
-      .addComponent(PositionComponent(positionInTheGUI, GUIHEIGHT))
-      .addComponent(
-        SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
-      )
-      .addComponent(VelocityComponent(0, 0))
-      .addComponent(DirectionComponent(RIGHT))
-      .addComponent(JumpingComponent(false))
-      .addComponent(SpriteComponent(model.s_Box))
-
-  private def createEnemyEntity(positionInTheGUI: Int): Entity =
-    EnemyEntity()
-      .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
-      .addComponent(PositionComponent(positionInTheGUI, GUIHEIGHT))
-      .addComponent(
-        SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
-      )
-      .addComponent(BulletComponent(EnemyBullet()))
-      .addComponent(VelocityComponent(0, 0))
-      .addComponent(DirectionComponent(RIGHT))
-      .addComponent(JumpingComponent(false))
-      .addComponent(SpriteComponent(model.s_EnemyCrab))
-      .addComponent(AIComponent())
-
-  private def createMachineGunEntity(positionInTheGUI: Int): Entity =
-    MachineGunEntity()
-      .addComponent(GravityComponent(model.GRAVITY_VELOCITY))
-      .addComponent(PositionComponent(positionInTheGUI, GUIHEIGHT))
-      .addComponent(DirectionComponent(RIGHT))
-      .addComponent(SpriteComponent(model.s_Weapon_H))
-      .addComponent(
-        SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE)
-      )
-      .addComponent(VelocityComponent(0, 0))
-      .addComponent(JumpingComponent(false))
-
 
   override def startButton: Button = getButton(root, "Start")
 

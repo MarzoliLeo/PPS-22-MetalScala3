@@ -4,10 +4,7 @@ import model.ecs.entities.player.SlugEntity
 import model.ecs.entities.weapons.{AmmoBoxEntity, PlayerBulletEntity, WeaponEntity}
 import model.ecs.entities.{Entity, EntityManager}
 import model.ecs.systems.CollisionChecker
-import model.ecs.systems.CollisionChecker.{boundaryCheck, getCollidingEntity, isImmediatelyAboveAPlatform}
 import model.{HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE, ammoBoxRefill}
-
-import scala.language.postfixOps
 
 trait PlayerCollisionHandler extends BasicCollisionHandler:
   self: Entity =>
