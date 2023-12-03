@@ -1,7 +1,7 @@
 package model.ecs.entities
 
 import model.ecs.collision_handlers.CollisionHandler
-import model.ecs.components.{CollisionComponent, Component}
+import model.ecs.components.Component
 
 import scala.reflect.ClassTag
 

@@ -82,7 +82,7 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       .addEntity(
         createEntity(
           EnemyEntity(),
-          enemyComponents(PositionComponent(900, 250)): _*
+          enemyComponents(PositionComponent(900, 400)): _*
         )
       )
       .addEntity(
@@ -154,8 +154,8 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
     systemManager
       .addSystem(InputSystem())
       .addSystem(JumpingSystem())
-      .addSystem(PositionUpdateSystem())
       .addSystem(GravitySystem())
+      .addSystem(PositionUpdateSystem())
       .addSystem(BulletMovementSystem())
       .addSystem(AISystem())
       .addSystem(SpriteSystem())

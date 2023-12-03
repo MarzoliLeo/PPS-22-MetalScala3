@@ -1,7 +1,7 @@
 package model.ecs.systems
 
 import model.ecs.collision_handlers.EnemyCollisionHandler
-import model.ecs.components.{GravityComponent, JumpingComponent, PositionComponent, VelocityComponent}
+import model.ecs.components.{CollisionComponent, GravityComponent, JumpingComponent, PositionComponent, VelocityComponent}
 import model.ecs.entities.EntityManager
 import model.ecs.entities.enemies.EnemyEntity
 import model.ecs.entities.environment.BoxEntity
@@ -25,24 +25,32 @@ private class GravitySystemImpl extends GravitySystem:
 
         val position = entity.getComponent[PositionComponent].get
         val velocity = entity.getComponent[VelocityComponent].get
+        val collision = entity.getComponent[CollisionComponent].get
         val isTouchingGround = position.y + VERTICAL_COLLISION_SIZE >= model.GUIHEIGHT && velocity.y >= 0
 
-        (entity, velocity, isTouchingGround)
+        (entity, velocity, collision, isTouchingGround)
       }
-      .foreach { case (entity, velocity, isOnGround) =>
-        if isOnGround
-        then
+      .foreach { case (entity, velocity, collision, isOnGround) =>
+        if (isOnGround) {
+          // Se è a terra, effettua il reset dei componenti come prima
           entity
             .replaceComponent(VelocityComponent(velocity.x, 0))
             .replaceComponent(GravityComponent(0))
             .replaceComponent(JumpingComponent(false))
-        else
-          if isGravityEnabled then
-            entity.replaceComponent(GravityComponent(GRAVITY_VELOCITY))
-            entity.replaceComponent(velocity + VelocityComponent(0.0 , entity.getComponent[GravityComponent].get.gravity * elapsedTime))
-          else
-            entity.replaceComponent(GravityComponent(0))
-            entity.replaceComponent(VelocityComponent(0.0, entity.getComponent[GravityComponent].get.gravity))
+        } else {
+          if (!collision.isColliding) {
+            // Applica la gravità solo se non sta collidendo
+            entity
+              .replaceComponent(GravityComponent(GRAVITY_VELOCITY))
+              .replaceComponent(velocity + VelocityComponent(0.0 , entity.getComponent[GravityComponent].get.gravity * elapsedTime))
+          } else {
+            // Non reimposta la gravità se sta collidendo
+            entity
+              .replaceComponent(GravityComponent(0))
+              .replaceComponent(JumpingComponent(false))
+              .replaceComponent(VelocityComponent(0.0, entity.getComponent[GravityComponent].get.gravity))
+          }
+        }
       }
 
 object GravitySystem:

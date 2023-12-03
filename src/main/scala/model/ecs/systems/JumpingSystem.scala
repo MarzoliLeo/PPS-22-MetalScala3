@@ -32,8 +32,8 @@ private case class JumpingSystemImpl() extends JumpingSystem:
         
         val isOnGround = currentPosition.y + size.height >= model.GUIHEIGHT && currentVelocity.y >= 0
         if (isOnGround)
-          entity.replaceComponent(GravityComponent(0))
           Some(JumpingComponent(false))
+
       }
 
 

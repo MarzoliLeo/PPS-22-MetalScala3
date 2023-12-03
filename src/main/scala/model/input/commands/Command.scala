@@ -17,6 +17,7 @@ object Command:
           VelocityComponent(v.x, -model.JUMP_MOVEMENT_VELOCITY)
         )
         entity.replaceComponent(JumpingComponent(true))
+        entity.replaceComponent(CollisionComponent(false)) //TODO qua mi funziona ed è l'unica toppa che ho trovato in 6 ore di lavoro.
       case _ => ()
 
   def left(entity: Entity): Unit =
@@ -25,6 +26,7 @@ object Command:
     entity.replaceComponent(
       VelocityComponent(v.x - model.INPUT_MOVEMENT_VELOCITY, v.y)
     )
+    entity.replaceComponent(CollisionComponent(false))
 
   def right(entity: Entity): Unit =
     val v = entity.getComponent[VelocityComponent].get
@@ -32,6 +34,7 @@ object Command:
     entity.replaceComponent(
       VelocityComponent(v.x + model.INPUT_MOVEMENT_VELOCITY, v.y)
     )
+    entity.replaceComponent(CollisionComponent(false))
 
   def shoot(entity: Entity): Unit =
     val p = entity.getComponent[PositionComponent].get
@@ -90,6 +93,7 @@ object Command:
           case (Some(size), Some(pos))  =>
             entity.replaceComponent(SizeComponent(size.width, size.height - model.CLUTCHFACTOR))
             entity.replaceComponent(PositionComponent(pos.x, pos.y + model.CLUTCHFACTOR))
+            entity.replaceComponent(CollisionComponent(false))
           case _ => ()
     }
     finally {
@@ -102,6 +106,7 @@ object Command:
       case (Some(size), Some(pos)) =>
         entity.replaceComponent(SizeComponent(model.HORIZONTAL_COLLISION_SIZE, model.VERTICAL_COLLISION_SIZE))
         entity.replaceComponent(PositionComponent(pos.x, pos.y - model.CLUTCHFACTOR))
+        entity.replaceComponent(CollisionComponent(false))
       case _ => ()
 
 

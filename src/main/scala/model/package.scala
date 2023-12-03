@@ -53,9 +53,10 @@ package object model:
   // Components
   private val defaultComponents: Seq[Component] = Seq(
     PositionComponent(0, 0),
-    SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE),
     VelocityComponent(0, 0),
+    SizeComponent(HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE),
     DirectionComponent(RIGHT),
+    CollisionComponent(),
     JumpingComponent(false)
   )
 
@@ -74,7 +75,7 @@ package object model:
       pos,
       PlayerComponent(),
       SpriteComponent(s_MarcoRossi),
-      GravityComponent(model.GRAVITY_VELOCITY),
+      GravityComponent(),
       BulletComponent(StandardBullet()),
       JumpingComponent(false)
     )
@@ -84,9 +85,8 @@ package object model:
       pos,
       AIComponent(),
       SpriteComponent(s_EnemyCrab),
-      GravityComponent(model.GRAVITY_VELOCITY),
-      BulletComponent(EnemyBullet()),
-      JumpingComponent(false)
+      GravityComponent(),
+      BulletComponent(EnemyBullet())
     )
 
   val boxComponents: PositionComponent => Seq[Component] = pos =>
@@ -107,6 +107,6 @@ package object model:
       pos,
       SpriteComponent(s_Slug),
       SlugComponent(),
-      GravityComponent(model.GRAVITY_VELOCITY),
+      GravityComponent(),
       JumpingComponent(false)
     )

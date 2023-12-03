@@ -1,6 +1,7 @@
 package model.ecs.systems
 
-import model.ecs.components.{GravityComponent, PositionComponent, SizeComponent}
+import model.ecs.components.{CollisionComponent, GravityComponent, PositionComponent, SizeComponent}
+import model.ecs.entities.enemies.EnemyEntity
 import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.WeaponEntity
@@ -39,7 +40,8 @@ object CollisionChecker {
             newPosition,
             size,
             otherEntity.getComponent[PositionComponent].get,
-            otherEntity.getComponent[SizeComponent].get
+            otherEntity.getComponent[SizeComponent].get,
+            entity
         )
 
       } else {
@@ -76,17 +78,11 @@ object CollisionChecker {
       pos1: PositionComponent,
       size1: SizeComponent,
       pos2: PositionComponent,
-      size2: SizeComponent
+      size2: SizeComponent,
+      entity: Entity
   ): Boolean = {
     val overX = isOverlappingX(pos1, size1, pos2, size2)
     val overY = isOverlappingY(pos1, size1, pos2, size2)
-
-    if overY then {
-      isGravityEnabled = false
-    }
-    else {
-      isGravityEnabled = true
-    }
 
     overX && overY
   }
