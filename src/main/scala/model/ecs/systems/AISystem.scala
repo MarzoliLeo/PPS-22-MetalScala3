@@ -72,6 +72,7 @@ private case class AISystemImpl() extends AISystem {
                     case _ => ()
                   }
 
+                  entity.replaceComponent(CollisionComponent(false))
                   entity.replaceComponent(newEnemyVelocity)
 
                   //Position.

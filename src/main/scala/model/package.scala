@@ -77,6 +77,7 @@ package object model:
       SpriteComponent(s_MarcoRossi),
       GravityComponent(),
       BulletComponent(StandardBullet()),
+      AmmoComponent(ammoBoxRefill),
       JumpingComponent(false)
     )
 
