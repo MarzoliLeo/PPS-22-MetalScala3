@@ -17,8 +17,8 @@ package object model:
   val GRAVITY_VELOCITY = 0.5
   val CLUTCHFACTOR = 15
   var isGravityEnabled = true
-  var isTouchingGround = false
   var isCrouching = true
+  
 
   val VERTICAL_COLLISION_SIZE = 100
   val HORIZONTAL_COLLISION_SIZE = 100

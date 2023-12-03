@@ -86,12 +86,10 @@ private class GameViewImpl(
     Platform.runLater { () =>
       subject match
         case Tick(entities) =>
-          entityIdToView.foreach((_, view) =>
-            root.getChildren.remove(view)
-          ) // Reset delle entità di ECS.
-          entityIdToView =
-            Map() // Solo per il reset delle entità che vengono rimosse (in questo caso Bullet).
-          entities.foreach(entity =>
+          entityIdToView.foreach((_, view) => root.getChildren.remove(view)) // Reset delle entità di ECS.
+          entityIdToView = Map() // Solo per il reset delle entità che vengono rimosse (in questo caso Bullet).
+          entities.foreach(
+            entity =>
             if entity.hasComponent(classOf[PositionComponent])
               && entity.hasComponent(classOf[SpriteComponent])
               && entity.hasComponent(classOf[DirectionComponent])
@@ -104,7 +102,7 @@ private class GameViewImpl(
                 .get
               val direction = entity.getComponent[DirectionComponent].get
 
-              // Update the ammo text
+              // TODO Hai già tutte le entità basta che ti riferisci ad entity che sta sopra.
               entities.find(_.isInstanceOf[PlayerEntity]).foreach {
                 playerEntity =>
                   playerEntity.getComponent[AmmoComponent] match
@@ -114,10 +112,7 @@ private class GameViewImpl(
                     case None => ammoText.setText("Ammo: 0")
               }
 
-              entityIdToView = entityIdToView + (entity.id -> createSpriteView(
-                sprite,
-                position
-              ))
+              entityIdToView = entityIdToView + (entity.id -> createSpriteView(sprite, position))
               val entityToShow = entityIdToView(entity.id)
               entityToShow.setTranslateX(position.x)
               entityToShow.setTranslateY(position.y)

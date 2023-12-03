@@ -5,7 +5,7 @@ import model.ecs.components.*
 import model.ecs.entities.Entity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.PlayerBulletEntity
-import model.ecs.systems.CollisionChecker.{boundaryCheck, getCollidingEntity, isImmediatelyAboveAPlatform}
+import model.ecs.systems.CollisionChecker.{boundaryCheck, getCollidingEntity}
 import model.{GRAVITY_VELOCITY, HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
 
 /** The BasicCollisionHandler trait implements collision handling logic for
@@ -31,8 +31,7 @@ trait BasicCollisionHandler extends CollisionHandler:
       proposedPosition: PositionComponent,
       currentPosition: PositionComponent
   ): PositionComponent =
-    getCollidingEntity(this, proposedPosition)
-      .fold(proposedPosition)(_ => currentPosition)
+    getCollidingEntity(this, proposedPosition).fold(proposedPosition)(_ => currentPosition)
 
   protected def handleSpecialCollision(
       collidingEntity: Option[Entity]

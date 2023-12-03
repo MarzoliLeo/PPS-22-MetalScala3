@@ -7,8 +7,7 @@ import model.ecs.entities.enemies.EnemyEntity
 import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.{EnemyBulletEntity, WeaponEntity}
-import model.ecs.systems.CollisionChecker.isImmediatelyAboveAPlatform
-import model.{GRAVITY_VELOCITY, VERTICAL_COLLISION_SIZE}
+import model.{GRAVITY_VELOCITY, VERTICAL_COLLISION_SIZE, isGravityEnabled}
 
 trait GravitySystem extends SystemWithElapsedTime
 
@@ -26,26 +25,24 @@ private class GravitySystemImpl extends GravitySystem:
 
         val position = entity.getComponent[PositionComponent].get
         val velocity = entity.getComponent[VelocityComponent].get
-        val isTouchingGround =
-          position.y + VERTICAL_COLLISION_SIZE >= model.GUIHEIGHT && velocity.y >= 0
+        val isTouchingGround = position.y + VERTICAL_COLLISION_SIZE >= model.GUIHEIGHT && velocity.y >= 0
 
-        (entity, velocity, isTouchingGround || isImmediatelyAboveAPlatform(entity).isDefined)
+        (entity, velocity, isTouchingGround)
       }
       .foreach { case (entity, velocity, isOnGround) =>
-        if isOnGround then
+        if isOnGround
+        then
           entity
             .replaceComponent(VelocityComponent(velocity.x, 0))
             .replaceComponent(GravityComponent(0))
             .replaceComponent(JumpingComponent(false))
         else
-          entity
-            .replaceComponent(GravityComponent(GRAVITY_VELOCITY))
-            .replaceComponent(
-              velocity + VelocityComponent(
-                0,
-                entity.getComponent[GravityComponent].get.gravity * elapsedTime
-              )
-            )
+          if isGravityEnabled then
+            entity.replaceComponent(GravityComponent(GRAVITY_VELOCITY))
+            entity.replaceComponent(velocity + VelocityComponent(0.0 , entity.getComponent[GravityComponent].get.gravity * elapsedTime))
+          else
+            entity.replaceComponent(GravityComponent(0))
+            entity.replaceComponent(VelocityComponent(0.0, entity.getComponent[GravityComponent].get.gravity))
       }
 
 object GravitySystem:

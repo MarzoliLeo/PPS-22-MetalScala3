@@ -67,9 +67,7 @@ object Command:
             .addComponent(SpriteComponent(model.s_SmallBullet))
             .addComponent(DirectionComponent(bulletDirection.d))
         case BulletComponent(MachineGunBullet()) =>
-          entity
-            .getComponent[AmmoComponent]
-            .getOrElse(throw new Exception) match
+          entity.getComponent[AmmoComponent].getOrElse(throw new Exception) match
             case AmmoComponent(1) =>
               entity.replaceComponent(AmmoComponent(0))
               entity.replaceComponent(BulletComponent(StandardBullet()))

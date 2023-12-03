@@ -2,7 +2,6 @@ package model.ecs.systems
 
 import model.ecs.components.{GravityComponent, JumpingComponent, PositionComponent, SizeComponent, VelocityComponent}
 import model.ecs.entities.{Entity, EntityManager}
-import model.ecs.systems.CollisionChecker.{getCollidingEntity, isImmediatelyAboveAPlatform}
 
 trait JumpingSystem extends SystemWithoutTime
 

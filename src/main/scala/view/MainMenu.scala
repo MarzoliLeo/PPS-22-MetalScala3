@@ -141,6 +141,12 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       )
       .addEntity(
         createEntity(
+          AmmoBoxEntity(),
+          ammoBoxComponents(PositionComponent(400, 300)): _*
+        )
+      )
+      .addEntity(
+        createEntity(
           SlugEntity(),
           slugComponents(PositionComponent(500, 700)): _*
         )

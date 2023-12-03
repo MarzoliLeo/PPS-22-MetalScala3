@@ -5,7 +5,7 @@ import model.ecs.entities.player.SlugEntity
 import model.ecs.entities.weapons.{AmmoBoxEntity, PlayerBulletEntity, WeaponEntity}
 import model.ecs.entities.{Entity, EntityManager}
 import model.ecs.systems.CollisionChecker
-import model.{HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE, ammoBoxRefill}
+import model.{HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE, ammoBoxRefill, isGravityEnabled}
 
 trait PlayerCollisionHandler extends BasicCollisionHandler:
   self: Entity =>
@@ -21,8 +21,7 @@ trait PlayerCollisionHandler extends BasicCollisionHandler:
         this.replaceComponent(BulletComponent(MachineGunBullet()))
       case Some(ammoBoxEntity: AmmoBoxEntity) =>
         EntityManager().removeEntity(ammoBoxEntity)
-        val ammoBoxComponent: AmmoComponent =
-          ammoBoxEntity.getComponent[AmmoComponent] match {
+        val ammoBoxComponent: AmmoComponent = ammoBoxEntity.getComponent[AmmoComponent] match {
             case Some(ammoComponent) =>
               this.getComponent[BulletComponent] match
                 case Some(currentBullet)
@@ -44,6 +43,7 @@ trait PlayerCollisionHandler extends BasicCollisionHandler:
       case Some(slugEntity: SlugEntity) =>
         EntityManager().removeEntity(slugEntity)
         this.addComponent(SlugComponent())
-      case Some(_: BoxEntity) =>
+      case Some(boxEntity: BoxEntity) =>
         this.replaceComponent(JumpingComponent(false))
-      case _ => ()
+      case _ =>
+

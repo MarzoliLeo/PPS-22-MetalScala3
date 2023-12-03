@@ -26,8 +26,8 @@ private class PositionUpdateSystemImpl() extends PositionUpdateSystem:
         given currentVelocity: VelocityComponent =
           entity.getComponent[VelocityComponent].get
 
-        if entity.isInstanceOf[PlayerEntity] then
-          println(currentVelocity)
+        //TODO da eliminare, è solo una stampa.
+        if entity.isInstanceOf[PlayerEntity] then println(currentVelocity)
 
         entity.replaceComponent(getUpdatedVelocity(entity))
 
