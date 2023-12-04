@@ -55,7 +55,7 @@ trait PlayerCollisionHandler extends BasicCollisionHandler:
     for {
       boxPosition <- boxEntity.getComponent[PositionComponent]
       thisPosition <- this.getComponent[PositionComponent]
-      if boxPosition.y > thisPosition.y + VERTICAL_COLLISION_SIZE - 1
+      if boxPosition.y > thisPosition.y + VERTICAL_COLLISION_SIZE
     } yield {
       this.replaceComponent(CollisionComponent(true))
       this.replaceComponent(JumpingComponent(false))
