@@ -43,7 +43,8 @@ trait PlayerCollisionHandler extends BasicCollisionHandler:
       case Some(slugEntity: SlugEntity) =>
         EntityManager().removeEntity(slugEntity)
         this.addComponent(SlugComponent())
-      case Some(boxEntity: BoxEntity) =>
+      case Some(boxEntity: BoxEntity)
+        if boxEntity.getComponent[PositionComponent].get.y > this.getComponent[PositionComponent].get.y + VERTICAL_COLLISION_SIZE - 1 =>
         //entity.getComponent[CollisionComponent].foreach(_.isColliding = overY)
         this.replaceComponent(CollisionComponent(true))
         this.replaceComponent(JumpingComponent(false))
