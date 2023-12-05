@@ -10,7 +10,7 @@ import model.{GRAVITY_VELOCITY, HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SI
 
 /** The BasicCollisionHandler trait implements collision handling logic for
   * entities. It extends the CollisionHandler trait and requires the entity to
-  * mix in the Entity trait.
+  *  mix in the Entity trait.
   */
 trait BasicCollisionHandler extends CollisionHandler:
   self: Entity =>

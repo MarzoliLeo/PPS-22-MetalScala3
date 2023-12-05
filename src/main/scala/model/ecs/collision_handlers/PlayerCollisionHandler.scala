@@ -2,10 +2,19 @@ package model.ecs.collision_handlers
 import model.ecs.components._
 import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.SlugEntity
-import model.ecs.entities.weapons.{AmmoBoxEntity, PlayerBulletEntity, WeaponEntity}
+import model.ecs.entities.weapons.{
+  AmmoBoxEntity,
+  PlayerBulletEntity,
+  WeaponEntity
+}
 import model.ecs.entities.{Entity, EntityManager}
 import model.ecs.systems.CollisionChecker
-import model.{HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE, ammoBoxRefill, isGravityEnabled}
+import model.{
+  HORIZONTAL_COLLISION_SIZE,
+  VERTICAL_COLLISION_SIZE,
+  ammoBoxRefill,
+  isGravityEnabled
+}
 
 trait PlayerCollisionHandler extends BasicCollisionHandler:
   self: Entity =>
@@ -31,7 +40,9 @@ trait PlayerCollisionHandler extends BasicCollisionHandler:
     this.replaceComponent(BulletComponent(MachineGunBullet()))
   }
 
-  private def handleAmmoBoxEntityCollision(ammoBoxEntity: AmmoBoxEntity): Unit = {
+  private def handleAmmoBoxEntityCollision(
+      ammoBoxEntity: AmmoBoxEntity
+  ): Unit = {
     EntityManager().removeEntity(ammoBoxEntity)
     for {
       ammoBoxComponent <- ammoBoxEntity.getComponent[AmmoComponent]
@@ -40,9 +51,11 @@ trait PlayerCollisionHandler extends BasicCollisionHandler:
     } yield {
       val newAmmoBoxComponent = currentBullet.bullet match {
         case MachineGunBullet() => ammoBoxComponent
-        case StandardBullet() => ammoBoxComponent.copy(0)
+        case StandardBullet()   => ammoBoxComponent.copy(0)
       }
-      this.replaceComponent(AmmoComponent(currentAmmo.ammo + newAmmoBoxComponent.ammo))
+      this.replaceComponent(
+        AmmoComponent(currentAmmo.ammo + newAmmoBoxComponent.ammo)
+      )
     }
   }
 
