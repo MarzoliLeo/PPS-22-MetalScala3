@@ -52,7 +52,7 @@ package object model:
   val s_AmmoBox = "sprites/Munitions.png"
   val s_Bomb = "sprites/Bomb.png"
 
-  var randomPositions = List((750,50), (400,300), (500,200), (1000,400))
+  var randomPositions: List[(Int, Int)] = List((750, 50), (400, 300), (500, 200), (1000, 400))
 
   // Components
   private val defaultComponents: Seq[Component] = Seq(

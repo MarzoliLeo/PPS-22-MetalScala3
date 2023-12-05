@@ -3,7 +3,7 @@ package model.input.commands
 import model.ecs.components.*
 import model.ecs.entities.enemies.EnemyEntity
 import model.ecs.entities.player.PlayerEntity
-import model.ecs.entities.weapons.{EnemyBulletEntity, PlayerBulletEntity}
+import model.ecs.entities.weapons.{BombEntity, EnemyBulletEntity, PlayerBulletEntity}
 import model.ecs.entities.{Entity, EntityManager}
 
 import scala.util.Try
@@ -120,6 +120,24 @@ object Command:
       }
     }
   }
+
+  def bomb(entity: Entity): Unit =
+    val pos = entity.getComponent[PositionComponent].get
+    val bulletDirection = entity.getComponent[DirectionComponent].get
+    val vx = bulletDirection.d match
+        case RIGHT => model.BULLET_VELOCITY
+        case LEFT => -model.BULLET_VELOCITY
+
+    val bulletPosition = PositionComponent(pos.x + vx * 0.1, pos.y)
+
+    EntityManager().addEntity {
+      BombEntity()
+        .addComponent(bulletPosition)
+        .addComponent(VelocityComponent(vx, 0))
+        .addComponent(SizeComponent(100,100))
+        .addComponent(SpriteComponent(model.s_Bomb))
+        .addComponent(bulletDirection)
+    }
 
   def crouch(entity: Entity): Unit =
     try {
