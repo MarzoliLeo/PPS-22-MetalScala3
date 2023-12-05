@@ -72,7 +72,7 @@ object Command:
         }
     }
 
-    val bulletPosition = PositionComponent(p.x + vx * 0.1, p.y)
+    val bulletPosition = PositionComponent(p.x + vx * 0.1 , p.y)
 
     EntityManager().addEntity {
       entity
@@ -84,7 +84,7 @@ object Command:
             BulletComponent(StandardBullet()),
             bulletPosition,
             VelocityComponent(vx, 0),
-            SizeComponent(100, 100),
+            SizeComponent(100, 20),
             SpriteComponent(model.s_SmallBullet),
             DirectionComponent(bulletDirection.d)
           )
@@ -94,7 +94,7 @@ object Command:
             BulletComponent(EnemyBullet()),
             bulletPosition,
             VelocityComponent(vx, 0),
-            SizeComponent(100, 100),
+            SizeComponent(100, 20),
             SpriteComponent(model.s_SmallBullet),
             DirectionComponent(bulletDirection.d)
           )
@@ -113,7 +113,7 @@ object Command:
             BulletComponent(MachineGunBullet()),
             bulletPosition,
             VelocityComponent(vx, 0),
-            SizeComponent(100, 100),
+            SizeComponent(100, 20),
             SpriteComponent(model.s_BigBullet),
             DirectionComponent(bulletDirection.d)
           )
@@ -123,18 +123,22 @@ object Command:
 
   def bomb(entity: Entity): Unit =
     val pos = entity.getComponent[PositionComponent].get
+    val size = entity.getComponent[SizeComponent].get
     val bulletDirection = entity.getComponent[DirectionComponent].get
+    val bombPosition = bulletDirection.d match
+      case RIGHT => PositionComponent(pos.x + size.width, pos.y)
+      case LEFT => PositionComponent(pos.x -size.width , pos.y)
     val vx = bulletDirection.d match
-        case RIGHT => model.BULLET_VELOCITY
-        case LEFT => -model.BULLET_VELOCITY
-
-    val bulletPosition = PositionComponent(pos.x + vx * 0.1, pos.y)
+      case RIGHT => model.BOMB_VELOCITY_X
+      case LEFT => -model.BOMB_VELOCITY_X
 
     EntityManager().addEntity {
       BombEntity()
-        .addComponent(bulletPosition)
-        .addComponent(VelocityComponent(vx, 0))
-        .addComponent(SizeComponent(100,100))
+        .addComponent(bombPosition)
+        .addComponent(VelocityComponent(vx, -model.BOMB_VELOCITY_Y))
+        .addComponent(GravityComponent())
+        .addComponent(CollisionComponent())
+        .addComponent(SizeComponent(50,50))
         .addComponent(SpriteComponent(model.s_Bomb))
         .addComponent(bulletDirection)
     }

@@ -17,6 +17,9 @@ package object model:
   val BULLET_VELOCITY = 1000
   val GRAVITY_VELOCITY = 0.5
   val CLUTCHFACTOR = 15
+  val BOMB_VELOCITY_Y = 400
+  val BOMB_VELOCITY_X = 50
+
   var isGravityEnabled = true
   var isCrouching = true
   

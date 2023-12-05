@@ -20,8 +20,6 @@ private class GravitySystemImpl extends GravitySystem:
         classOf[PositionComponent]
       )
       .map { entity =>
-        if entity.isInstanceOf[BoxEntity] then
-          throw new Exception("BoxEntity should not have gravity")
 
         val position = entity.getComponent[PositionComponent].get
         val velocity = entity.getComponent[VelocityComponent].get
