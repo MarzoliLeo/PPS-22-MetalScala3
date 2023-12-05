@@ -10,7 +10,7 @@ import model.{GRAVITY_VELOCITY, HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SI
 
 /** The BasicCollisionHandler trait implements collision handling logic for
   * entities. It extends the CollisionHandler trait and requires the entity to
-  *  mix in the Entity trait.
+  * mix in the Entity trait.
   */
 trait BasicCollisionHandler extends CollisionHandler:
   self: Entity =>
@@ -31,7 +31,11 @@ trait BasicCollisionHandler extends CollisionHandler:
       proposedPosition: PositionComponent,
       currentPosition: PositionComponent
   ): PositionComponent =
-    getCollidingEntity(this, proposedPosition).fold(proposedPosition)(_ => currentPosition)
+    val maybeEntity = getCollidingEntity(this, proposedPosition)
+    if this.isInstanceOf[PlayerBulletEntity] && maybeEntity.isDefined then
+      proposedPosition // Make the bullet go through without collision handling
+    else maybeEntity.fold(proposedPosition)(_ => currentPosition)
+
 
   protected def handleSpecialCollision(
       collidingEntity: Option[Entity]
@@ -42,7 +46,7 @@ trait BasicCollisionHandler extends CollisionHandler:
   ): Option[PositionComponent] =
     for
       currentPosition <- getComponent[PositionComponent]
-      velocity <- getComponent[VelocityComponent]
+      _ <- getComponent[VelocityComponent]
       sizeComponent <- getComponent[SizeComponent]
     yield
       handleSpecialCollision {

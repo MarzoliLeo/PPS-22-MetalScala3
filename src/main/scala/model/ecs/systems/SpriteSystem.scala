@@ -11,7 +11,7 @@ trait SpriteSystem extends SystemWithoutTime
 
 private case class SpriteSystemImpl() extends SpriteSystem:
   def update(): Unit =
-    // FIXME: Throw exceptions when SPRITE ARE NOT FOUND!!!!
+    // ! FIXME: Throw exceptions when SPRITE ARE NOT FOUND!!!!
     EntityManager()
       .getEntitiesWithComponent(
         classOf[PositionComponent],
@@ -33,11 +33,12 @@ private case class SpriteSystemImpl() extends SpriteSystem:
                 model.s_MarcoRossiJumpingMoving
             }
             sprite = summon[SizeComponent] match {
-              case SizeComponent(_, y) if y < model.VERTICAL_COLLISION_SIZE => model.s_MarcoRossiCluch
+              case SizeComponent(_, y) if y < model.VERTICAL_COLLISION_SIZE =>
+                model.s_MarcoRossiCluch
               case _ => sprite
             }
             if playerEntity.hasComponent(classOf[SlugComponent])
-              then sprite = model.s_Slug
+            then sprite = model.s_Slug
 
             playerEntity.replaceComponent(SpriteComponent(sprite))
 
@@ -47,6 +48,7 @@ private case class SpriteSystemImpl() extends SpriteSystem:
               .getOrElse(throw new Exception("BulletComponent not found"))
               .bullet match
               case _: MachineGunBullet =>
+                println("MachineGunBullet")
                 playerBulletEntity.replaceComponent(
                   SpriteComponent(model.s_BigBullet)
                 )
@@ -75,7 +77,7 @@ private case class SpriteSystemImpl() extends SpriteSystem:
             val sprite = summon[VelocityComponent] match {
               case VelocityComponent(0, 0)           => model.s_EnemyCrab
               case VelocityComponent(x, 0) if x != 0 => model.s_EnemyCrabMoving
-              case _ => model.s_EnemyCrab
+              case _                                 => model.s_EnemyCrab
             }
             enemyEntity.replaceComponent(SpriteComponent(sprite))
 

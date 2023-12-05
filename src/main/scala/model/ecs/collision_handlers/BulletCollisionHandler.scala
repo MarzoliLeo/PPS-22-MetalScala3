@@ -6,6 +6,7 @@ import model.ecs.entities.weapons.{EnemyBulletEntity, PlayerBulletEntity}
 import model.ecs.entities.{Entity, EntityManager}
 import model.ecs.systems.CollisionChecker
 import model.{GUIWIDTH, HORIZONTAL_COLLISION_SIZE}
+import model.ecs.entities.player.PlayerEntity
 
 /** Handles collisions involving the BulletEntity.
   *
@@ -39,10 +40,12 @@ trait BulletCollisionHandler extends CollisionHandler:
     else
       collidingEntity match
         case Some(enemyEntity: EnemyEntity)
-            if this.isInstanceOf[EnemyBulletEntity] => ()
-        case Some(enemyEntity: EnemyEntity)
-            if this.isInstanceOf[PlayerBulletEntity] => EntityManager().removeEntity(enemyEntity)
-        case _ => ()
-      EntityManager().removeEntity(this)
+            if this.isInstanceOf[PlayerBulletEntity] => 
+              EntityManager().removeEntity(enemyEntity)
+              EntityManager().removeEntity(this)
+        case Some(_: PlayerEntity)
+            if this.isInstanceOf[PlayerBulletEntity] => // Do nothing
+        case _ => 
+          EntityManager().removeEntity(this)
       None
   }
