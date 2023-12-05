@@ -3,6 +3,7 @@ package model.ecs.entities
 import model.ecs.components.{Component, PositionComponent, SpriteComponent}
 import model.event.Event
 import model.event.observer.Observable
+import sun.jvm.hotspot.HelloWorld.e
 
 import scala.collection.immutable.{AbstractSeq, LinearSeq}
 
@@ -16,10 +17,13 @@ trait EntityManager extends Observable[Event]:
 private case class EntityManagerImpl() extends EntityManager:
 
   var entities: List[Entity] = List.empty
-  override def getEntitiesWithComponent(types: Class[_ <: Component]*): List[Entity] =
+  override def getEntitiesWithComponent(
+      types: Class[_ <: Component]*
+  ): List[Entity] =
     entities.filter(e => types.forall(t => e.hasComponent(t)))
-
-  override def getEntitiesByClass[T <: Entity](entityClass: Class[T]): List[Entity] =
+  override def getEntitiesByClass[T <: Entity](
+      entityClass: Class[T]
+  ): List[Entity] =
     entities.filter(_.getClass == entityClass)
 
   override def addEntity(entity: Entity): EntityManager =
@@ -33,9 +37,9 @@ private case class EntityManagerImpl() extends EntityManager:
 object EntityManager {
   private var singleton: Option[EntityManager] = None
   def apply(): EntityManager =
-    if(singleton.isEmpty){
+    if (singleton.isEmpty) {
       singleton = Some(EntityManagerImpl())
     }
     singleton.get
-    
+
 }

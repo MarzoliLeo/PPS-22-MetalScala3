@@ -1,9 +1,12 @@
 package model.ecs.collision_handlers
 
-import model.ecs.components.{JumpingComponent, PositionComponent, SizeComponent, VelocityComponent}
+import model.ecs.collision_handlers.CollisionHandler
+import model.ecs.components.*
 import model.ecs.entities.Entity
+import model.ecs.entities.player.PlayerEntity
+import model.ecs.entities.weapons.PlayerBulletEntity
 import model.ecs.systems.CollisionChecker.{boundaryCheck, getCollidingEntity}
-import model.{HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
+import model.{GRAVITY_VELOCITY, HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
 
 /** The BasicCollisionHandler trait implements collision handling logic for
   * entities. It extends the CollisionHandler trait and requires the entity to
@@ -12,30 +15,27 @@ import model.{HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
 trait BasicCollisionHandler extends CollisionHandler:
   self: Entity =>
 
+  /** Returns the final position based on the proposed position and the current
+    * position.
+    *
+    * @param proposedPosition
+    *   The proposed position to check for collisions.
+    * @param currentPosition
+    *   The current position to use if collisions occur.
+    * @return
+    *   The final position after considering collisions. If a collision occurs,
+    *   the current position is returned; otherwise, the proposed position is
+    *   returned.
+    */
   private def getFinalPosition(
       proposedPosition: PositionComponent,
       currentPosition: PositionComponent
   ): PositionComponent =
-    getCollidingEntity(this, proposedPosition)
-      .fold(proposedPosition)(_ => currentPosition)
+    val maybeEntity = getCollidingEntity(this, proposedPosition)
+    if this.isInstanceOf[PlayerBulletEntity] && maybeEntity.isDefined then
+      proposedPosition // Make the bullet go through without collision handling
+    else maybeEntity.fold(proposedPosition)(_ => currentPosition)
 
-  private def getUpdatedJumpingComponent(
-      currentPosition: PositionComponent,
-      proposedPosition: PositionComponent,
-      velocity: VelocityComponent,
-      collisionSize: Double
-  ): JumpingComponent =
-    val isOnGround =
-      currentPosition.y + collisionSize >= model.GUIHEIGHT && velocity.y >= 0
-    val isColliding = getCollidingEntity(
-      this,
-      PositionComponent(currentPosition.x, proposedPosition.y)
-    ).isDefined
-    if (isOnGround || isColliding) JumpingComponent(false)
-    else
-      getComponent[JumpingComponent].getOrElse(
-        throw new Exception("No JumpingComponent found")
-      )
 
   protected def handleSpecialCollision(
       collidingEntity: Option[Entity]
@@ -46,12 +46,9 @@ trait BasicCollisionHandler extends CollisionHandler:
   ): Option[PositionComponent] =
     for
       currentPosition <- getComponent[PositionComponent]
-      velocity <- getComponent[VelocityComponent]
+      _ <- getComponent[VelocityComponent]
       sizeComponent <- getComponent[SizeComponent]
     yield
-      replaceComponent {
-        getUpdatedJumpingComponent(currentPosition, proposedPosition, velocity, sizeComponent.height)
-      }
       handleSpecialCollision {
         getCollidingEntity(this, proposedPosition)
       }

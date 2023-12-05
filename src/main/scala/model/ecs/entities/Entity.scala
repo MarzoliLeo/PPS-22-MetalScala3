@@ -1,7 +1,7 @@
 package model.ecs.entities
 
 import model.ecs.collision_handlers.CollisionHandler
-import model.ecs.components.{CollisionComponent, Component}
+import model.ecs.components.Component
 
 import scala.reflect.ClassTag
 
@@ -20,9 +20,12 @@ trait Entity extends CollisionHandler:
     this
 
   def replaceComponent(component: Component): Entity =
-    removeComponent(component.getClass)
-    addComponent(component)
-    this
+    if hasComponent(component.getClass) then
+      removeComponent(component.getClass)
+      addComponent(component)
+      this
+    else
+      this
 
   def getComponent[T <: Component: ClassTag]: Option[T] =
     signature.collectFirst {

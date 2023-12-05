@@ -1,10 +1,12 @@
 package model.ecs.systems
 
-import model.ecs.components.{PositionComponent, SizeComponent}
+import model.ecs.components.{CollisionComponent, GravityComponent, PositionComponent, SizeComponent}
+import model.ecs.entities.enemies.EnemyEntity
+import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.WeaponEntity
 import model.ecs.entities.{Entity, EntityManager}
-import model.{GUIWIDTH, HORIZONTAL_COLLISION_SIZE}
+import model.{GUIWIDTH, HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE, isGravityEnabled}
 
 import java.awt.image.BufferedImage
 import java.io.File
@@ -22,51 +24,32 @@ object CollisionChecker {
     *   the entity that collides with the entity passed as parameter
     */
   def getCollidingEntity(
-      entity: Entity,
-      newPosition: PositionComponent
-  ): Option[Entity] = {
-    val potentialCollisions = EntityManager().getEntitiesWithComponent(
-      classOf[PositionComponent],
-      classOf[SizeComponent]
-    )
+                          entity: Entity,
+                          newPosition: PositionComponent
+                        ): Option[Entity] = {
+    val potentialEntitiesCollisions = EntityManager()
+      .getEntitiesWithComponent(
+        classOf[PositionComponent],
+        classOf[SizeComponent]
+      )
     val size = entity.getComponent[SizeComponent].get
 
-    // [ATTENTION] We are hypothesizing that there is at most one collision
-    potentialCollisions.find { otherEntity =>
+    potentialEntitiesCollisions.find { otherEntity =>
       if (!otherEntity.isSameEntity(entity)) {
         isOverlapping(
-          newPosition,
-          size,
-          otherEntity.getComponent[PositionComponent].get,
-          otherEntity.getComponent[SizeComponent].get
+            newPosition,
+            size,
+            otherEntity.getComponent[PositionComponent].get,
+            otherEntity.getComponent[SizeComponent].get,
+            entity
         )
-      } else false
+
+      } else {
+        false
+      }
     }
   }
 
-  /**
-   * Checks if `entity1` is immediately below `entity2`.
-   *
-   * @param entity1 The first entity to compare.
-   * @param entity2 The second entity to compare.
-   * @return `true` if `entity1` is immediately below `entity2`, `false` otherwise.
-   */
-  def isImmediatelyBelow(entity1: Entity, entity2: Entity): Boolean = {
-    val pos1 = entity1.getComponent[PositionComponent].get
-    val size1 = entity1.getComponent[SizeComponent].get
-
-    val pos2 = entity2.getComponent[PositionComponent].get
-    val size2 = entity2.getComponent[SizeComponent].get
-
-    val top1 = pos1.y
-    val bottom2 = pos2.y + size2.height
-
-    // check if entity1 is immediately below entity2
-    val isVerticallyAligned = top1 == bottom2
-    val isHorizontallyOverlapping = isOverlappingX(pos1, size1, pos2, size2)
-
-    isVerticallyAligned && isHorizontallyOverlapping
-  }
 
   /** Applies a boundary check to a currentPosition value, ensuring it stays
     * within the bounds of the system. It ensures that 'pos' is not less than
@@ -95,14 +78,13 @@ object CollisionChecker {
       pos1: PositionComponent,
       size1: SizeComponent,
       pos2: PositionComponent,
-      size2: SizeComponent
+      size2: SizeComponent,
+      entity: Entity
   ): Boolean = {
-    isOverlappingX(pos1, size1, pos2, size2) && isOverlappingY(
-      pos1,
-      size1,
-      pos2,
-      size2
-    )
+    val overX = isOverlappingX(pos1, size1, pos2, size2)
+    val overY = isOverlappingY(pos1, size1, pos2, size2)
+
+    overX && overY
   }
 
   private def isOverlappingX(
@@ -126,6 +108,7 @@ object CollisionChecker {
       pos2: PositionComponent,
       size2: SizeComponent
   ): Boolean = {
+
     val top1 = pos1.y
     val bottom1 = pos1.y + size1.height
 

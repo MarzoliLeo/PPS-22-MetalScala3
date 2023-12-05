@@ -4,13 +4,14 @@ import model.ecs.components.*
 import model.ecs.entities.EntityManager
 import model.ecs.entities.enemies.EnemyEntity
 import model.ecs.entities.environment.BoxEntity
-import model.ecs.entities.player.PlayerEntity
+import model.ecs.entities.player.{PlayerEntity, SlugEntity}
 import model.ecs.entities.weapons.*
 
 trait SpriteSystem extends SystemWithoutTime
 
 private case class SpriteSystemImpl() extends SpriteSystem:
   def update(): Unit =
+    // ! FIXME: Throw exceptions when SPRITE ARE NOT FOUND!!!!
     EntityManager()
       .getEntitiesWithComponent(
         classOf[PositionComponent],
@@ -20,16 +21,25 @@ private case class SpriteSystemImpl() extends SpriteSystem:
       .foreach { entity =>
         // Given instances
         given VelocityComponent = entity.getComponent[VelocityComponent].get
+        given SizeComponent = entity.getComponent[SizeComponent].get
 
         entity match {
           case playerEntity: PlayerEntity =>
-            val sprite = summon[VelocityComponent] match {
+            var sprite = summon[VelocityComponent] match {
               case VelocityComponent(0, 0)           => model.s_MarcoRossi
               case VelocityComponent(0, y) if y != 0 => model.s_MarcoRossiJump
               case VelocityComponent(x, 0) if x != 0 => model.s_MarcoRossiMove
               case VelocityComponent(x, y) if x != 0 && y != 0 =>
                 model.s_MarcoRossiJumpingMoving
             }
+            sprite = summon[SizeComponent] match {
+              case SizeComponent(_, y) if y < model.VERTICAL_COLLISION_SIZE =>
+                model.s_MarcoRossiCluch
+              case _ => sprite
+            }
+            if playerEntity.hasComponent(classOf[SlugComponent])
+            then sprite = model.s_Slug
+
             playerEntity.replaceComponent(SpriteComponent(sprite))
 
           case playerBulletEntity: PlayerBulletEntity =>
@@ -38,6 +48,7 @@ private case class SpriteSystemImpl() extends SpriteSystem:
               .getOrElse(throw new Exception("BulletComponent not found"))
               .bullet match
               case _: MachineGunBullet =>
+                println("MachineGunBullet")
                 playerBulletEntity.replaceComponent(
                   SpriteComponent(model.s_BigBullet)
                 )
@@ -53,6 +64,9 @@ private case class SpriteSystemImpl() extends SpriteSystem:
               SpriteComponent(model.s_BigBullet)
             )
 
+          case slug: SlugEntity =>
+            slug.replaceComponent(SpriteComponent(model.s_Slug))
+
           case machineGunEntity: MachineGunEntity =>
             machineGunEntity.replaceComponent(SpriteComponent(model.s_Weapon_H))
 
@@ -63,8 +77,14 @@ private case class SpriteSystemImpl() extends SpriteSystem:
             val sprite = summon[VelocityComponent] match {
               case VelocityComponent(0, 0)           => model.s_EnemyCrab
               case VelocityComponent(x, 0) if x != 0 => model.s_EnemyCrabMoving
+              case _                                 => model.s_EnemyCrab
             }
             enemyEntity.replaceComponent(SpriteComponent(sprite))
+
+          case ammoBoxEntity: AmmoBoxEntity =>
+            ammoBoxEntity.replaceComponent(SpriteComponent(model.s_AmmoBox))
+
+          case _ => throw new Exception("Entity not managed")
         }
       }
 

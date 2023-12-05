@@ -10,10 +10,10 @@ import scala.math.sqrt
   */
 sealed trait Component
 
+case class SlugComponent() extends Component
+
 case class BulletComponent(bullet: Bullet) extends Component
 
-case class CollisionComponent(entities: scala.collection.mutable.Set[Entity])
-    extends Component
 
 /** An Entity has this component if it's a trigger
   */
@@ -53,11 +53,15 @@ case class PositionComponent(x: Double, y: Double) extends Component:
   def +(v: VelocityComponent): PositionComponent =
     PositionComponent(x + v.x, y + v.y)
 
+  override def toString: String =
+    s"PositionComponent($x,$y)"
+
 /** Represents the gravity applied to an entity.
   * @param gravity
   *   The gravity value.
   */
-case class GravityComponent(gravity: Double) extends Component
+case class GravityComponent(var gravity: Double = model.GRAVITY_VELOCITY) extends Component
+
 
 /** Represents the jumping state of an entity.
   * @param isJumping
@@ -131,3 +135,7 @@ case class VelocityComponent(var x: Double, var y: Double) extends Component:
     */
   override def toString: String = s"VelocityComponent($x,$y)"
 
+case class AmmoComponent(ammo: Int) extends Component
+
+
+case class CollisionComponent(var isColliding: Boolean = false) extends Component
