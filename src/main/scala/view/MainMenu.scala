@@ -135,14 +135,22 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
       )
       .addEntity(
         createEntity(
-          MachineGunEntity(),
-          machineGunWeaponComponents(PositionComponent(750, 50)): _*
+          BoxEntity(),
+          boxComponents(PositionComponent(1000, 500)): _*
         )
       )
-      .addEntity(
+      val randomPositionTupleForGunEntity = generateRandomPosition()
+      entityManager.addEntity(
+        createEntity(
+          MachineGunEntity(),
+          machineGunWeaponComponents(PositionComponent(randomPositionTupleForGunEntity._1, randomPositionTupleForGunEntity._2)): _*
+        )
+      )
+      val randomPositionTupleForAmmoBoxEntity = generateRandomPosition()
+      entityManager.addEntity(
         createEntity(
           AmmoBoxEntity(),
-          ammoBoxComponents(PositionComponent(400, 300)): _*
+          ammoBoxComponents(PositionComponent(randomPositionTupleForAmmoBoxEntity._1, randomPositionTupleForAmmoBoxEntity._2)): _*
         )
       )
       .addEntity(
@@ -165,6 +173,13 @@ private class MainMenuImpl(parentStage: Stage) extends MainMenu:
   override def startButton: Button = getButton(root, "Start")
 
   override def exitButton: Button = getButton(root, "Exit")
+
+  private def generateRandomPosition() : (Int, Int) =
+    val randomInt = scala.util.Random.nextInt(model.randomPositions.size)
+    val randomPositionTuple = model.randomPositions(randomInt)
+    model.randomPositions = model.randomPositions.patch(randomInt, Nil, 1)
+    randomPositionTuple
+
 
 object MainMenu:
   def apply(parentStage: Stage): MainMenu =

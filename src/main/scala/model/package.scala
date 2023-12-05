@@ -1,5 +1,6 @@
 import model.ecs.components.*
 import model.ecs.entities.Entity
+import model.{HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE, s_MarcoRossi}
 import model.utilities.{Cons, Empty, Stack}
 
 package object model:
@@ -49,6 +50,8 @@ package object model:
   val s_GameBackground = "sprites/Background1230x700.png"
   val s_Slug = "sprites/Slug.png"
   val s_AmmoBox = "sprites/Munitions.png"
+
+  var randomPositions = List((750,50), (400,300), (500,200), (1000,400))
 
   // Components
   private val defaultComponents: Seq[Component] = Seq(
