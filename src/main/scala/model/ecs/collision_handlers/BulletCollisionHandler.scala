@@ -39,12 +39,13 @@ trait BulletCollisionHandler extends CollisionHandler:
     then Some(proposedPosition)
     else
       collidingEntity match
-        case Some(enemyEntity: EnemyEntity)
-            if this.isInstanceOf[PlayerBulletEntity] => 
-              EntityManager().removeEntity(enemyEntity)
-              EntityManager().removeEntity(this)
-        case Some(_: PlayerEntity)
-            if this.isInstanceOf[PlayerBulletEntity] => // Do nothing
+        case Some(enemyEntity: EnemyEntity) if this.isInstanceOf[PlayerBulletEntity] =>
+          EntityManager().removeEntity(enemyEntity)
+          EntityManager().removeEntity(this)
+        case Some(_: PlayerEntity) if this.isInstanceOf[PlayerBulletEntity] => // Do nothing
+        case Some(playerEntity: PlayerEntity) if this.isInstanceOf[EnemyBulletEntity] =>
+          EntityManager().removeEntity(playerEntity)
+          EntityManager().removeEntity(this)
         case _ => 
           EntityManager().removeEntity(this)
       None

@@ -50,6 +50,7 @@ package object model:
   val s_GameBackground = "sprites/Background1230x700.png"
   val s_Slug = "sprites/Slug.png"
   val s_AmmoBox = "sprites/Munitions.png"
+  val s_Bomb = "sprites/Bomb.png"
 
   var randomPositions = List((750,50), (400,300), (500,200), (1000,400))
 

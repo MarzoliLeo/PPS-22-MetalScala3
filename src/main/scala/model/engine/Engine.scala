@@ -43,6 +43,7 @@ object Engine {
 
     override def stop(): Unit = {
       gameLoop.halt()
+      //TODO notifyobserver con evento GAMEOVER e mostri la schermata Gameover.
     }
     override def pause(): Unit =
       gameLoop.pause()
