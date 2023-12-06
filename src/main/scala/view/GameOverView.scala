@@ -7,6 +7,7 @@ import javafx.scene.{Parent, Scene}
 import javafx.stage.{Stage, WindowEvent}
 import javafx.scene.control.Button
 import javafx.scene.layout.{GridPane, Pane}
+import model.ecs.entities.EntityManager
 import model.ecs.systems.SystemManager
 import model.engine.Engine
 
@@ -46,7 +47,9 @@ private class GameOverViewImpl(primaryStage: Stage, gameEngine: Engine) extends 
   primaryStage.show()
 
   def handleStartButton(): Unit =
+    val gameView = GameView(primaryStage, Set(EntityManager(), gameEngine), gameEngine)
     createGame(gameEngine)
+    primaryStage.getScene.setRoot(gameView)
     gameEngine.start()
 
   def handleExitButton(): Unit =

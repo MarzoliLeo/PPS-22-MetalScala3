@@ -13,10 +13,12 @@ import model.event.observer.Observable
 import view.MainMenu
 
 trait Engine extends GameEngine with Observable[Event]{
+  def init(): Unit
   def start(): Unit
   def stop(): Unit
   def pause(): Unit
   def resume(): Unit
+  def getStatus(): GameStatus
 
 }
 
@@ -31,8 +33,7 @@ object Engine {
       systemManager.updateAll(elapsedTime)
       notifyObservers(Tick(EntityManager().entities))
 
-    override def start(): Unit = {
-      // init()
+    override def init(): Unit = {
       gameLoop.status match {
         case Stopped =>
           gameLoop.start() // .start() its because gameloop is a thread.
@@ -40,15 +41,25 @@ object Engine {
       }
     }
 
+
+    override def start(): Unit = {
+      gameLoop.unPause() // Riprendi il ciclo di gioco
+    }
+
     override def stop(): Unit = {
       notifyObservers(GameOver())
-      gameLoop.halt()
+      gameLoop.pause()
     }
+
+    //TODO sono inutili per ora.
     override def pause(): Unit =
       gameLoop.pause()
+
     override def resume(): Unit =
       gameLoop.unPause()
 
+    // Method for testing purposes
+    override def getStatus(): GameStatus = gameLoop.status
 
   }
 }

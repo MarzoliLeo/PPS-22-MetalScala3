@@ -27,9 +27,9 @@ import java.util.UUID
 
 trait GameView extends View
 
-private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Event]], gameEngine: Engine) 
+private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Event]], gameEngine: Engine)
   extends GameView with CommandsStackHandler with Observer[Event] {
-  
+
   val root: Pane = Pane()
 
   // Create the ammo text
@@ -85,11 +85,8 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
     Platform.runLater { () =>
       subject match
         case Tick(entities) =>
-          entityIdToView.foreach((_, view) =>
-            root.getChildren.remove(view)
-          ) // Reset delle entità di ECS.
-          entityIdToView =
-            Map() // Solo per il reset delle entità che vengono rimosse (in questo caso Bullet).
+          entityIdToView.foreach((_, view) => root.getChildren.remove(view)) // Reset delle entità di ECS.
+          entityIdToView = Map() // Solo per il reset delle entità che vengono rimosse (in questo caso Bullet).
           entities.foreach(entity =>
             if entity.hasComponent(classOf[PositionComponent])
               && entity.hasComponent(classOf[SpriteComponent])
@@ -140,6 +137,9 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
           entityIdToView.foreach((_, view) => root.getChildren.add(view))
 
         case GameOver() =>
+          var entityIdToView: Map[UUID, Node] = Map()
+          entityIdToView.foreach((_, view) => root.getChildren.remove(view)) // Reset delle entità di ECS.
+          entityIdToView = Map() // Solo per il reset delle entità che vengono rimosse (in questo caso Bullet).
           primaryStage.close()
           print("Sono morto e ho generato l'evento")
           GameOverView(new Stage, gameEngine)

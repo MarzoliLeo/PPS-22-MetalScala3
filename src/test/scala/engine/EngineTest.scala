@@ -12,7 +12,8 @@ class EngineTest {
   val systemManager: SystemManager = SystemManager(entityManager)
   val engine: Engine = Engine()
 
-  engine.start()
+  engine.init()
+  
   @Test
   def testStart(): Unit = {
     // Assert engine is running

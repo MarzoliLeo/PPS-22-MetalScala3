@@ -60,7 +60,7 @@ private class MainMenuImpl(parentStage: Stage, gameEngine: Engine) extends MainM
     val gameView = GameView(parentStage, Set(EntityManager(), gameEngine), gameEngine)
     createGame(gameEngine)
     parentStage.getScene.setRoot(gameView)
-    gameEngine.start()
+    gameEngine.init()
 
   override def startButton: Button = getButton(root, "Start")
 
