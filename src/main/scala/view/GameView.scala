@@ -103,7 +103,6 @@ private class GameViewImpl(
                 .get
               val direction = entity.getComponent[DirectionComponent].get
 
-              // TODO Hai già tutte le entità basta che ti riferisci ad entity che sta sopra.
               entities.find(_.isInstanceOf[PlayerEntity]).foreach {
                 playerEntity =>
                   playerEntity.getComponent[SpecialWeaponAmmoComponent] match

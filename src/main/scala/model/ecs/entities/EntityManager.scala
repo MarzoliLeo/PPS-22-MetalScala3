@@ -3,8 +3,6 @@ package model.ecs.entities
 import model.ecs.components.{Component, PositionComponent, SpriteComponent}
 import model.event.Event
 import model.event.observer.Observable
-import sun.jvm.hotspot.HelloWorld.e
-
 import scala.collection.immutable.{AbstractSeq, LinearSeq}
 
 trait EntityManager extends Observable[Event]:

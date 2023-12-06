@@ -12,7 +12,7 @@ trait SlugCollisionHandler extends BasicCollisionHandler:
     collidingEntity match
       case Some(weaponEntity: WeaponEntity) =>
         EntityManager().removeEntity(weaponEntity)
-      case Some(boxEntity: BoxEntity) =>
+      case Some(_: BoxEntity) =>
         this.replaceComponent(CollisionComponent(true))
         this.replaceComponent(JumpingComponent(false))
       case _ => ()

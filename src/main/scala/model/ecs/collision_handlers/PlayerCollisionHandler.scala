@@ -1,15 +1,11 @@
 package model.ecs.collision_handlers
+import model.*
 import model.ecs.components.*
 import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.SlugEntity
-import model.ecs.entities.weapons.{
-  AmmoBoxEntity,
-  PlayerBulletEntity,
-  WeaponEntity
-}
+import model.ecs.entities.weapons.{AmmoBoxEntity, PlayerBulletEntity, WeaponEntity}
 import model.ecs.entities.{Entity, EntityManager}
 import model.ecs.systems.CollisionChecker
-import model.*
 
 trait PlayerCollisionHandler extends BasicCollisionHandler:
   self: Entity =>
@@ -57,7 +53,10 @@ trait PlayerCollisionHandler extends BasicCollisionHandler:
           currentAmmo,
           currentBombAmmo
         )
-      case _ => throw Exception(s"Missing components needed for handling collision from $this")
+      case _ =>
+        throw Exception(
+          s"Missing components needed for handling collision from $this"
+        )
     }
   }
 
