@@ -13,6 +13,7 @@ import javafx.scene.{Node, Scene}
 import javafx.stage.Stage
 import javafx.util.Duration
 import model.ecs.components.*
+import model.ecs.entities.Entity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.EnemyBulletEntity
 import model.event.Event
@@ -32,18 +33,17 @@ private class GameViewImpl(
     with CommandsStackHandler
     with Observer[Event] {
   val root: Pane = Pane()
-  private var entityIdToView: Map[UUID, Node] = Map()
 
   // Create the ammo text
-  private val ammoText: Text = Text()
-  ammoText.setFont(Font.font("Verdana", 20))
-  ammoText.setFill(Color.BLACK)
-  ammoText.setX(10) // Set the position of the text
-  ammoText.setY(30) // Set the position of the text
-  root.getChildren.add(ammoText) // Add the text to the root pane
+  private val ammoText: Text = createText(10, 30)
+  // Create the bomb text
+  private val bombText: Text = createText(10, 60)
 
   // Creazione della scena di gioco (Diversa da quella del Menù).
   private val scene: Scene = Scene(root, model.GUIWIDTH, model.GUIHEIGHT)
+
+  // Load the background image
+  private val backgroundImage = new Image(model.s_GameBackground)
   scene.setOnKeyPressed { k =>
     k.getCode match
       case KeyCode.LEFT  => handleInput(Command.left)
@@ -59,8 +59,6 @@ private class GameViewImpl(
       case KeyCode.DOWN => handleInput(Command.standUp)
       case _            =>
   }
-  // Load the background image
-  private val backgroundImage = new Image(model.s_GameBackground)
   // Create a BackgroundImage object
   private val background = new Background(
     new BackgroundImage(
@@ -78,6 +76,7 @@ private class GameViewImpl(
       )
     )
   )
+  private var entityIdToView: Map[UUID, Node] = Map()
   // Set the background of the root using the Background object
   root.setBackground(background)
   primaryStage.setScene(scene)
@@ -87,10 +86,12 @@ private class GameViewImpl(
     Platform.runLater { () =>
       subject match
         case Tick(entities) =>
-          entityIdToView.foreach((_, view) => root.getChildren.remove(view)) // Reset delle entità di ECS.
-          entityIdToView = Map() // Solo per il reset delle entità che vengono rimosse (in questo caso Bullet).
-          entities.foreach(
-            entity =>
+          entityIdToView.foreach((_, view) =>
+            root.getChildren.remove(view)
+          ) // Reset delle entità di ECS.
+          entityIdToView =
+            Map() // Solo per il reset delle entità che vengono rimosse (in questo caso Bullet).
+          entities.foreach(entity =>
             if entity.hasComponent(classOf[PositionComponent])
               && entity.hasComponent(classOf[SpriteComponent])
               && entity.hasComponent(classOf[DirectionComponent])
@@ -110,9 +111,17 @@ private class GameViewImpl(
                       val ammo = ammoComponent.ammo
                       ammoText.setText(s"Ammo: $ammo")
                     case None => ammoText.setText("Ammo: 0")
+                  playerEntity.getComponent[BombAmmoComponent] match
+                    case Some(ammoComponent) =>
+                      val ammo = ammoComponent.ammo
+                      bombText.setText(s"Bomb: $ammo")
+                    case None => bombText.setText("Bomb: 0")
               }
 
-              entityIdToView = entityIdToView + (entity.id -> createSpriteView(sprite, position))
+              entityIdToView = entityIdToView + (entity.id -> createSpriteView(
+                sprite,
+                position
+              ))
               val entityToShow = entityIdToView(entity.id)
               entityToShow.setTranslateX(position.x)
               entityToShow.setTranslateY(position.y)
@@ -145,6 +154,15 @@ private class GameViewImpl(
     imageView
   }
 
+  private def createText(x: Double, y: Double): Text = {
+    val text = Text()
+    text.setFont(Font.font("Verdana", 20))
+    text.setFill(Color.BLACK)
+    text.setX(x)
+    text.setY(y)
+    root.getChildren.add(text)
+    text
+  }
 }
 
 object GameView {
