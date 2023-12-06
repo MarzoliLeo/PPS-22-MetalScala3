@@ -51,7 +51,6 @@ private[engine] object GameLoop {
       }
 
     override def pause(): GameStatus = this.synchronized {
-      print("[Pause] Lo stato del sistema è:" + _status + "\n")
       _status match {
         case Running => _status = Paused; print("pausing\n")
         case Paused | Stopped => print("Not running, can't pause\n")
@@ -60,7 +59,6 @@ private[engine] object GameLoop {
     }
 
     override def unPause(): GameStatus = this.synchronized {
-      print("[unPause] Lo stato del sistema è:" + _status + "\n")
       _status match {
         case Paused => _status = Running; print("unpausing\n"); notifyAll()
         case Running | Stopped => print("Not paused, can't unpause\n")
@@ -69,7 +67,6 @@ private[engine] object GameLoop {
     }
 
     override def halt(): GameStatus = this.synchronized {
-      print("[Halt] Lo stato del sistema è:" + _status + "\n")
       _status match {
         case Running | Paused => _status = Stopped; print("stopped\n"); notifyAll()
         case Stopped => print("Already stopped\n")

@@ -21,11 +21,12 @@ class App extends Application:
     val GAME_TITLE = "Metal Scala 3"
     val WINDOW_WIDTH = model.GUIWIDTH
     val WINDOW_HEIGHT = model.GUIHEIGHT
+    val gameEngine = Engine()
     
     primaryStage.setTitle(GAME_TITLE)
 
     //La creazione della GameView avviene dentro il pulsante start di Main Menu.
-    val mainMenu = MainMenu(primaryStage)
+    val mainMenu = MainMenu(primaryStage, gameEngine)
 
     primaryStage
       .setScene(

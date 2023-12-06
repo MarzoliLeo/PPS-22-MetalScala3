@@ -16,6 +16,7 @@ import model.ecs.components.*
 import model.ecs.entities.Entity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.EnemyBulletEntity
+import model.engine.Engine
 import model.event.Event
 import model.event.Event.*
 import model.event.observer.{Observable, Observer}
@@ -26,12 +27,9 @@ import java.util.UUID
 
 trait GameView extends View
 
-private class GameViewImpl(
-    primaryStage: Stage,
-    observables: Set[Observable[Event]]
-) extends GameView
-    with CommandsStackHandler
-    with Observer[Event] {
+private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Event]], gameEngine: Engine) 
+  extends GameView with CommandsStackHandler with Observer[Event] {
+  
   val root: Pane = Pane()
 
   // Create the ammo text
@@ -42,8 +40,6 @@ private class GameViewImpl(
   // Creazione della scena di gioco (Diversa da quella del Menù).
   private val scene: Scene = Scene(root, model.GUIWIDTH, model.GUIHEIGHT)
 
-  // Load the background image
-  private val backgroundImage = new Image(model.s_GameBackground)
   scene.setOnKeyPressed { k =>
     k.getCode match
       case KeyCode.LEFT  => handleInput(Command.left)
@@ -59,6 +55,9 @@ private class GameViewImpl(
       case KeyCode.DOWN => handleInput(Command.standUp)
       case _            =>
   }
+
+  // Load the background image
+  private val backgroundImage = new Image(model.s_GameBackground)
   // Create a BackgroundImage object
   private val background = new Background(
     new BackgroundImage(
@@ -139,6 +138,13 @@ private class GameViewImpl(
                     entityToShow.setScaleX(1)
           )
           entityIdToView.foreach((_, view) => root.getChildren.add(view))
+
+        case GameOver() =>
+          primaryStage.close()
+          print("Sono morto e ho generato l'evento")
+          GameOverView(new Stage, gameEngine)
+
+
     }
 
   private def createSpriteView(
@@ -156,7 +162,7 @@ private class GameViewImpl(
 
   private def createText(x: Double, y: Double): Text = {
     val text = Text()
-    text.setFont(Font.font("Verdana", 20))
+    text.setFont(Font.font("Arial", 20))
     text.setFill(Color.BLACK)
     text.setX(x)
     text.setY(y)
@@ -168,7 +174,8 @@ private class GameViewImpl(
 object GameView {
   def apply(
       primaryStage: Stage,
-      observables: Set[Observable[Event]]
+      observables: Set[Observable[Event]],
+      gameEngine: Engine
   ): GameView =
-    new GameViewImpl(primaryStage, observables)
+    new GameViewImpl(primaryStage, observables, gameEngine)
 }

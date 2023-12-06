@@ -6,9 +6,9 @@ import model.Fps
 import model.ecs.components.PositionComponent
 import model.ecs.entities.EntityManager
 import model.ecs.entities.player.PlayerEntity
-import model.ecs.systems.SystemManager
+import model.ecs.systems.{DeathSystem, SystemManager}
 import model.event.Event
-import model.event.Event.Tick
+import model.event.Event.{GameOver, Tick}
 import model.event.observer.Observable
 import view.MainMenu
 
@@ -17,7 +17,6 @@ trait Engine extends GameEngine with Observable[Event]{
   def stop(): Unit
   def pause(): Unit
   def resume(): Unit
-  def getStatus(): GameStatus
 
 }
 
@@ -26,8 +25,8 @@ object Engine {
   private class EngineImpl() extends Engine {
     private val systemManager = SystemManager(EntityManager())
     private val gameLoop = GameLoop(Fps, this)
+    private val deathSystem = DeathSystem(this) // Passa l'istanza di Engine
 
-    // TODO: delete debug print
     override def tick(elapsedTime: Long): Unit =
       systemManager.updateAll(elapsedTime)
       notifyObservers(Tick(EntityManager().entities))
@@ -42,16 +41,14 @@ object Engine {
     }
 
     override def stop(): Unit = {
+      notifyObservers(GameOver())
       gameLoop.halt()
-      //TODO notifyobserver con evento GAMEOVER e mostri la schermata Gameover.
     }
     override def pause(): Unit =
       gameLoop.pause()
     override def resume(): Unit =
       gameLoop.unPause()
 
-    // Method for testing purposes
-    def getStatus(): GameStatus = gameLoop.status
 
   }
 }
