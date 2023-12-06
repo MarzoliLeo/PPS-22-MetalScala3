@@ -72,7 +72,7 @@ object Command:
         }
     }
 
-    val bulletPosition = PositionComponent(p.x + vx * 0.1 , p.y)
+    val bulletPosition = PositionComponent(p.x + vx * 0.1, p.y)
 
     EntityManager().addEntity {
       entity
@@ -100,13 +100,13 @@ object Command:
           )
         case BulletComponent(MachineGunBullet()) =>
           entity
-            .getComponent[AmmoComponent]
+            .getComponent[SpecialWeaponAmmoComponent]
             .getOrElse(throw new Exception) match {
-            case AmmoComponent(1) =>
-              entity.replaceComponent(AmmoComponent(0))
+            case SpecialWeaponAmmoComponent(1) =>
+              entity.replaceComponent(SpecialWeaponAmmoComponent(0))
               entity.replaceComponent(BulletComponent(StandardBullet()))
-            case AmmoComponent(n) =>
-              entity.replaceComponent(AmmoComponent(n - 1))
+            case SpecialWeaponAmmoComponent(n) =>
+              entity.replaceComponent(SpecialWeaponAmmoComponent(n - 1))
           }
           createBulletEntity(
             PlayerBulletEntity(),
@@ -127,22 +127,30 @@ object Command:
     val bulletDirection = entity.getComponent[DirectionComponent].get
     val bombPosition = bulletDirection.d match
       case RIGHT => PositionComponent(pos.x + size.width, pos.y)
-      case LEFT => PositionComponent(pos.x -size.width , pos.y)
+      case LEFT  => PositionComponent(pos.x - size.width, pos.y)
     val vx = bulletDirection.d match
       case RIGHT => model.BOMB_VELOCITY_X
-      case LEFT => -model.BOMB_VELOCITY_X
+      case LEFT  => -model.BOMB_VELOCITY_X
 
-    EntityManager().addEntity {
-      BombEntity()
-        .addComponent(bombPosition)
-        .addComponent(VelocityComponent(vx, -model.BOMB_VELOCITY_Y))
-        .addComponent(GravityComponent())
-        .addComponent(CollisionComponent())
-        .addComponent(SizeComponent(50,50))
-        .addComponent(SpriteComponent(model.s_Bomb))
-        .addComponent(bulletDirection)
-    }
+    entity
+      .getComponent[BombAmmoComponent]
+      .getOrElse(throw new Exception) match
+      case BombAmmoComponent(0) =>
+        println("No more bombs")
+      case BombAmmoComponent(n) =>
+        println(s"Remaining bombs: $n")
+        entity.replaceComponent(BombAmmoComponent(n - 1))
+        EntityManager().addEntity {
+          BombEntity()
+            .addComponent(bombPosition)
+            .addComponent(VelocityComponent(vx, -model.BOMB_VELOCITY_Y))
+            .addComponent(GravityComponent())
+            .addComponent(CollisionComponent())
+            .addComponent(SizeComponent(50, 50))
+            .addComponent(SpriteComponent(model.s_Bomb))
+            .addComponent(bulletDirection)
 
+        }
   def crouch(entity: Entity): Unit =
     try {
       if model.isCrouching then

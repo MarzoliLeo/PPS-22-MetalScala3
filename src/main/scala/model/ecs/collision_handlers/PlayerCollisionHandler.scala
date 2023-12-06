@@ -1,5 +1,5 @@
 package model.ecs.collision_handlers
-import model.ecs.components._
+import model.ecs.components.*
 import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.SlugEntity
 import model.ecs.entities.weapons.{
@@ -9,12 +9,7 @@ import model.ecs.entities.weapons.{
 }
 import model.ecs.entities.{Entity, EntityManager}
 import model.ecs.systems.CollisionChecker
-import model.{
-  HORIZONTAL_COLLISION_SIZE,
-  VERTICAL_COLLISION_SIZE,
-  ammoBoxRefill,
-  isGravityEnabled
-}
+import model.*
 
 trait PlayerCollisionHandler extends BasicCollisionHandler:
   self: Entity =>
@@ -36,7 +31,7 @@ trait PlayerCollisionHandler extends BasicCollisionHandler:
 
   private def handleWeaponEntityCollision(weaponEntity: WeaponEntity): Unit = {
     EntityManager().removeEntity(weaponEntity)
-    this.replaceComponent(AmmoComponent(ammoBoxRefill))
+    this.replaceComponent(SpecialWeaponAmmoComponent(ammoBoxRefill))
     this.replaceComponent(BulletComponent(MachineGunBullet()))
   }
 
@@ -44,19 +39,43 @@ trait PlayerCollisionHandler extends BasicCollisionHandler:
       ammoBoxEntity: AmmoBoxEntity
   ): Unit = {
     EntityManager().removeEntity(ammoBoxEntity)
-    for {
-      ammoBoxComponent <- ammoBoxEntity.getComponent[AmmoComponent]
-      currentBullet <- this.getComponent[BulletComponent]
-      currentAmmo <- this.getComponent[AmmoComponent]
-    } yield {
-      val newAmmoBoxComponent = currentBullet.bullet match {
-        case MachineGunBullet() => ammoBoxComponent
-        case StandardBullet()   => ammoBoxComponent.copy(0)
-      }
-      this.replaceComponent(
-        AmmoComponent(currentAmmo.ammo + newAmmoBoxComponent.ammo)
-      )
+    (
+      ammoBoxEntity.getComponent[SpecialWeaponAmmoComponent],
+      this.getComponent[BulletComponent],
+      this.getComponent[SpecialWeaponAmmoComponent],
+      this.getComponent[BombAmmoComponent]
+    ) match {
+      case (
+            Some(ammoBoxComponent),
+            Some(bulletComponent),
+            Some(currentAmmo),
+            Some(currentBombAmmo)
+          ) =>
+        updateComponents(
+          ammoBoxComponent,
+          bulletComponent,
+          currentAmmo,
+          currentBombAmmo
+        )
+      case _ => throw Exception(s"Missing components needed for handling collision from $this")
     }
+  }
+
+  private def updateComponents(
+      ammoBoxComponent: SpecialWeaponAmmoComponent,
+      bulletComponent: BulletComponent,
+      currentAmmo: SpecialWeaponAmmoComponent,
+      currentBombAmmo: BombAmmoComponent
+  ): Unit = {
+    val ammoInBox = ammoBoxComponent.ammo
+    bulletComponent.bullet match {
+      case _: MachineGunBullet =>
+        this.replaceComponent(
+          SpecialWeaponAmmoComponent(currentAmmo.ammo + ammoInBox)
+        )
+      case _ => ()
+    }
+    this.replaceComponent(BombAmmoComponent(currentBombAmmo.ammo + ammoInBox))
   }
 
   private def handleSlugEntityCollision(slugEntity: SlugEntity): Unit = {

@@ -106,7 +106,7 @@ private class GameViewImpl(
               // TODO Hai già tutte le entità basta che ti riferisci ad entity che sta sopra.
               entities.find(_.isInstanceOf[PlayerEntity]).foreach {
                 playerEntity =>
-                  playerEntity.getComponent[AmmoComponent] match
+                  playerEntity.getComponent[SpecialWeaponAmmoComponent] match
                     case Some(ammoComponent) =>
                       val ammo = ammoComponent.ammo
                       ammoText.setText(s"Ammo: $ammo")
