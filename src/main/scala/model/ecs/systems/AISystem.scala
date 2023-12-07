@@ -1,12 +1,15 @@
 package model.ecs.systems
 
+import alice.tuprolog.{MalformedGoalException, NoMoreSolutionException, NoSolutionException, Prolog, Struct, Theory, Var}
 import javafx.scene.Node
 import model.ecs.entities.{Entity, EntityManager}
-import java.util.concurrent.{Executors, ExecutorService}
+
+import java.util.concurrent.{ExecutorService, Executors}
 import model.*
 import model.ecs.components.*
 import model.ecs.entities.player.PlayerEntity
 import model.input.commands.Command
+import utilities.Scala2P.*
 
 import java.io.FileInputStream
 import java.util.UUID
@@ -14,12 +17,11 @@ import java.util.UUID
 trait AISystem extends SystemWithElapsedTime
 
 private case class AISystemImpl() extends AISystem {
+
+
   private val threadPool: ExecutorService = Executors.newFixedThreadPool(NUMBER_OF_ENEMIES) //Numero di Thread pari al numero di nemici.
 
   override def update(elapsedTime: Long): Unit = {
-    import alice.tuprolog.*
-    import utilities.Scala2P.*
-
     val prologFile = new java.io.File("src/main/resources/EnemyAI.pl")
     val engine = new Prolog()
     engine.setTheory(new Theory(new FileInputStream(prologFile)))
@@ -72,7 +74,7 @@ private case class AISystemImpl() extends AISystem {
                       case _ => ()
                     }
 
-                    entity.replaceComponent(CollisionComponent(false))
+                    entity.replaceComponent(CollisionComponent())
                     entity.replaceComponent(newEnemyVelocity)
 
                     //Position.
@@ -86,9 +88,9 @@ private case class AISystemImpl() extends AISystem {
                   }
                 } catch {
                   case e: Exception => e match {
-                    case e: NoSolutionException => println("Prolog query failed: No.")
-                    case e: MalformedGoalException => println("Prolog query failed: Malformed.")
-                    case e: NoMoreSolutionException => println("Prolog query failed: No more solutions.")
+                    case _: NoSolutionException => println("Prolog query failed: No.")
+                    case _: MalformedGoalException => println("Prolog query failed: Malformed.")
+                    case _: NoMoreSolutionException => println("Prolog query failed: No more solutions.")
                     case _ => println("Raised exception: " + e)
                   }
                 }
