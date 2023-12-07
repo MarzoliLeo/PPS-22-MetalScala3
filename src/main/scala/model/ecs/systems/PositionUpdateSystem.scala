@@ -26,7 +26,7 @@ private class PositionUpdateSystemImpl() extends PositionUpdateSystem:
         given currentVelocity: VelocityComponent =
           entity.getComponent[VelocityComponent].get
 
-        entity.replaceComponent(getUpdatedVelocity(entity))
+        entity.replaceComponent(getUpdatedVelocity)
 
         val proposedPosition = currentPosition.getUpdatedPosition(elapsedTime)
         val handledPosition: Option[PositionComponent] =
@@ -37,9 +37,9 @@ private class PositionUpdateSystemImpl() extends PositionUpdateSystem:
           case None => ()
       )
 
-  private def getUpdatedVelocity(
-      entity: Entity
-  )(using velocity: VelocityComponent): VelocityComponent = {
+  private def getUpdatedVelocity(using
+      velocity: VelocityComponent
+  ): VelocityComponent = {
     val newHorizontalVelocity = velocity.x * FRICTION_FACTOR match
       case x if -0.1 < x && x < 0.1 => 0.0
       case x                        => x
