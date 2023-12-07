@@ -9,7 +9,7 @@ trait InputSystem extends SystemWithoutTime
 
 private class InputSystemImpl extends InputSystem:
   override def update(): Unit =
-    EntityManager().getEntitiesWithComponent(classOf[PlayerComponent]).foreach {
+    EntityManager.getEntitiesWithComponent(classOf[PlayerComponent]).foreach {
       entity =>
         inputsQueue.peek match
           case Some(command) => command(entity)

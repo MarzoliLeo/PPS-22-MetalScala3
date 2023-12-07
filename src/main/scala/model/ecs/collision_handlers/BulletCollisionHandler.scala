@@ -12,14 +12,14 @@ trait BulletCollisionHandler extends CollisionHandler:
   self: Entity =>
 
   private def handleEnemyCollision(enemyEntity: EnemyEntity): Unit = {
-    EntityManager().removeEntity(enemyEntity)
-    EntityManager().removeEntity(this)
+    EntityManager.removeEntity(enemyEntity)
+    EntityManager.removeEntity(this)
   }
 
   private def handlePlayerCollision(playerEntity: PlayerEntity): Unit = {
     if this.isInstanceOf[EnemyBulletEntity] then
-      EntityManager().removeEntity(playerEntity)
-      EntityManager().removeEntity(this)
+      EntityManager.removeEntity(playerEntity)
+      EntityManager.removeEntity(this)
   }
 
   override def handleCollision(
@@ -36,6 +36,6 @@ trait BulletCollisionHandler extends CollisionHandler:
         case Some(enemyEntity: EnemyEntity) => handleEnemyCollision(enemyEntity)
         case Some(playerEntity: PlayerEntity) => handlePlayerCollision(playerEntity)
         case _ => 
-          EntityManager().removeEntity(this)
+          EntityManager.removeEntity(this)
       None
   }

@@ -24,7 +24,7 @@ private case class AISystemImpl() extends AISystem {
     val engine = new Prolog()
     engine.setTheory(new Theory(new FileInputStream(prologFile)))
 
-    EntityManager().getEntitiesByClass(classOf[PlayerEntity]) match
+    EntityManager.getEntitiesByClass(classOf[PlayerEntity]) match
     case Nil => // player morto.
     case x =>
       val playerPosition = x.head.getComponent[PositionComponent].get
@@ -32,7 +32,7 @@ private case class AISystemImpl() extends AISystem {
       AItimeElapsedSinceLastExecution += AIexecutionSpeed
 
       if (AItimeElapsedSinceLastExecution >= AIexecutionInterval) {
-        EntityManager()
+        EntityManager
           .getEntitiesWithComponent(classOf[AIComponent])
           .foreach(entity => {
             val enemyPosition = entity.getComponent[PositionComponent].get

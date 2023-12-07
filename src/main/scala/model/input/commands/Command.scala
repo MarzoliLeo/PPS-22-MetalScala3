@@ -74,7 +74,7 @@ object Command:
 
     val bulletPosition = PositionComponent(p.x + vx * 0.1, p.y)
 
-    EntityManager().addEntity {
+    EntityManager.addEntity {
       entity
         .getComponent[BulletComponent]
         .getOrElse(throw new Exception) match {
@@ -140,7 +140,7 @@ object Command:
       case BombAmmoComponent(n) =>
         println(s"Remaining bombs: $n")
         entity.replaceComponent(BombAmmoComponent(n - 1))
-        EntityManager().addEntity {
+        EntityManager.addEntity {
           BombEntity()
             .addComponent(bombPosition)
             .addComponent(VelocityComponent(vx, -model.BOMB_VELOCITY_Y))

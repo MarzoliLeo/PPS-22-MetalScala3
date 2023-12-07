@@ -11,7 +11,7 @@ trait SlugCollisionHandler extends BasicCollisionHandler:
   override protected def handleSpecialCollision(collidingEntity: Option[Entity]): Unit =
     collidingEntity match
       case Some(weaponEntity: WeaponEntity) =>
-        EntityManager().removeEntity(weaponEntity)
+        EntityManager.removeEntity(weaponEntity)
       case Some(_: BoxEntity) =>
         this.replaceComponent(CollisionComponent(true))
         this.replaceComponent(JumpingComponent(false))

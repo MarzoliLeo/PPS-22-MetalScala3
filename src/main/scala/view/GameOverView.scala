@@ -47,7 +47,7 @@ private class GameOverViewImpl(primaryStage: Stage, gameEngine: Engine) extends 
   primaryStage.show()
 
   def handleStartButton(): Unit =
-    val gameView = GameView(primaryStage, Set(EntityManager(), gameEngine), gameEngine)
+    val gameView = GameView(primaryStage, Set(EntityManager, gameEngine), gameEngine)
     createGame(gameEngine)
     primaryStage.getScene.setRoot(gameView)
     gameEngine.start()

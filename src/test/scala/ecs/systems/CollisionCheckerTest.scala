@@ -14,11 +14,8 @@ class CollisionCheckerTest
     extends AnyFlatSpec
     with Matchers
     with BeforeAndAfterEach {
-  var manager: EntityManager = _
-
   override def beforeEach(): Unit =
-    manager = EntityManager()
-    manager.entities.foreach(manager.removeEntity)
+    EntityManager.entities.foreach(EntityManager.removeEntity)
 
   "getCollidingEntity" should "return the colliding entity" in {
     val entity1 = BoxEntity()
@@ -31,8 +28,8 @@ class CollisionCheckerTest
     entity2.addComponent(SizeComponent(10, 10))
     entity2.addComponent(CollisionComponent())
 
-    EntityManager().addEntity(entity1)
-    EntityManager().addEntity(entity2)
+    EntityManager.addEntity(entity1)
+    EntityManager.addEntity(entity2)
 
     val newPosition = PositionComponent(5, 0)
 
@@ -54,8 +51,8 @@ class CollisionCheckerTest
     entity2.addComponent(SizeComponent(10, 10))
     entity2.addComponent(CollisionComponent())
 
-    EntityManager().addEntity(entity1)
-    EntityManager().addEntity(entity2)
+    EntityManager.addEntity(entity1)
+    EntityManager.addEntity(entity2)
 
     val newPosition = PositionComponent(15, 0)
 
@@ -68,7 +65,7 @@ class CollisionCheckerTest
     entity1.addComponent(SizeComponent(10, 10))
     entity1.addComponent(CollisionComponent())
 
-    EntityManager().addEntity(entity1)
+    EntityManager.addEntity(entity1)
 
     val newPosition = PositionComponent(0, 0)
 

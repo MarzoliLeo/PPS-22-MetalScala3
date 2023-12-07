@@ -9,7 +9,7 @@ trait JumpingSystem extends SystemWithoutTime
 private case class JumpingSystemImpl() extends JumpingSystem:
 
   override def update(): Unit =
-    EntityManager()
+    EntityManager
       .getEntitiesWithComponent(
         classOf[JumpingComponent]
       )

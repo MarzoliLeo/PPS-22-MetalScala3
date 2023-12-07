@@ -10,7 +10,7 @@ object CollisionChecker {
       entity: Entity,
       newPosition: PositionComponent
   ): Option[Entity] = {
-    val potentialEntitiesCollisions = EntityManager()
+    val potentialEntitiesCollisions = EntityManager
       .getEntitiesWithComponent(
         classOf[PositionComponent],
         classOf[SizeComponent]

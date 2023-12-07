@@ -18,7 +18,7 @@ trait CreateGameView
     }
     
   def createGame(gameEngine: Engine): Unit =
-    EntityManager()
+    EntityManager
       .addEntity(
         createEntity(
           PlayerEntity(),
@@ -86,14 +86,14 @@ trait CreateGameView
         )
       )
     val randomPositionTupleForGunEntity = generateRandomPosition()
-    EntityManager().addEntity(
+    EntityManager.addEntity(
       createEntity(
         MachineGunEntity(),
         machineGunWeaponComponents(PositionComponent(randomPositionTupleForGunEntity._1, randomPositionTupleForGunEntity._2)): _*
       )
     )
     val randomPositionTupleForAmmoBoxEntity = generateRandomPosition()
-    EntityManager().addEntity(
+    EntityManager.addEntity(
         createEntity(
           AmmoBoxEntity(),
           ammoBoxComponents(PositionComponent(randomPositionTupleForAmmoBoxEntity._1, randomPositionTupleForAmmoBoxEntity._2)): _*
@@ -105,7 +105,7 @@ trait CreateGameView
           slugComponents(PositionComponent(500, 700)): _*
         )
       )
-    SystemManager(EntityManager())
+    SystemManager(EntityManager)
       .addSystem(InputSystem())
       .addSystem(JumpingSystem())
       .addSystem(GravitySystem())

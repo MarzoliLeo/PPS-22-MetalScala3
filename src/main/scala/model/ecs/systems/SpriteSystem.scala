@@ -12,7 +12,7 @@ trait SpriteSystem extends SystemWithoutTime
 private case class SpriteSystemImpl() extends SpriteSystem:
   def update(): Unit =
     // ! FIXME: Throw exceptions when SPRITE ARE NOT FOUND!!!!
-    EntityManager()
+    EntityManager
       .getEntitiesWithComponent(
         classOf[PositionComponent],
         classOf[VelocityComponent],

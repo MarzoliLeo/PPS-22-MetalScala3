@@ -13,7 +13,7 @@ trait PositionUpdateSystem extends SystemWithElapsedTime
 private class PositionUpdateSystemImpl() extends PositionUpdateSystem:
 
   override def update(elapsedTime: Long): Unit =
-    EntityManager()
+    EntityManager
       .getEntitiesWithComponent(
         classOf[PositionComponent],
         classOf[VelocityComponent],

@@ -26,7 +26,7 @@ trait PlayerCollisionHandler extends BasicCollisionHandler:
       case _ =>
 
   private def handleWeaponEntityCollision(weaponEntity: WeaponEntity): Unit = {
-    EntityManager().removeEntity(weaponEntity)
+    EntityManager.removeEntity(weaponEntity)
     this.replaceComponent(SpecialWeaponAmmoComponent(ammoBoxRefill))
     this.replaceComponent(BulletComponent(MachineGunBullet()))
   }
@@ -34,7 +34,7 @@ trait PlayerCollisionHandler extends BasicCollisionHandler:
   private def handleAmmoBoxEntityCollision(
       ammoBoxEntity: AmmoBoxEntity
   ): Unit = {
-    EntityManager().removeEntity(ammoBoxEntity)
+    EntityManager.removeEntity(ammoBoxEntity)
     (
       ammoBoxEntity.getComponent[SpecialWeaponAmmoComponent],
       this.getComponent[BulletComponent],
@@ -78,7 +78,7 @@ trait PlayerCollisionHandler extends BasicCollisionHandler:
   }
 
   private def handleSlugEntityCollision(slugEntity: SlugEntity): Unit = {
-    EntityManager().removeEntity(slugEntity)
+    EntityManager.removeEntity(slugEntity)
     this.addComponent(SlugComponent())
   }
 
