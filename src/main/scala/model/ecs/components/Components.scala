@@ -14,7 +14,6 @@ case class SlugComponent() extends Component
 
 case class BulletComponent(bullet: Bullet) extends Component
 
-
 /** An Entity has this component if it's a trigger
   */
 case class TriggerComponent() extends Component
@@ -36,12 +35,11 @@ case class SizeComponent(width: Double, height: Double) extends Component
 case class PositionComponent(x: Double, y: Double) extends Component:
   def getUpdatedPosition(
       elapsedTime: Long
-  )(using velocity: VelocityComponent): PositionComponent = {
+  )(using velocity: VelocityComponent): PositionComponent =
     val newPositionX = this.x + velocity.x * elapsedTime * 0.001
     val newPositionY = this.y + velocity.y * elapsedTime * 0.001
 
     PositionComponent(newPositionX, newPositionY)
-  }
 
   /** Adds a velocity component to the current position component.
     * @param v
@@ -60,8 +58,8 @@ case class PositionComponent(x: Double, y: Double) extends Component:
   * @param gravity
   *   The gravity value.
   */
-case class GravityComponent(var gravity: Double = model.GRAVITY_VELOCITY) extends Component
-
+case class GravityComponent(var gravity: Double = model.GRAVITY_VELOCITY)
+    extends Component
 
 /** Represents the jumping state of an entity.
   * @param isJumping
@@ -137,4 +135,5 @@ case class VelocityComponent(var x: Double, var y: Double) extends Component:
 
 case class SpecialWeaponAmmoComponent(ammo: Int) extends Component
 case class BombAmmoComponent(ammo: Int) extends Component
-case class CollisionComponent(var isColliding: Boolean = false) extends Component
+case class CollisionComponent(var isColliding: Boolean = false)
+    extends Component

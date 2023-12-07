@@ -36,8 +36,6 @@ trait BasicCollisionHandler extends CollisionHandler:
         currentPosition
       ).y
 
-      println(s"finalX: $finalX, finalY: $finalY")
-
       PositionComponent(
         boundaryCheck(
           finalX,
@@ -73,4 +71,4 @@ trait BasicCollisionHandler extends CollisionHandler:
 
   protected def handleSpecialCollision(
       collidingEntity: Option[Entity]
-  ): Unit = {}
+  ): Unit = ()

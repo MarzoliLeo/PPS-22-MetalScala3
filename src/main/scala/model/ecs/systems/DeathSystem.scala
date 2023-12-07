@@ -12,7 +12,7 @@ private class DeathSystemImpl(engine: Engine) extends DeathSystem:
   override def update(): Unit =
     EntityManager.entities.find(_.isInstanceOf[PlayerEntity]) match
       case Some(entity) if entity.isInstanceOf[PlayerEntity] => //player ancora vivo.
-      case None => engine.stop()
+      case _ => engine.stop()
 
 object DeathSystem:
   def apply(engine: Engine): DeathSystem = DeathSystemImpl(engine)

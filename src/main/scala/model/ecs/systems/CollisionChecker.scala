@@ -9,7 +9,7 @@ object CollisionChecker {
   def getCollidingEntity(
       entity: Entity,
       newPosition: PositionComponent
-  ): Option[Entity] = {
+  ): Option[Entity] =
     val potentialEntitiesCollisions = EntityManager
       .getEntitiesWithComponent(
         classOf[PositionComponent],
@@ -27,7 +27,6 @@ object CollisionChecker {
         )
       case _ => false
     }
-  }
 
   private def isOverlapping(
       pos1: PositionComponent,

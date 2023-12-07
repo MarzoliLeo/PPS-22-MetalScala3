@@ -11,20 +11,18 @@ import model.ecs.systems.CollisionChecker
 trait BulletCollisionHandler extends CollisionHandler:
   self: Entity =>
 
-  private def handleEnemyCollision(enemyEntity: EnemyEntity): Unit = {
+  private def handleEnemyCollision(enemyEntity: EnemyEntity): Unit =
     EntityManager.removeEntity(enemyEntity)
     EntityManager.removeEntity(this)
-  }
 
-  private def handlePlayerCollision(playerEntity: PlayerEntity): Unit = {
+  private def handlePlayerCollision(playerEntity: PlayerEntity): Unit =
     if this.isInstanceOf[EnemyBulletEntity] then
       EntityManager.removeEntity(playerEntity)
       EntityManager.removeEntity(this)
-  }
 
   override def handleCollision(
       proposedPosition: PositionComponent
-  ): Option[PositionComponent] = {
+  ): Option[PositionComponent] =
     val collidingEntity = CollisionChecker
       .getCollidingEntity(this, proposedPosition)
     if collidingEntity.isEmpty && !CollisionChecker.isOutOfHorizontalBoundaries(
@@ -34,8 +32,8 @@ trait BulletCollisionHandler extends CollisionHandler:
     else
       collidingEntity match
         case Some(enemyEntity: EnemyEntity) => handleEnemyCollision(enemyEntity)
-        case Some(playerEntity: PlayerEntity) => handlePlayerCollision(playerEntity)
-        case _ => 
+        case Some(playerEntity: PlayerEntity) =>
+          handlePlayerCollision(playerEntity)
+        case _ =>
           EntityManager.removeEntity(this)
       None
-  }
