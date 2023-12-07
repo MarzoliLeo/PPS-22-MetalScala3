@@ -23,11 +23,10 @@ trait Engine extends GameEngine with Observable[Event]{
 }
 
 object Engine {
-  def apply(): Engine = new EngineImpl()
-  private class EngineImpl() extends Engine {
+  def apply(): Engine = EngineImpl()
+  private case class EngineImpl() extends Engine {
     private val systemManager = SystemManager(EntityManager)
     private val gameLoop = GameLoop(Fps, this)
-    private val deathSystem = DeathSystem(this) // Passa l'istanza di Engine
 
     override def tick(elapsedTime: Long): Unit =
       systemManager.updateAll(elapsedTime)

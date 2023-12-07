@@ -10,7 +10,7 @@ import model.ecs.entities.{Entity, EntityManager}
 
 trait PositionUpdateSystem extends SystemWithElapsedTime
 
-private class PositionUpdateSystemImpl() extends PositionUpdateSystem:
+private case class PositionUpdateSystemImpl() extends PositionUpdateSystem:
   override def update(elapsedTime: Long): Unit =
     EntityManager
       .getEntitiesWithComponent(
@@ -26,9 +26,7 @@ private class PositionUpdateSystemImpl() extends PositionUpdateSystem:
         entity.replaceComponent(getUpdatedVelocity)
 
         val proposedPosition = currentPosition.getUpdatedPosition(elapsedTime)
-        val handledPosition: Option[PositionComponent] =
-          entity.handleCollision(proposedPosition)
-        handledPosition match
+        entity.handleCollision(proposedPosition) match
           case Some(handledPosition) => entity.replaceComponent(handledPosition)
           case None => ()
       )

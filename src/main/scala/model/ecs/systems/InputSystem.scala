@@ -7,7 +7,7 @@ import model.utilities.Empty
 
 trait InputSystem extends SystemWithoutTime
 
-private class InputSystemImpl extends InputSystem:
+private case class InputSystemImpl() extends InputSystem:
   override def update(): Unit =
     EntityManager.getEntitiesWithComponent(classOf[PlayerComponent]).foreach {
       entity =>

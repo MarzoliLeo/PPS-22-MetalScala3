@@ -1,9 +1,9 @@
 package ecs.systems
 
+import model.ecs.collision_handlers.CollisionChecker
 import model.ecs.components.{CollisionComponent, PositionComponent, SizeComponent}
 import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.{Entity, EntityManager}
-import model.ecs.systems.CollisionChecker
 import org.mockito.Mockito
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach

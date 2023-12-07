@@ -5,7 +5,7 @@ import model.ecs.components.*
 import model.ecs.entities.Entity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.PlayerBulletEntity
-import model.ecs.systems.CollisionChecker.{boundaryCheck, getCollidingEntity}
+import CollisionChecker.{boundaryCheck, getCollidingEntity}
 import model.{GRAVITY_VELOCITY, HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
 
 /** The BasicCollisionHandler trait implements collision handling logic for

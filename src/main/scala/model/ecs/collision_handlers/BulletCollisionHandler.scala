@@ -6,7 +6,6 @@ import model.ecs.entities.enemies.EnemyEntity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.EnemyBulletEntity
 import model.ecs.entities.{Entity, EntityManager}
-import model.ecs.systems.CollisionChecker
 
 trait BulletCollisionHandler extends CollisionHandler:
   self: Entity =>

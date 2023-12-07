@@ -8,10 +8,11 @@ import model.event.observer.Observable
 
 trait DeathSystem extends SystemWithoutTime
 
-private class DeathSystemImpl(engine: Engine) extends DeathSystem:
+private case class DeathSystemImpl(engine: Engine) extends DeathSystem:
   override def update(): Unit =
     EntityManager.entities.find(_.isInstanceOf[PlayerEntity]) match
-      case Some(entity) if entity.isInstanceOf[PlayerEntity] => //player ancora vivo.
+      case Some(entity)
+          if entity.isInstanceOf[PlayerEntity] => // player ancora vivo.
       case _ => engine.stop()
 
 object DeathSystem:

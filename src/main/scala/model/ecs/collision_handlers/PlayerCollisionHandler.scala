@@ -9,7 +9,6 @@ import model.ecs.entities.weapons.{
   WeaponEntity
 }
 import model.ecs.entities.{Entity, EntityManager}
-import model.ecs.systems.CollisionChecker
 
 trait PlayerCollisionHandler extends BasicCollisionHandler:
   self: Entity =>

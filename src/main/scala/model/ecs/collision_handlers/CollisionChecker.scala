@@ -1,4 +1,4 @@
-package model.ecs.systems
+package model.ecs.collision_handlers
 
 import model.ecs.components.{PositionComponent, SizeComponent}
 import model.ecs.entities.{Entity, EntityManager}

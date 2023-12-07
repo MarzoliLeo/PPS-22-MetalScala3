@@ -6,7 +6,7 @@ import model.ecs.entities.weapons.{BombEntity, EnemyBulletEntity, PlayerBulletEn
 
 trait BulletMovementSystem extends SystemWithElapsedTime
 
-private class BulletMovementSystemImpl extends BulletMovementSystem:
+private case class BulletMovementSystemImpl() extends BulletMovementSystem:
   override def update(elapsedTime: Long): Unit =
     val playerBullets = EntityManager.getEntitiesByClass(classOf[PlayerBulletEntity])
     val enemyBullets = EntityManager.getEntitiesByClass(classOf[EnemyBulletEntity])
