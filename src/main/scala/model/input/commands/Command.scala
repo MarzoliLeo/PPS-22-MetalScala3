@@ -19,7 +19,7 @@ object Command:
         entity.replaceComponent(JumpingComponent(true))
         entity.replaceComponent(
           CollisionComponent()
-        ) // TODO qua mi funziona ed è l'unica toppa che ho trovato in 6 ore di lavoro.
+        )
       case _ => ()
 
   def left(entity: Entity): Unit =
