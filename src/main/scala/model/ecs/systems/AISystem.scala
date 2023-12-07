@@ -1,6 +1,14 @@
 package model.ecs.systems
 
-import alice.tuprolog.{MalformedGoalException, NoMoreSolutionException, NoSolutionException, Prolog, Struct, Theory, Var}
+import alice.tuprolog.{
+  MalformedGoalException,
+  NoMoreSolutionException,
+  NoSolutionException,
+  Prolog,
+  Struct,
+  Theory,
+  Var
+}
 import javafx.scene.Node
 import model.*
 import model.ecs.components.*
