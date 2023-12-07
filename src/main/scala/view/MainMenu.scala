@@ -43,7 +43,8 @@ private class MainMenuImpl(parentStage: Stage, gameEngine: Engine) extends MainM
   // Gestione dei pulsanti.
   getButton(root, "Start").setOnAction((_: ActionEvent) => handleStartButton())
   getButton(root, "Exit").setOnAction((_: ActionEvent) => handleExitButton())
-  parentStage.setOnCloseRequest((* : WindowEvent) => handleWindowCloseRequest())
+  parentStage.setResizable(false)
+  parentStage.setOnCloseRequest((_ : WindowEvent) => handleWindowCloseRequest())
 
   def handleExitButton(): Unit =
     parentStage.close()
