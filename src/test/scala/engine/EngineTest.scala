@@ -8,11 +8,12 @@ import org.junit.Assert.*
 
 class EngineTest {
 
-  val entityManager: EntityManager = EntityManager()
+  val entityManager: EntityManager = EntityManager
   val systemManager: SystemManager = SystemManager(entityManager)
   val engine: Engine = Engine()
 
-  engine.start()
+  engine.init()
+  
   @Test
   def testStart(): Unit = {
     // Assert engine is running

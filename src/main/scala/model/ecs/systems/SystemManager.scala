@@ -12,7 +12,7 @@ trait SystemManager:
   def removeSystem(system: System): SystemManager
   def updateAll(elapsedTime: Long): Unit
 
-private class SystemManagerImpl(var entityManager: EntityManager)
+private case class SystemManagerImpl(var entityManager: EntityManager)
     extends SystemManager:
   var systems: List[System] = List()
 
@@ -35,7 +35,7 @@ object SystemManager {
 
   def apply(entityManager: EntityManager): SystemManager =
     if (singleton.isEmpty) {
-      singleton = Some(new SystemManagerImpl(entityManager))
+      singleton = Some(SystemManagerImpl(entityManager))
     }
     singleton.get
 }

@@ -10,10 +10,9 @@ import model.ecs.entities.{Entity, EntityManager}
 
 trait PositionUpdateSystem extends SystemWithElapsedTime
 
-private class PositionUpdateSystemImpl() extends PositionUpdateSystem:
-
+private case class PositionUpdateSystemImpl() extends PositionUpdateSystem:
   override def update(elapsedTime: Long): Unit =
-    EntityManager()
+    EntityManager
       .getEntitiesWithComponent(
         classOf[PositionComponent],
         classOf[VelocityComponent],
@@ -22,24 +21,19 @@ private class PositionUpdateSystemImpl() extends PositionUpdateSystem:
       .foreach(entity =>
         given currentPosition: PositionComponent =
           entity.getComponent[PositionComponent].get
-
         given currentVelocity: VelocityComponent =
           entity.getComponent[VelocityComponent].get
-
-        entity.replaceComponent(getUpdatedVelocity(entity))
+        entity.replaceComponent(getUpdatedVelocity)
 
         val proposedPosition = currentPosition.getUpdatedPosition(elapsedTime)
-        val handledPosition: Option[PositionComponent] =
-          entity.handleCollision(proposedPosition)
-        handledPosition match
+        entity.handleCollision(proposedPosition) match
           case Some(handledPosition) => entity.replaceComponent(handledPosition)
-          // keep the current position
           case None => ()
       )
 
-  private def getUpdatedVelocity(
-      entity: Entity
-  )(using velocity: VelocityComponent): VelocityComponent = {
+  private def getUpdatedVelocity(using
+      velocity: VelocityComponent
+  ): VelocityComponent = {
     val newHorizontalVelocity = velocity.x * FRICTION_FACTOR match
       case x if -0.1 < x && x < 0.1 => 0.0
       case x                        => x

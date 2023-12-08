@@ -6,7 +6,7 @@ import model.Fps
 import model.ecs.components.PositionComponent
 import model.ecs.entities.EntityManager
 import model.ecs.entities.player.PlayerEntity
-import model.ecs.systems.SystemManager
+import model.ecs.systems.{AISystem, DeathSystem, SystemManager}
 import model.event.Event
 import model.event.Event.Tick
 import model.event.observer.Observable
@@ -22,18 +22,16 @@ trait Engine extends GameEngine with Observable[Event]{
 }
 
 object Engine {
-  def apply(): Engine = new EngineImpl()
-  private class EngineImpl() extends Engine {
-    private val systemManager = SystemManager(EntityManager())
+  def apply(): Engine = EngineImpl()
+  private case class EngineImpl() extends Engine {
+    private val systemManager = SystemManager(EntityManager)
     private val gameLoop = GameLoop(Fps, this)
 
-    // TODO: delete debug print
     override def tick(elapsedTime: Long): Unit =
       systemManager.updateAll(elapsedTime)
-      notifyObservers(Tick(EntityManager().entities))
+      notifyObservers(Tick(EntityManager.entities))
 
     override def start(): Unit = {
-      // init()
       gameLoop.status match {
         case Stopped =>
           gameLoop.start() // .start() its because gameloop is a thread.
@@ -44,13 +42,16 @@ object Engine {
     override def stop(): Unit = {
       gameLoop.halt()
     }
+
+    //TODO sono inutili per ora.
     override def pause(): Unit =
       gameLoop.pause()
+
     override def resume(): Unit =
       gameLoop.unPause()
 
     // Method for testing purposes
-    def getStatus(): GameStatus = gameLoop.status
+    override def getStatus(): GameStatus = gameLoop.status
 
   }
 }

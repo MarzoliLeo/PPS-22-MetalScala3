@@ -1,6 +1,7 @@
 import model.ecs.components.*
 import model.ecs.entities.Entity
 import model.utilities.{Cons, Empty, Stack}
+import model.{HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE, s_MarcoRossi}
 
 package object model:
   // Game
@@ -16,9 +17,11 @@ package object model:
   val BULLET_VELOCITY = 1000
   val GRAVITY_VELOCITY = 0.5
   val CLUTCHFACTOR = 15
+  val BOMB_VELOCITY_Y = 400
+  val BOMB_VELOCITY_X = 50
+
   var isGravityEnabled = true
   var isCrouching = true
-  
 
   val VERTICAL_COLLISION_SIZE = 100
   val HORIZONTAL_COLLISION_SIZE = 100
@@ -49,6 +52,10 @@ package object model:
   val s_GameBackground = "sprites/Background1230x700.png"
   val s_Slug = "sprites/Slug.png"
   val s_AmmoBox = "sprites/Munitions.png"
+  val s_Bomb = "sprites/Bomb.png"
+
+  var randomPositions: List[(Int, Int)] =
+    List((750, 50), (400, 300), (500, 200), (1000, 400))
 
   // Components
   private val defaultComponents: Seq[Component] = Seq(
@@ -77,7 +84,8 @@ package object model:
       SpriteComponent(s_MarcoRossi),
       GravityComponent(),
       BulletComponent(StandardBullet()),
-      AmmoComponent(ammoBoxRefill),
+      SpecialWeaponAmmoComponent(ammoBoxRefill),
+      BombAmmoComponent(ammoBoxRefill),
       JumpingComponent(false)
     )
 
@@ -100,7 +108,7 @@ package object model:
     createComponents(
       pos,
       SpriteComponent(s_AmmoBox),
-      AmmoComponent(ammoBoxRefill)
+      SpecialWeaponAmmoComponent(ammoBoxRefill)
     )
 
   val slugComponents: PositionComponent => Seq[Component] = pos =>

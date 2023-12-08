@@ -10,7 +10,7 @@ trait EnemyCollisionHandler extends BasicCollisionHandler:
   self: Entity =>
   override protected def handleSpecialCollision(collidingEntity: Option[Entity]): Unit =
     collidingEntity match
-      case Some(boxEntity: BoxEntity) =>
+      case Some(_: BoxEntity) =>
         this.replaceComponent(CollisionComponent(true))
         this.replaceComponent(JumpingComponent(false))
       case _ => ()

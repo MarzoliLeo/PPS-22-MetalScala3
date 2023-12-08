@@ -12,7 +12,7 @@ trait SpriteSystem extends SystemWithoutTime
 private case class SpriteSystemImpl() extends SpriteSystem:
   def update(): Unit =
     // ! FIXME: Throw exceptions when SPRITE ARE NOT FOUND!!!!
-    EntityManager()
+    EntityManager
       .getEntitiesWithComponent(
         classOf[PositionComponent],
         classOf[VelocityComponent],
@@ -48,7 +48,6 @@ private case class SpriteSystemImpl() extends SpriteSystem:
               .getOrElse(throw new Exception("BulletComponent not found"))
               .bullet match
               case _: MachineGunBullet =>
-                println("MachineGunBullet")
                 playerBulletEntity.replaceComponent(
                   SpriteComponent(model.s_BigBullet)
                 )
@@ -59,20 +58,7 @@ private case class SpriteSystemImpl() extends SpriteSystem:
               case _ =>
                 throw new Exception("Type of bullet not managed")
 
-          case enemyBulletEntity: EnemyBulletEntity =>
-            enemyBulletEntity.replaceComponent(
-              SpriteComponent(model.s_BigBullet)
-            )
-
-          case slug: SlugEntity =>
-            slug.replaceComponent(SpriteComponent(model.s_Slug))
-
-          case machineGunEntity: MachineGunEntity =>
-            machineGunEntity.replaceComponent(SpriteComponent(model.s_Weapon_H))
-
-          case boxEntity: BoxEntity =>
-            boxEntity.replaceComponent(SpriteComponent(model.s_Box))
-
+            
           case enemyEntity: EnemyEntity =>
             val sprite = summon[VelocityComponent] match {
               case VelocityComponent(0, 0)           => model.s_EnemyCrab
@@ -80,11 +66,8 @@ private case class SpriteSystemImpl() extends SpriteSystem:
               case _                                 => model.s_EnemyCrab
             }
             enemyEntity.replaceComponent(SpriteComponent(sprite))
-
-          case ammoBoxEntity: AmmoBoxEntity =>
-            ammoBoxEntity.replaceComponent(SpriteComponent(model.s_AmmoBox))
-
-          case _ => throw new Exception("Entity not managed")
+            
+          case _ => 
         }
       }
 

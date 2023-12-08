@@ -5,7 +5,7 @@ import model.ecs.components.*
 import model.ecs.entities.Entity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.PlayerBulletEntity
-import model.ecs.systems.CollisionChecker.{boundaryCheck, getCollidingEntity}
+import CollisionChecker.{boundaryCheck, getCollidingEntity}
 import model.{GRAVITY_VELOCITY, HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SIZE}
 
 /** The BasicCollisionHandler trait implements collision handling logic for
@@ -14,6 +14,40 @@ import model.{GRAVITY_VELOCITY, HORIZONTAL_COLLISION_SIZE, VERTICAL_COLLISION_SI
   */
 trait BasicCollisionHandler extends CollisionHandler:
   self: Entity =>
+
+  def handleCollision(
+      proposedPosition: PositionComponent
+  ): Option[PositionComponent] =
+    for
+      currentPosition <- getComponent[PositionComponent]
+      _ <- getComponent[VelocityComponent]
+      sizeComponent <- getComponent[SizeComponent]
+    yield
+      handleSpecialCollision {
+        getCollidingEntity(this, proposedPosition)
+      }
+
+      val finalX = getFinalPosition(
+        PositionComponent(proposedPosition.x, currentPosition.y),
+        currentPosition
+      ).x
+      val finalY = getFinalPosition(
+        PositionComponent(currentPosition.x, proposedPosition.y),
+        currentPosition
+      ).y
+
+      PositionComponent(
+        boundaryCheck(
+          finalX,
+          model.GUIWIDTH,
+          sizeComponent.width
+        ),
+        boundaryCheck(
+          finalY,
+          model.GUIHEIGHT,
+          sizeComponent.height
+        )
+      )
 
   /** Returns the final position based on the proposed position and the current
     * position.
@@ -31,43 +65,10 @@ trait BasicCollisionHandler extends CollisionHandler:
       proposedPosition: PositionComponent,
       currentPosition: PositionComponent
   ): PositionComponent =
-    val maybeEntity = getCollidingEntity(this, proposedPosition)
-    if this.isInstanceOf[PlayerBulletEntity] && maybeEntity.isDefined then
-      proposedPosition // Make the bullet go through without collision handling
-    else maybeEntity.fold(proposedPosition)(_ => currentPosition)
-
+    getCollidingEntity(this, proposedPosition).fold(proposedPosition)(_ =>
+      currentPosition
+    )
 
   protected def handleSpecialCollision(
       collidingEntity: Option[Entity]
-  ): Unit = {}
-
-  def handleCollision(
-      proposedPosition: PositionComponent
-  ): Option[PositionComponent] =
-    for
-      currentPosition <- getComponent[PositionComponent]
-      _ <- getComponent[VelocityComponent]
-      sizeComponent <- getComponent[SizeComponent]
-    yield
-      handleSpecialCollision {
-        getCollidingEntity(this, proposedPosition)
-      }
-
-      PositionComponent(
-        boundaryCheck(
-          getFinalPosition(
-            PositionComponent(proposedPosition.x, currentPosition.y),
-            currentPosition
-          ).x,
-          model.GUIWIDTH,
-          sizeComponent.width
-        ),
-        boundaryCheck(
-          getFinalPosition(
-            PositionComponent(currentPosition.x, proposedPosition.y),
-            currentPosition
-          ).y,
-          model.GUIHEIGHT,
-          sizeComponent.height
-        )
-      )
+  ): Unit = ()
