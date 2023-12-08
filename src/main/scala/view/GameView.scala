@@ -84,65 +84,102 @@ private class GameViewImpl(
   primaryStage.setScene(scene)
   observables.foreach(_.addObserver(this))
 
-  override def update(subject: Event): Unit =
-    Platform.runLater { () =>
-      subject match
-        case Tick(entities) =>
-          entityIdToView.foreach((_, view) =>
-            root.getChildren.remove(view)
-          ) // Reset delle entità di ECS.
-          entityIdToView =
-            Map() // Solo per il reset delle entità che vengono rimosse (in questo caso Bullet).
-          entities.foreach(entity =>
-            if entity.hasComponent(classOf[PositionComponent])
-              && entity.hasComponent(classOf[SpriteComponent])
-              && entity.hasComponent(classOf[DirectionComponent])
-            then
-              val position = entity
-                .getComponent[PositionComponent]
-                .get
-              val sprite = entity
-                .getComponent[SpriteComponent]
-                .get
-              val direction = entity.getComponent[DirectionComponent].get
+  override def update(subject: Event): Unit = Platform.runLater { () =>
+    subject match
+      case Tick(entities) =>
+        resetEntities()
+        processEntities(entities)
+        addSpritesToRoot()
+      case _ => ()
+  }
 
-              entity match
-                case playerEntity: PlayerEntity =>
-                  playerEntity.getComponent[SpecialWeaponAmmoComponent] match
-                    case Some(ammoComponent) =>
-                      val ammo = ammoComponent.ammo
-                      ammoText.setText(s"Ammo: $ammo")
-                    case None => ammoText.setText("Ammo: 0")
-                  playerEntity.getComponent[BombAmmoComponent] match
-                    case Some(ammoComponent) =>
-                      val ammo = ammoComponent.ammo
-                      bombText.setText(s"Bomb: $ammo")
-                    case None => bombText.setText("Bomb: 0")
-                case _ => ()
+  /** Resets all entities by removing them from the root node and clearing the
+    * entity map.
+    */
+  private def resetEntities(): Unit = {
+    entityIdToView.values.foreach(root.getChildren.remove)
+    entityIdToView = Map()
+  }
 
-              entityIdToView = entityIdToView + (entity.id -> createSpriteView(
-                sprite,
-                position
-              ))
-              val entityToShow = entityIdToView(entity.id)
-              entityToShow.setTranslateX(position.x)
-              entityToShow.setTranslateY(position.y)
-              direction.d match
-                case RIGHT =>
-                  entityToShow.setScaleX(1)
-                case LEFT =>
-                  entityToShow.setScaleX(-1)
-
-              if entity.isInstanceOf[EnemyBulletEntity] then
-                direction.d match
-                  case RIGHT =>
-                    entityToShow.setScaleX(-1)
-                  case LEFT =>
-                    entityToShow.setScaleX(1)
-          )
-          entityIdToView.foreach((_, view) => root.getChildren.add(view))
+  /** Process the given entities by performing certain operations on them.
+    *
+    * @param entities
+    *   the sequence of entities to be processed
+    */
+  private def processEntities(entities: Seq[Entity]): Unit = {
+    entities.foreach { entity =>
+      (
+        entity.getComponent[PositionComponent],
+        entity.getComponent[SpriteComponent],
+        entity.getComponent[DirectionComponent]
+      ) match
+        case (Some(position), Some(sprite), Some(direction)) =>
+          processEntity(entity)
+          renderSpriteView(entity, sprite, position, direction)
+        case _ => ()
     }
+  }
 
+  /** Processes a entity according to the type of entity.
+    *
+    * @param entity
+    *   The entity to process.
+    */
+  private def processEntity(entity: Entity): Unit = {
+    entity match
+      case playerEntity: PlayerEntity =>
+        val ammoTextValue = playerEntity
+          .getComponent[SpecialWeaponAmmoComponent]
+          .map(c => s"Ammo: ${c.ammo}")
+          .getOrElse("Ammo: 0")
+        ammoText.setText(ammoTextValue)
+        val bombTextValue = playerEntity
+          .getComponent[BombAmmoComponent]
+          .map(c => s"Bomb: ${c.ammo}")
+          .getOrElse("Bomb: 0")
+        bombText.setText(bombTextValue)
+      case _ => ()
+  }
+
+  /** Private method for working with a sprite view.
+    *
+    * @param entity
+    *   The entity being worked on.
+    * @param sprite
+    *   The sprite component of the entity.
+    * @param position
+    *   The position component of the entity.
+    * @param direction
+    *   The direction component of the entity.
+    */
+  private def renderSpriteView(
+      entity: Entity,
+      sprite: SpriteComponent,
+      position: PositionComponent,
+      direction: DirectionComponent
+  ): Unit = {
+    val spriteView = createSpriteView(sprite, position)
+    entityIdToView += (entity.id -> spriteView)
+    spriteView.setTranslateX(position.x)
+    spriteView.setTranslateY(position.y)
+    val scaleXValue = direction.d match
+      case RIGHT if entity.isInstanceOf[EnemyBulletEntity] => -1
+      case LEFT if entity.isInstanceOf[EnemyBulletEntity]  => 1
+      case RIGHT                                           => 1
+      case LEFT                                            => -1
+    spriteView.setScaleX(scaleXValue)
+  }
+
+  /** Creates a sprite view using the provided sprite component and position
+    * component.
+    *
+    * @param spriteComponent
+    *   The sprite component containing the sprite path.
+    * @param position
+    *   The position component containing the x and y coordinates.
+    * @return
+    *   The created sprite view as a Node.
+    */
   private def createSpriteView(
       spriteComponent: SpriteComponent,
       position: PositionComponent
@@ -156,6 +193,26 @@ private class GameViewImpl(
     imageView
   }
 
+  /** Adds all the sprites to the root node.
+    *
+    * This method iterates through each value in `entityIdToView` map and adds
+    * the corresponding view node to the root node.
+    *
+    * @since 1.0.0
+    */
+  private def addSpritesToRoot(): Unit = {
+    entityIdToView.values.foreach(root.getChildren.add)
+  }
+
+  /** Creates a new Text object at the given coordinates.
+    *
+    * @param x
+    *   The x-coordinate of the Text object.
+    * @param y
+    *   The y-coordinate of the Text object.
+    * @return
+    *   The newly created Text object.
+    */
   private def createText(x: Double, y: Double): Text = {
     val text = Text()
     text.setFont(Font.font("Arial", 20))
@@ -170,6 +227,7 @@ private class GameViewImpl(
 object GameView {
   def apply(
       primaryStage: Stage,
-      observables: Set[Observable[Event]]): GameView =
+      observables: Set[Observable[Event]]
+  ): GameView =
     new GameViewImpl(primaryStage, observables)
 }

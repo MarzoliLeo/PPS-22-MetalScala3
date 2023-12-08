@@ -133,7 +133,8 @@ case class VelocityComponent(var x: Double, var y: Double) extends Component:
     */
   override def toString: String = s"VelocityComponent($x,$y)"
 
-case class SpecialWeaponAmmoComponent(ammo: Int) extends Component
-case class BombAmmoComponent(ammo: Int) extends Component
+trait AmmoComponent(ammo: Int) extends Component
+case class SpecialWeaponAmmoComponent(ammo: Int) extends AmmoComponent(ammo)
+case class BombAmmoComponent(ammo: Int) extends AmmoComponent(ammo)
 case class CollisionComponent(var isColliding: Boolean = false)
     extends Component
