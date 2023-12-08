@@ -27,8 +27,12 @@ import java.util.UUID
 
 trait GameView extends View
 
-private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Event]], gameEngine: Engine)
-  extends GameView with CommandsStackHandler with Observer[Event] {
+private class GameViewImpl(
+    primaryStage: Stage,
+    observables: Set[Observable[Event]]
+) extends GameView
+    with CommandsStackHandler
+    with Observer[Event] {
 
   val root: Pane = Pane()
 
@@ -36,7 +40,6 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
   private val ammoText: Text = createText(10, 30)
   // Create the bomb text
   private val bombText: Text = createText(10, 60)
-
   // Creazione della scena di gioco (Diversa da quella del Menù).
   private val scene: Scene = Scene(root, model.GUIWIDTH, model.GUIHEIGHT)
 
@@ -85,8 +88,11 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
     Platform.runLater { () =>
       subject match
         case Tick(entities) =>
-          entityIdToView.foreach((_, view) => root.getChildren.remove(view)) // Reset delle entità di ECS.
-          entityIdToView = Map() // Solo per il reset delle entità che vengono rimosse (in questo caso Bullet).
+          entityIdToView.foreach((_, view) =>
+            root.getChildren.remove(view)
+          ) // Reset delle entità di ECS.
+          entityIdToView =
+            Map() // Solo per il reset delle entità che vengono rimosse (in questo caso Bullet).
           entities.foreach(entity =>
             if entity.hasComponent(classOf[PositionComponent])
               && entity.hasComponent(classOf[SpriteComponent])
@@ -100,8 +106,8 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
                 .get
               val direction = entity.getComponent[DirectionComponent].get
 
-              entities.find(_.isInstanceOf[PlayerEntity]).foreach {
-                playerEntity =>
+              entity match
+                case playerEntity: PlayerEntity =>
                   playerEntity.getComponent[SpecialWeaponAmmoComponent] match
                     case Some(ammoComponent) =>
                       val ammo = ammoComponent.ammo
@@ -112,7 +118,7 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
                       val ammo = ammoComponent.ammo
                       bombText.setText(s"Bomb: $ammo")
                     case None => bombText.setText("Bomb: 0")
-              }
+                case _ => ()
 
               entityIdToView = entityIdToView + (entity.id -> createSpriteView(
                 sprite,
@@ -135,7 +141,6 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
                     entityToShow.setScaleX(1)
           )
           entityIdToView.foreach((_, view) => root.getChildren.add(view))
-
     }
 
   private def createSpriteView(
@@ -165,8 +170,6 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
 object GameView {
   def apply(
       primaryStage: Stage,
-      observables: Set[Observable[Event]],
-      gameEngine: Engine
-  ): GameView =
-    new GameViewImpl(primaryStage, observables, gameEngine)
+      observables: Set[Observable[Event]]): GameView =
+    new GameViewImpl(primaryStage, observables)
 }
