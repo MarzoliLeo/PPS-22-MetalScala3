@@ -6,14 +6,13 @@ import model.Fps
 import model.ecs.components.PositionComponent
 import model.ecs.entities.EntityManager
 import model.ecs.entities.player.PlayerEntity
-import model.ecs.systems.{DeathSystem, SystemManager}
+import model.ecs.systems.{AISystem, DeathSystem, SystemManager}
 import model.event.Event
-import model.event.Event.{GameOver, Tick}
+import model.event.Event.Tick
 import model.event.observer.Observable
 import view.MainMenu
 
 trait Engine extends GameEngine with Observable[Event]{
-  def init(): Unit
   def start(): Unit
   def stop(): Unit
   def pause(): Unit
@@ -32,7 +31,7 @@ object Engine {
       systemManager.updateAll(elapsedTime)
       notifyObservers(Tick(EntityManager.entities))
 
-    override def init(): Unit = {
+    override def start(): Unit = {
       gameLoop.status match {
         case Stopped =>
           gameLoop.start() // .start() its because gameloop is a thread.
@@ -40,14 +39,8 @@ object Engine {
       }
     }
 
-
-    override def start(): Unit = {
-      gameLoop.unPause() // Riprendi il ciclo di gioco
-    }
-
     override def stop(): Unit = {
-      notifyObservers(GameOver())
-      gameLoop.pause()
+      gameLoop.halt()
     }
 
     //TODO sono inutili per ora.

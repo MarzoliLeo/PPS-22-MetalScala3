@@ -136,15 +136,6 @@ private class GameViewImpl(primaryStage: Stage, observables: Set[Observable[Even
           )
           entityIdToView.foreach((_, view) => root.getChildren.add(view))
 
-        case GameOver() =>
-          var entityIdToView: Map[UUID, Node] = Map()
-          entityIdToView.foreach((_, view) => root.getChildren.remove(view)) // Reset delle entità di ECS.
-          entityIdToView = Map() // Solo per il reset delle entità che vengono rimosse (in questo caso Bullet).
-          primaryStage.close()
-          print("Sono morto e ho generato l'evento")
-          GameOverView(new Stage, gameEngine)
-
-
     }
 
   private def createSpriteView(
