@@ -1,6 +1,5 @@
-# Introduzione
-
 ![Logo](./img/MetalSlug3Doc.png)
+# Introduzione
 
 L'obiettivo del progetto è la realizzazione di un clone del gioco Metal Slug 3, famoso platformer degli anni 2000.
 
