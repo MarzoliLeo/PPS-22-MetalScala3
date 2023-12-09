@@ -4,11 +4,17 @@ import model.ecs.components.PositionComponent
 import model.ecs.entities.Entity
 import model.ecs.entities.player.PlayerEntity
 import org.scalatest.Assertions.*
+import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class EntityTest extends AnyFunSuite {
+class EntityTest extends AnyFunSuite with Matchers with BeforeAndAfter{
 
-  val player: Entity = PlayerEntity().addComponent(PositionComponent(0, 0))
+  var player: Entity = _
+
+  before {
+    player = PlayerEntity().addComponent(PositionComponent(0, 0))
+  }
 
   test("entity has position component") {
     assert(player.hasComponent(classOf[PositionComponent]))

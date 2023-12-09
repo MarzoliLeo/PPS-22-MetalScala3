@@ -72,7 +72,7 @@ object Command:
         }
     }
 
-    val bulletPosition = PositionComponent(p.x + vx * 0.1, p.y)
+    val bulletPosition = PositionComponent(p.x + vx * 0.001, p.y)
 
     EntityManager.addEntity {
       entity

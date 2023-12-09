@@ -1,35 +1,48 @@
 package ecs.systems
 
 import model.ecs.entities.EntityManager
+import model.ecs.systems.{SystemManager, SystemWithElapsedTime, SystemWithoutTime}
+import org.scalatest.BeforeAndAfterEach
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import org.mockito.Mockito._
-/*
-class SystemManagerTest extends AnyFlatSpec with Matchers {
-  "A SystemManager" should "be able to add and remove a system" in {
-    val entityManager = mock(classOf[EntityManager])
-    val systemManager = SystemManager(entityManager)
-    val system1 = PlayerMovementSystem()
 
-    systemManager.addSystem(system1)
-    systemManager.systems should contain (system1)
+// Define your concrete implementations of Systems
+object TestSystemWithoutTime extends SystemWithoutTime {
+  def update(): Unit = ???
+}
 
-    systemManager.removeSystem(system1)
-    systemManager.systems should not contain system1
+object TestSystemWithElapsedTime extends SystemWithElapsedTime {
+  def update(elapsedTime: Long): Unit = ???
+}
+
+class SystemManagerTest extends AnyFlatSpec with Matchers with BeforeAndAfterEach {
+
+  var manager: SystemManager = _
+
+  override def beforeEach(): Unit = {
+    manager = SystemManager(EntityManager)
+    super.beforeEach() // To be stackable, must call super.beforeEach()
   }
 
-  it should "call update on all systems when updateAll is called" in {
-    val entityManager = mock(classOf[EntityManager])
-    val systemManager = SystemManager(entityManager)
-    val system1 = mock(classOf[System])
-    val system2 = mock(classOf[System])
-
-    systemManager.addSystem(system1)
-    systemManager.addSystem(system2)
-
-    systemManager.updateAll()
-
-    verify(system1).update(entityManager)
-    verify(system2).update(entityManager)
+  "A SystemManager" should "add a system without time" in {
+    manager.addSystem(TestSystemWithoutTime)
+    manager.systems should contain(TestSystemWithoutTime)
   }
-}*/
+
+  it should "add a system with elapsed time" in {
+    manager.addSystem(TestSystemWithElapsedTime)
+    manager.systems should contain(TestSystemWithElapsedTime)
+  }
+
+  it should "remove a system without time" in {
+    manager.addSystem(TestSystemWithoutTime)
+    manager.removeSystem(TestSystemWithoutTime)
+    manager.systems should not contain(TestSystemWithoutTime)
+  }
+
+  it should "remove a system with elapsed time" in {
+    manager.addSystem(TestSystemWithElapsedTime)
+    manager.removeSystem(TestSystemWithElapsedTime)
+    manager.systems should not contain(TestSystemWithElapsedTime)
+  }
+}
