@@ -1,9 +1,0 @@
-[book]
-title = "Metal Scala 3"
-authors = ["Leo Marzoli, Lorenzo Massone, Giacomo Romagnoli"]
-language = "it"
-multilingual = true
-src = "src"
-
-[output.html]
-mathjax-support = true
