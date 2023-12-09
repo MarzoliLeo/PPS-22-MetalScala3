@@ -1,3 +1,5 @@
 # File di configurazione per Jkelly in modo da dare un Tema alle github pages.
 * @Leo-Marzoli @Lorenzo-Massone @Giacomo-Romagnoli
-theme: jekyll-theme-minimal
+remote_theme: pages-themes/minimal@v0.2.0
+plugins:
+- jekyll-remote-theme # add this line to the plugins list if you already have one
