@@ -21,6 +21,10 @@ class PositionUpdateSystemTest
   override def beforeEach(): Unit = {
     positionUpdateSystem = PositionUpdateSystem()
     entity = BoxEntity()
+
+    // Empty the EntityManager
+    EntityManager.entities.foreach(EntityManager.removeEntity)
+
     EntityManager.addEntity(entity)
     entity.addComponent(startingPosition)
   }

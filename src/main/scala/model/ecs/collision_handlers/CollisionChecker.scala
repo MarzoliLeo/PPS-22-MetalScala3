@@ -4,6 +4,9 @@ import model.ecs.components.{PositionComponent, SizeComponent}
 import model.ecs.entities.{Entity, EntityManager}
 import model.{GUIWIDTH, HORIZONTAL_COLLISION_SIZE}
 
+/** The CollisionChecker object provides methods for checking collisions between
+  * entities and performing boundary checks.
+  */
 object CollisionChecker {
 
   def getCollidingEntity(

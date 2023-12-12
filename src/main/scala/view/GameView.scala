@@ -27,7 +27,7 @@ import java.util.UUID
 
 trait GameView extends View
 
-private class GameViewImpl(
+private class GameViewImpl( 
     primaryStage: Stage,
     observables: Set[Observable[Event]]
 ) extends GameView
