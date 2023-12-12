@@ -10,8 +10,13 @@ Il gioco consiste nel guidare un soldato, con una pistola e 10 bombe a mano nell
  Completare la missione assegnata terminando con una vittoria.
 
 # Link alle pagine della repo.
-* [Requirements](./requirements.md).
-
+1. [Processo di sviluppo](./processo_di sviluppo/processo_di sviluppo.md).
+2. [Requisiti](./requisiti/requisiti.md).
+3. [Design architetturale](./design_architetturale/design_architetturale.md).
+4. [Design di dettaglio](./design_di_dettaglio/design_di_dettaglio.md).
+5. [Implementazione](./implementazione/implementazione.md).
+6. [Restrospettiva](./restrospettiva/restrospettiva.md).
+   
 ## Contributors
 
 - [Leo Marzoli](#)
