@@ -10,7 +10,7 @@ Il gioco consiste nel guidare un soldato, con una pistola e 10 bombe a mano nell
  Completare la missione assegnata terminando con una vittoria.
 
 # Link alle pagine della repo.
-[Link to another page](./another-page.html).
+* [Requirements](./requirements.md).
 
 ## Contributors
 
