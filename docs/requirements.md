@@ -7,8 +7,8 @@ e ottenere power up che forniscono nuove armi o munizioni. Inoltre il gioco prev
 per farsi largo fino al traguardo.
 Di seguito verranno riportati i requisiti emersi dalla fase di analisi divisi per categorie, che comprenderanno il sottoinsieme del dominio che si intende reimplementare.
 
-Requisiti funzionali
-  Utente
+## Requisiti funzionali
+  ### Utente
     Le meccaniche scelte come sottoinsieme rappresentativo del dominio sono:
       - Salto
       - Arrampicata su piattaforme
@@ -18,4 +18,4 @@ Requisiti funzionali
       - Raccolta di munizioni
       - Raccolta di armi
       - Utilizzare uno Slug
-  Sistema
+  ### Sistema
