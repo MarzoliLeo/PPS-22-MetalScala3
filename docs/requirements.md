@@ -1,4 +1,4 @@
-Modello di Dominio
+# Modello di Dominio
 
 Il team ha scelto di realizzare un clone del famoso titolo da sala giochi "Metal Slug 3", implementando un sottoinsieme significativo di funzionalità tipiche del gioco.
 Nel platformer originale il giocatore pilota un soldato attraverso diversi livelli e viene ostacolato da svariati nemici, ai quali può sparare col fine di ucciderli e proseguire.
