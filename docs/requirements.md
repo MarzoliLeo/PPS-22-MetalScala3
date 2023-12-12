@@ -10,12 +10,12 @@ Di seguito verranno riportati i requisiti emersi dalla fase di analisi divisi pe
 ## Requisiti funzionali
   ### Utente
     Le meccaniche scelte come sottoinsieme rappresentativo del dominio sono:
-      - Salto
-      - Arrampicata su piattaforme
-      - Accovacciarsi
-      - Sparare
-      - Lanciare bombe
-      - Raccolta di munizioni
-      - Raccolta di armi
-      - Utilizzare uno Slug
+      * Salto
+      * Arrampicata su piattaforme
+      * Accovacciarsi
+      * Sparare
+      * Lanciare bombe
+      * Raccolta di munizioni
+      * Raccolta di armi
+      * Utilizzare uno Slug
   ### Sistema
