@@ -2,7 +2,7 @@
  Il gruppo ha adottato una metodologia agile per lo sviluppo del progetto. L'intenzione è stata di adottare una forma di scrum meno stringente, così da permettere al team di adattarsi alle difficoltà e agli imprevisti,
  senza però penalizzare l'organizzazione del lavoro. Come strumenti per agevolare la coordinazione citiamo:
  * Git
- * GiuHub
+ * GitHub
  * Trello
  * IntelliJ (code with me)
    
