@@ -10,7 +10,7 @@ Breve spiegazione dell'immagine:
 * **Engine**: rappresenta il cuore del gioco; incapsula il flusso di controllo principale e tramite ECS calcola continuamente il nuovo ambiente.
 
 ## Pattern architetturali utilizzati
-### 1. ECS
+###  ECS
 Trattandosi dello sviluppo di un videogioco, per il quale è necessario creare un motore di gioco, è stato scelto di utilizzare il pattern architetturale **Entity Component System** (ECS). Questo pattern è largamente utilizzato nello sviluppo di videogiochi per motivi di performance e per la sua estensibilità e manutenibilità.
 Si compone di tre parti principali:
 * **Entità**: rappresentano gli elementi in gioco, ad esempio player, enemy, slug. Ad ogni entità vengono associati uno o più componenti.
