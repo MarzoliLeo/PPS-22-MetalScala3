@@ -1,6 +1,6 @@
 # Design Architetturale
 ## Architettura complessiva
-Dopo un’attenta analisi dei requisiti, si è proceduto con la fase di design architetturale la seguente immagine definisce il core dell’architettura generale implementata.
+Dopo un’attenta analisi dei requisiti, si è proceduto con la fase di design architetturale. La seguente immagine definisce il core dell’architettura generale implementata.
 
 ![Architettura di Sistema.](../img/ArchitetturaPPS.png)
 
