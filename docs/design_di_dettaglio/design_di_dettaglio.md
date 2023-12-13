@@ -15,6 +15,11 @@ All'interno del nostro pattern ECS si è scelto la disposizione di due Manager:
  1. **Entity Manager**: è responsabile della gestione delle entità nel sistema. Ha la capacità di creare nuove entità, recuperare entità esistenti, e rimuovere entità. Inoltre, tiene traccia di un identificatore univoco per ciascuna entità, garantendo la distinzione tra di esse.
  2. **System Manager**: si occupa della gestione dei sistemi nel sistema ECS. Può aggiungere e rimuovere sistemi, oltre a coordinare l'aggiornamento di tutti i sistemi. In questo contesto, un "sistema" è responsabile dell'elaborazione dei dati delle entità. La funzione update_systems richiama l'aggiornamento di ciascun sistema, consentendo loro di operare sui dati delle entità.
 
+Di seguito viene riportata una rappresentazione tramite diagramma delle classi della nostra implementazione del pattern ECS.
+![ECS Class Diagram](../img/ECSDiagram.png)
+
+Ciò che si può notare oltre alle entità precedentemente descritte è la scelta progettuale effettuata per la gestione delle componenti la quale avviene all'interno del trait Entity. Questo perché abbiamo scelto di gestire le componenti in maniera immutabile andando a rimpiazzare le componenti ad ogni frame di gioco.
+
 ## organizzazione del codice -- corredato da pochi ma efficaci diagrammi)
 
 
