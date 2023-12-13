@@ -20,7 +20,32 @@ Di seguito viene riportata una rappresentazione tramite diagramma delle classi d
 
 Ciò che si può notare oltre alle entità precedentemente descritte è la scelta progettuale effettuata per la gestione delle componenti la quale avviene all'interno del trait Entity. Questo perché abbiamo scelto di gestire le componenti in maniera immutabile andando a rimpiazzare le componenti ad ogni frame di gioco.
 
-Per quanto riguarda la creazione delle componenti si fornisce il seguente diagramma delle classi: 
+Per quanto riguarda la creazione delle componenti si fornisce il seguente diagramma delle classi:
+![Componenti di ECS](../img/Componenti.png)
+
+Dovendo descrivere brevemente ciascuna di queste:
+- Bullet: interfaccia che permette di definire diversi tipi di proiettili utilizzati dal Bullet Component
+  - Standard Bullet: proiettile di default sparato dal player.
+  - Enemy Bullet: proiettile di default sparato dal nemico.
+  - MachineGun Bullet: proiettile ottenuto attraverso un powerup.
+- Slug Component: determina se si sta utilizzando uno slug.
+- Bullet Component: aggiunge la possibilità di sparare ad una entità.
+- Size Component: rappresenta la dimensione della finestra di collisione associata ad una entità.
+- Position Component: indica la posizione all'interno della scena di gioco di una entità.
+- Gravity Component: applica gli effetti della gravità ad una entità.
+- Jumping Component: aggiunge la possibilità di saltare ad una entità.
+- Sprite Component: permette di renderizzare a video tramite uno sprite una entità.
+- Direction Component: indica la direzione di una entità.
+- AI Component: se applicata ad una entità questa utilizza un sistema basato sul Prolog per determinarne il suo stato.
+- Player Component: se applicata ad una entità questa diventa il giocatore principale.
+- Velocity Component: rappresenta la velocità di una entità nella scena di gioco.
+- Ammo Component: rappresenta quante munizioni una entità a disposizione da poter sparare.
+- Special Weapon Ammo Component: determina le munizioni dell'arma ottenuta tramite powerup.
+- Bomb Ammo Component: determina quante bombe si ha a disposizione.
+- Collision Component: applica le collisioni ad una entità.
+- Direction: interfaccia che permette di definire molteplici direzioni utilizzate dal Direction Component.
+  - Right: direzione destra.
+  - Left: direzione sinistra.
 
 ### Observable Pattern 
 ## organizzazione del codice -- corredato da pochi ma efficaci diagrammi)
