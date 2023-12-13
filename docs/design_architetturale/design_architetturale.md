@@ -20,4 +20,4 @@ Si compone di tre parti principali:
 
 </br>
 </br>
-[Home](../index.md).
+![Home](../index.md).
