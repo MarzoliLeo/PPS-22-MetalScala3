@@ -19,7 +19,9 @@ Di seguito viene riportata una rappresentazione tramite diagramma delle classi d
 ![ECS Class Diagram](../img/ECSDiagram.png)
 
 Ciò che si può notare oltre alle entità precedentemente descritte è la scelta progettuale effettuata per la gestione delle componenti la quale avviene all'interno del trait Entity. Questo perché abbiamo scelto di gestire le componenti in maniera immutabile andando a rimpiazzare le componenti ad ogni frame di gioco.
+Per quanto riguarda la creazione delle componenti si fornisce il seguente diagramma delle classi: 
 
+### Observable Pattern 
 ## organizzazione del codice -- corredato da pochi ma efficaci diagrammi)
 
 
