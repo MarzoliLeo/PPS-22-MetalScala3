@@ -18,4 +18,6 @@ Si compone di tre parti principali:
 * **Sistemi**: definiscono dei comportamenti necessari a gestire dei sottoinsiemi della logica di gioco. Gestiscono le interazioni tra le entità agendo sui componenti associati ad esse.
 
 
-* [Home](../index.md).
+
+Torna alla pagina principale.
+[Home](../index.md).
