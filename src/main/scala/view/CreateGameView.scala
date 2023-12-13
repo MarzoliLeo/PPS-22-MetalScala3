@@ -8,15 +8,16 @@ import model.ecs.entities.player.{PlayerEntity, SlugEntity}
 import model.ecs.entities.weapons.{AmmoBoxEntity, MachineGunEntity}
 import model.ecs.systems.*
 import model.engine.Engine
-import model.{ammoBoxComponents, boxComponents, enemyComponents, machineGunWeaponComponents, playerComponents, slugComponents}
+import model.{
+  ammoBoxComponents,
+  boxComponents,
+  enemyComponents,
+  machineGunWeaponComponents,
+  playerComponents,
+  slugComponents
+}
 
-trait CreateGameView
-
-  def createEntity(entity: Entity, components: Component*): Entity =
-    components.foldLeft(entity) { (e, component) =>
-      e.addComponent(component)
-    }
-    
+trait CreateGameView:
   def createGame(gameEngine: Engine): Unit =
     EntityManager
       .addEntity(
@@ -89,14 +90,25 @@ trait CreateGameView
     EntityManager.addEntity(
       createEntity(
         MachineGunEntity(),
-        machineGunWeaponComponents(PositionComponent(randomPositionTupleForGunEntity._1, randomPositionTupleForGunEntity._2)): _*
+        machineGunWeaponComponents(
+          PositionComponent(
+            randomPositionTupleForGunEntity._1,
+            randomPositionTupleForGunEntity._2
+          )
+        ): _*
       )
     )
     val randomPositionTupleForAmmoBoxEntity = generateRandomPosition()
-    EntityManager.addEntity(
+    EntityManager
+      .addEntity(
         createEntity(
           AmmoBoxEntity(),
-          ammoBoxComponents(PositionComponent(randomPositionTupleForAmmoBoxEntity._1, randomPositionTupleForAmmoBoxEntity._2)): _*
+          ammoBoxComponents(
+            PositionComponent(
+              randomPositionTupleForAmmoBoxEntity._1,
+              randomPositionTupleForAmmoBoxEntity._2
+            )
+          ): _*
         )
       )
       .addEntity(
@@ -115,9 +127,13 @@ trait CreateGameView
       .addSystem(SpriteSystem())
       .addSystem(DeathSystem(gameEngine))
 
-  def generateRandomPosition(): (Int, Int) =
+  private def createEntity(entity: Entity, components: Component*): Entity =
+    components.foldLeft(entity) { (e, component) =>
+      e.addComponent(component)
+    }
+
+  private def generateRandomPosition(): (Int, Int) =
     val randomInt = scala.util.Random.nextInt(model.randomPositions.size)
     val randomPositionTuple = model.randomPositions(randomInt)
     model.randomPositions = model.randomPositions.patch(randomInt, Nil, 1)
     randomPositionTuple
-
