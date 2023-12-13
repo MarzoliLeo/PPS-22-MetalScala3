@@ -19,4 +19,4 @@ Si compone di tre parti principali:
 
 
 
-![Home](../index.md).
+[Home](../index.md).
