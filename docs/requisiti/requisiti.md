@@ -32,6 +32,7 @@ Di seguito riportiamo una immagine rappresentativa del gioco originale.
 
 ## 4. Sistema
 * Il sistema deve creare la scena di gioco, provvista di personaggio principale, piattaforme, power up per munizioni e armi, slug e nemici.
+* Il sistema deve creare la schermata iniziale e quella di gioco, rispettivamente all'avvio dell'applicazione e all'inizio della partita.
 * Il sistema deve aggiornare la scena di gioco in base all'input dell'utente e allo scorrere del tempo.
 * Il sistema deve aggiornare la schermata che visualizza la scena di gioco coerentemente con l'input dell'utente e lo scorrere del tempo.
 * Il sistema deve gestire il comportamento dei nemici.
