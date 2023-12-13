@@ -14,10 +14,6 @@ case class SlugComponent() extends Component
 
 case class BulletComponent(bullet: Bullet) extends Component
 
-/** An Entity has this component if it's a trigger
-  */
-case class TriggerComponent() extends Component
-
 /** Represents the size of an entity.
   * @param width
   *   The width of the entity.
@@ -51,9 +47,6 @@ case class PositionComponent(x: Double, y: Double) extends Component:
   def +(v: VelocityComponent): PositionComponent =
     PositionComponent(x + v.x, y + v.y)
 
-  override def toString: String =
-    s"PositionComponent($x,$y)"
-
 /** Represents the gravity applied to an entity.
   * @param gravity
   *   The gravity value.
@@ -80,21 +73,11 @@ case class SpriteComponent(spritePath: String) extends Component
 case class DirectionComponent(d: Direction) extends Component
 case class AIComponent() extends Component
 
-/** Represents the color of an entity.
-  * @param color
-  *   The color of the entity.
-  */
-case class ColorComponent(color: Color) extends Component
 
 /** Represents a player entity.
   */
 case class PlayerComponent() extends Component
 
-/** Represents the health of an entity.
-  * @param currentHealth
-  *   The current health value.
-  */
-case class HealthComponent(var currentHealth: Int) extends Component
 
 /** Represents the velocity of an entity.
   * @param x
@@ -126,15 +109,10 @@ case class VelocityComponent(var x: Double, var y: Double) extends Component:
   def *(fact: Double): VelocityComponent =
     VelocityComponent(x * fact, y * fact)
 
-  /** Returns a string representation of the velocity component.
-    *
-    * @return
-    *   The string representation of the velocity component.
-    */
-  override def toString: String = s"VelocityComponent($x,$y)"
+case class CollisionComponent(var isColliding: Boolean = false) extends Component
+
 
 trait AmmoComponent(ammo: Int) extends Component
 case class SpecialWeaponAmmoComponent(ammo: Int) extends AmmoComponent(ammo)
 case class BombAmmoComponent(ammo: Int) extends AmmoComponent(ammo)
-case class CollisionComponent(var isColliding: Boolean = false)
-    extends Component
+

@@ -1,6 +1,6 @@
 package ecs.entities.weapons
 
-import model.ecs.components.{HealthComponent, PositionComponent, VelocityComponent}
+import model.ecs.components.{PositionComponent, VelocityComponent}
 import model.ecs.entities.Entity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.{MachineGunEntity, WeaponEntity}
