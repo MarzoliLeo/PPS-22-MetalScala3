@@ -15,7 +15,7 @@ Trattandosi dello sviluppo di un videogioco, per il quale è necessario creare u
 Si compone di tre parti principali:
 * **Entità**: rappresentano gli elementi in gioco, ad esempio player, enemy, slug. Ad ogni entità vengono associati uno o più componenti.
 * **Componenti**: sono delle proprietà che vengono possedute da una o più entità e ne rappresentano lo stato. Esempi di possibili componenti sono posizione o velocità.
-* **Sistemi**: definiscono dei comportamenti necessari a gestire dei sottoinsiemi della logica di gioco. Gestiscono le interazioni tra le entità agendo sui componenti associati ad esse.
+* **Sistemi**: definiscono le meccaniche di gioco modificando lo stato delle entità agendo sui componenti associati ad esse.
 
 
 
