@@ -3,6 +3,7 @@
 
 ## 1. Business 
 * Creazione di un applicativo che permette di giocare a una copia di Metal Slug 3, implementando un sottoinsieme di funzionalità significative e una grafica simile all'originale.
+* Implementare il suddetto applicativo in un tempo limite di due mesi.
 ## 2. Modello di dominio:
 ### * Descrizione: 
 Nel platformer originale il giocatore pilota un soldato attraverso diversi livelli e viene ostacolato da svariati nemici, ai quali può sparare col fine di ucciderli e proseguire. Il titolo presenta le classiche meccaniche platformer, quali, salto, corsa e arrampicata su piattaforme, ma è caratterizzato da meccaniche come sparare, lanciare bombe, accovacciarsi e ottenere power up che forniscono nuove armi o munizioni. Inoltre il gioco prevede la possibilità per il giocatore di pilotare potenti slug, che aiutano il protagonista a spazzare via i nemici per farsi largo fino al traguardo. Di seguito verranno riportati i requisiti emersi dalla fase di analisi divisi per categorie, che comprenderanno il sottoinsieme del dominio che si intende reimplementare.
@@ -29,9 +30,23 @@ Di seguito riportiamo una immagine rappresentativa del gioco originale.
 * L'utente deve morire quando viene colpito da un nemico.
 * L'utente deve vincere quando tutti i nemici sono stati eliminati.
 
-4. funzionali :   utente e di sistema 
-5. non funzionali
-6. di implementazione
+## 4. Sistema
+* Il sistema deve creare la scena di gioco, provvista di personaggio principale, piattaforme, power up per munizioni e armi, slug e nemici.
+* Il sistema deve aggiornare la scena di gioco in base all'input dell'utente e allo scorrere del tempo.
+* Il sistema deve aggiornare la schermata che visualizza la scena di gioco coerentemente con l'input dell'utente e lo scorrere del tempo.
+* Il sistema deve gestire il comportamento dei nemici.
+
+## 5. Non funzionali
+* Grafica: il gioco deve ricordare visivamente l'originale.
+* Usabilità: il gioco deve essere chiaro in risposta alle interazioni, fornendo elementi grafici che permettano all'utente di comprendere facilmente lo stato del gioco.
+  
+## 6. Di implementazione
+Utilizzo di:
+* Scala 3.3.0
+* ScalaTest 3.3.x
+* JDK 17+
+Sviluppare un game engine:
+* Proprietario senza usufruire di soluzioni già esistenti
 
 
 * [Home](./index.md).
