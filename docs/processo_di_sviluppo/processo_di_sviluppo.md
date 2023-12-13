@@ -7,12 +7,12 @@
  * IntelliJ (code with me)
 ## Modalità di divisione in itinere dei task
 La suddivisione dei task è avvenuta sulla base della priorità assegnate durante la definizione dei task stessi. I task prioritari sono stati assegnati durante i meeting, lasciando la possibilità ai singoli membri
-del gruppo si autoassegnarsi i task meno rilevanti qual'ora avessero finito le mansioni prioritarie. Grazie all'utilizzo di Trello si è tenuto traccia delle assegnazioni, aggiornate eventualmente in corso d'opera in 
+del gruppo si autoassegnarsi i task meno rilevanti, qual'ora avessero finito le mansioni prioritarie. Grazie all'utilizzo di Trello si è tenuto traccia delle assegnazioni, aggiornate eventualmente in corso d'opera in 
 accordo con il team. Nel momento in cui lo sviluppatore ha portato a termine un task è incaricato di segnalarlo etichettandolo come "done". Un task è considerato finito quando:
  * l'assegnatario ha eseguito i test manuali e/o automatizzati con esito positivo.
  * l'assegnatario ha provveduto ad integrare il proprio sviluppo con il lavoro svolto in parallelo dagli altri.
 ## Meeting/interazioni pianificate
-
+In una prima fase di analisi e modellazione il gruppo ha cooperato in un meeting iniziale con lo scopo di definire l'architettura del progetto. Inoltre, nella stessa sede, sono state programmate la durata degli sprint e le successive interazioni. Il team ha scelto di organizzare le iterazioni sulla base di sprint settimanali, alla fine dei quali ha luogo una riunione con duplice funzione: riassumere lo sprint portato a termine e formulare gli obiettivi per il successivo. La scelta di organizzare meeting settimanali corposi è dovuta allo stretto contatto degli sviluppatori, che nel corso dello sviluppo hanno avuto la possibilità di aggiornarsi continuativamente, lavorando spesso in collaborazione stretta. Di comune accordo si è deciso di inquadrare la figura dello scrum master in Marzoli Leo, così da velocizzare il processo decisionale in fase di coordinamento.      
 ## Modalità di revisione in itinere dei task
 
 ## Scelta degli strumenti di test/build/continuous integration
