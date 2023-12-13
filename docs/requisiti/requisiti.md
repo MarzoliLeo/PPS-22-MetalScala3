@@ -41,11 +41,11 @@ Di seguito riportiamo una immagine rappresentativa del gioco originale.
 * Usabilità: il gioco deve essere chiaro in risposta alle interazioni, fornendo elementi grafici che permettano all'utente di comprendere facilmente lo stato del gioco.
   
 ## 6. Di implementazione
-Utilizzo di:
+### Utilizzo di:
 * Scala 3.3.0
 * ScalaTest 3.3.x
 * JDK 17+
-Sviluppare un game engine:
+### Sviluppare un game engine:
 * Proprietario senza usufruire di soluzioni già esistenti
 
 
