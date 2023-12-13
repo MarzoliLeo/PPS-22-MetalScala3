@@ -5,7 +5,7 @@
  * GiuHub
  * Trello
  * IntelliJ (code with me)
- * 
+   
 ## Modalità di divisione in itinere dei task
 
 La suddivisione dei task è avvenuta sulla base della priorità assegnate durante la definizione dei task stessi. I task prioritari sono stati assegnati durante i meeting, lasciando la possibilità ai singoli membri
@@ -22,5 +22,5 @@ In una prima fase di analisi e modellazione il gruppo ha cooperato in un meeting
 Per la revisione dei task si è optato per l'introduzione di un meccanismo a pull request. Nello specifico ogni feature è stata implementata in un branch separato da master che, ha sviluppo ultimato, è stata integrata tramite una pull request; per avere successo, tale richiesta doveva ottenere l'approvazione di entrambi i membri del gruppo. Lo scopo di questa metologia è quello di permettere a tutto il team di rimanere aggiornato, qual'ora la definizione di uno sprint preveda molto lavoro parallelo, oltre che eventualmente aggiungere un controllo addizionale.
 
 ## Scelta degli strumenti di test/build/continuous integration
-
+Per il testing si è scelto di utilizzare scalatest come strumento di automazione, essendo una tecnologia nota e facile da integrare. Va precisato che per via dei tempi brevi questo aspetto del progetto non è stato particolarmente curato. Come build tool è stato scelto sbt, e non gradle, per permettere al team di sperimentare un nuovo strumento. L'intera relazione, che descrive e documenta il progetto, è mantenuta continuamente integrata grazie a GitHub Pages che prevede un nuovo deploy ad ogni modifica.
 * [Home](./index.md).
