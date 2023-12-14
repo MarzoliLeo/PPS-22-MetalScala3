@@ -64,9 +64,10 @@ Di seguito una breve descrizione della logica rappresentata:
   - **Jumping System**: applica una forza di salto.
   - **Sprite System**: effettua l'assegnamento dello sprite corretto all'entità che hanno bisogno di essere renderizzate.
 
+Entrambe le tipologie di sistemi ereditano da una classe system che permette di definire molteplici sistemi. Il system manager è dipendente dall'utilizzo di system, infatti esso tiene traccia di tutti i sistemi aggiunti e ne effettua l'update tramite l'invocazione del metodo "updateAll(...)" .
 
 ### Command pattern
-### Observable Pattern 
+### Observer pattern 
 ## organizzazione del codice -- corredato da pochi ma efficaci diagrammi)
 
 
