@@ -18,7 +18,7 @@ All'interno del nostro pattern ECS si è scelto la disposizione di due Manager:
 Di seguito viene riportata una rappresentazione tramite diagramma delle classi della nostra implementazione del pattern ECS.
 ![ECS Class Diagram](../img/ECSDiagram.png)
 
-Ciò che si può notare oltre alle entità precedentemente descritte è la scelta progettuale effettuata per la gestione delle componenti la quale avviene all'interno del trait Entity. Questo perché abbiamo scelto di gestire le componenti in maniera immutabile andando a rimpiazzare le componenti ad ogni frame di gioco.
+Ciò che si può notare oltre alle entità precedentemente descritte è la scelta progettuale effettuata per la gestione delle componenti la quale avviene all'interno del trait Entity. Infatti, ogni entità tiene traccia in maniera immutabile di quelle che sono le componenti ad essa associate e quando si va ad aggiornare si sceglie volontariamente di eliminare il tipo precedente per andarlo a sostituire con una nuova componente aggiornata.
 
 Per quanto riguarda la creazione delle componenti si fornisce il seguente diagramma delle classi:
 ![Componenti di ECS](../img/Componenti.png)
@@ -46,6 +46,13 @@ Dovendo descrivere brevemente ciascuna di queste:
 - **Direction**: interfaccia che permette di definire molteplici direzioni utilizzate dal Direction Component.
   - **Right**: direzione destra.
   - **Left**: direzione sinistra.
+
+Il collegamento dinamico di queste componenti permette di attivare la logica dei sistemi che filtrano le entità in base alle componenti di cui dispongono per l'attivazione della loro logica o meno. Successivamente applicano la logica alle entità selezionate risultando nella creazione di nuove meccaniche di gioco per ciascuna di esse.
+
+Di seguito si riporta una visione dei sistemi implementati: 
+![Sistemi di ECS](../img/Systems.png)
+
+
 
 ### Observable Pattern 
 ## organizzazione del codice -- corredato da pochi ma efficaci diagrammi)
