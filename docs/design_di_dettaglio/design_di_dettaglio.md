@@ -96,8 +96,10 @@ Di seguito una breve descrizione della logica rappresentata:
 
 Entrambe le tipologie di sistemi ereditano da una classe system che permette di definire molteplici sistemi. Il system manager è dipendente dall'utilizzo di system, infatti esso tiene traccia di tutti i sistemi aggiunti e ne effettua l'update tramite l'invocazione del metodo "updateAll(...)" che viene invocato dall'Engine.
 
+### Observer Pattern
 ### Engine
 All'interno dell'applicazione era necessario implementare una logica di gioco che diferisse dal main thread. Questa viene rappresentata tramite il seguente diagramma:
+![Engine_Diagramma](../img/Engine.png)
 
 
 ### View
