@@ -37,7 +37,7 @@ Si riporta una breve spiegazione del diagramma:
  - **Player Bullet Entity**: è il proiettile del giocatore nella scena di gioco.
 
 La creazione delle entità avviene sia in maniera statica al momento dell'avvio del gioco, sia in maniera dinamica durante l'esecuzione del gioco in base alle azioni svolte dal giocatore, mentre la loro rimozione soltanto in maniera dinamica, così come le componenti associate ad esse.
-Inoltre, ciascuna entità implementa una logica personalizzata di collisione. Di seguito si riporta il diagramma: 
+Un altro aspetto del progetto in cui le entità entrano in gioco è la gestione delle collisioni, infatti, ciascuna di esse ha una sua implementazione personalizzata. Di seguito si riporta il diagramma: 
 ![Diagramma_delle_Collisioni](../img/Collisioni.png)
 
 Ciò che viene rappresentato è un sottoinsieme di interfacce che permettono di personalizzare per ciascuna entità il concetto di collisione all'interno della scena di gioco. Si descrive:
@@ -50,7 +50,7 @@ Ciò che viene rappresentato è un sottoinsieme di interfacce che permettono di 
 - **Player Bullet Collision Handler**: è l'interfaccia che specializza le collisioni per il proiettile del giocatore.
 - **Collision Checker**: è interamente dedicato all'implementazione di funzioni di utilità per gestire al meglio le collisioni.
 
-Per quanto riguarda la creazione delle componenti si fornisce il seguente diagramma delle classi:
+Per quanto riguarda la creazione delle componenti da associare alle entità si fornisce il seguente diagramma delle classi:
 ![Componenti di ECS](../img/Componenti.png)
 
 Dovendo descrivere brevemente ciascuna di queste:
