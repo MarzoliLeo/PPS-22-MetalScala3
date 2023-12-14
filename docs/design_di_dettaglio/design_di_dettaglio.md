@@ -97,15 +97,23 @@ Di seguito una breve descrizione della logica rappresentata:
 Entrambe le tipologie di sistemi ereditano da una classe system che permette di definire molteplici sistemi. Il system manager è dipendente dall'utilizzo di system, infatti esso tiene traccia di tutti i sistemi aggiunti e ne effettua l'update tramite l'invocazione del metodo "updateAll(...)" che viene invocato dall'Engine.
 
 ### Observer Pattern
-### Engine
+L'Observer Pattern è un design pattern comportamentale che definisce una dipendenza uno-a-molti tra oggetti in modo che quando un oggetto cambia stato, tutti i suoi dipendenti siano notificati e aggiornati automaticamente. Questo pattern è utile in scenari in cui un oggetto, chiamato "subject" (soggetto), deve notificare altri oggetti, chiamati "observers" (osservatori), di qualsiasi cambiamento senza conoscere a priori chi o cosa siano questi osservatori.
+### *Applicazione al progetto*:
+#### Engine
 All'interno dell'applicazione era necessario implementare una logica di gioco che diferisse dal main thread. Questa viene rappresentata tramite il seguente diagramma:
 ![Engine_Diagramma](../img/Engine.png)
 
 Questo infatti viene implementato nel seguente modo:
 - Viene definita una interfaccia **Game Engine** che generalizza al suo interno un unico metodo *tick(elapsedTime: Long): Unit*.
-- Viene creata una interfaccia Engine che specializza il metodo *tick(elpasedTime: Long): Unit* di Game Engine andando ad aggiornare al suo interno lo stato dei sistemi tramite l'invocazione di *updateAll(elapsedTime: Long)* . Questa aggiunge al suo interno la logica per gestire un vero e proprio motore di gioco, dunque aggiunge metodi come: start, stop, pause e resume.
-- L'interfaccia Game Loop estende da Thread, è bilateralmente dipendente da Engine che ha il compito di istanziarla tramite lo start e di fermarla tramite lo stop. All'interno del suo metodo predefinito *run()* tramite la dipendenza di cui dispone con Engine, richiama il metodo *tick(elapsedTime: Long): Unit* andando ad aggiornare i frame di gioco in modo tale che i sistemi che ne fanno uso siano sincronizzati. ElapsedTime rappresenta l'intervallo di tempo trascorso tra un tick e quello successivo, questo infatti permette di rendere "fluido" il calcolo di variabili come la velocità o la posizione che altrimenti andrebbero a scatti.
-- L'interfaccia Game Status rappresenta la lista di stati possibili che l'engine e il game loop possono assumere.
+- Viene creata una interfaccia **Engine** che specializza il metodo *tick(elpasedTime: Long): Unit* di Game Engine andando ad aggiornare al suo interno lo stato dei sistemi tramite l'invocazione di *updateAll(elapsedTime: Long)* . Questa aggiunge al suo interno la logica per gestire un vero e proprio motore di gioco, dunque aggiunge metodi come: start, stop, pause e resume.
+- L'interfaccia **Game Loop** estende da **Thread**, è bilateralmente dipendente da Engine che ha il compito di istanziarla tramite lo start e di fermarla tramite lo stop. All'interno del suo metodo predefinito *run()* tramite la dipendenza di cui dispone con Engine, richiama il metodo *tick(elapsedTime: Long): Unit* andando ad aggiornare i frame di gioco in modo tale che i sistemi che ne fanno uso siano sincronizzati. ElapsedTime rappresenta l'intervallo di tempo trascorso tra un tick e quello successivo, questo infatti permette di rendere "fluido" il calcolo di variabili come la velocità o la posizione che altrimenti andrebbero a scatti.
+- L'interfaccia **Game Status** rappresenta la lista di stati possibili che l'engine e il game loop possono assumere.
+Bisogna notare all'interno del diagramma anche un riferimento all'interfaccia **Observable** questo infatti viene utilizzato tramite una *notifyObservers(Tick(EntityManager.entities))* all'interno del metodo *tick(elapsedTime: Long): Unit* per fare sì che l'ordine di esecuzione del gioco rispecchi il seguente:
+1. Caricamento degli input.
+2. Aggiornamento dei sistemi e logica di gioco.
+3. Notifica alla View di effettuare il rendering sulla base dello stato dei sistemi.
+
+La notifyObservers in questo caso prende come argomento un evento definito attraverso una interfaccia che classifica le diverse azioni da far eseguire alla View . Inoltre, 
 
 
 ### View
