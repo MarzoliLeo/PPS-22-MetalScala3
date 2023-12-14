@@ -145,6 +145,4 @@ Che i comandi rappresentano un'astrazione di un'operazione e includono tutte le 
 Il Command Pattern è spesso utilizzato nei sistemi di gioco per gestire le interazioni utente, in questo caso la gestione degli input da tastiera. Nel contesto di un motore di gioco, i comandi possono rappresentare azioni come movimenti, sparare, lanciare bombe, ecc. 
 La gestione dei comandi sottoforma di coda ha apportato un vantaggio all'interno del progetto, ovvero questi ora possono essere accodati e successivamente eseguiti in modo sequenziale, fornendo un meccanismo flessibile per gestire le richieste. Arricchendo questo sistema si possono anche sviluppare meccaniche in futuro come l'undo dei comandi.
 
-//TODOOOOOOOOOOOOOOOOOOOOOO
-//TODO Rimuovere nel primo diagramma delle classi il fatto che ci sia Observable... non ci doveva essere!!!!!!
 * [Home](../index.md).
