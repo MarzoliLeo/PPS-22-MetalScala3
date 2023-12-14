@@ -139,8 +139,9 @@ Il Command Pattern è un design pattern comportamentale che incapsula una richie
 ### Applicazione nel progetto:
 Si riporta un diagramma delle classi che visualizza l'implementazione del pattern:
 ![Command_Diagram](../img/Command.png)
-Concetti chiave: 
-I comandi rappresentano un'astrazione di un'operazione e includono tutte le informazioni necessarie la sua esecuzione. Vengono definiti all'interno dell'interfaccia *Command*. In questo caso chi crea il comando è la *Game View* che richiamando *Input Handler* tramite l'unico metodo da esso definito *handleInput(command: Entity => Unit): Unit* li inserisce all'interno di uno stack. Sarà poi compito dell'*input system* prendere il comando sulla cima dello stack, associarlo all'entità su cui si decide di applicarne gli effetti ed eseguire il comando.
+
+I concetti chiave da riassumere guardando il seguente diagramma sono: 
+Che i comandi rappresentano un'astrazione di un'operazione e includono tutte le informazioni necessarie la sua esecuzione. Vengono definiti all'interno dell'interfaccia *Command*. In questo caso chi crea il comando è la *Game View* che richiamando *Input Handler* tramite l'unico metodo da esso definito *handleInput(command: Entity => Unit): Unit* li inserisce all'interno di uno stack. Sarà poi compito dell'*input system* prendere il comando sulla cima dello stack, associarlo all'entità su cui si decide di applicarne gli effetti ed eseguire il comando.
 
 Il vantaggio che questo ha apportato è che i comandi vengono gestiti come code: i comandi possono essere accodati e successivamente eseguiti in modo sequenziale, fornendo un meccanismo flessibile per gestire le richieste.
 
