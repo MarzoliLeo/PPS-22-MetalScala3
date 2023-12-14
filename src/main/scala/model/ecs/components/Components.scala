@@ -14,10 +14,6 @@ case class SlugComponent() extends Component
 
 case class BulletComponent(bullet: Bullet) extends Component
 
-/** An Entity has this component if it's a trigger
-  */
-case class TriggerComponent() extends Component
-
 /** Represents the size of an entity.
   * @param width
   *   The width of the entity.
@@ -80,12 +76,6 @@ case class SpriteComponent(spritePath: String) extends Component
 case class DirectionComponent(d: Direction) extends Component
 case class AIComponent() extends Component
 
-/** Represents the color of an entity.
-  * @param color
-  *   The color of the entity.
-  */
-case class ColorComponent(color: Color) extends Component
-
 /** Represents a player entity.
   */
 case class PlayerComponent() extends Component
@@ -133,8 +123,8 @@ case class VelocityComponent(var x: Double, var y: Double) extends Component:
     */
   override def toString: String = s"VelocityComponent($x,$y)"
 
-trait AmmoComponent(ammo: Int) extends Component
-case class SpecialWeaponAmmoComponent(ammo: Int) extends AmmoComponent(ammo)
-case class BombAmmoComponent(ammo: Int) extends AmmoComponent(ammo)
+trait AmmoComponent() extends Component
+case class SpecialWeaponAmmoComponent(ammo: Int) extends AmmoComponent()
+case class BombAmmoComponent(ammo: Int) extends AmmoComponent()
 case class CollisionComponent(var isColliding: Boolean = false)
     extends Component

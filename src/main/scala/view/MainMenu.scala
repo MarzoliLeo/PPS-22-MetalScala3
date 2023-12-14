@@ -35,7 +35,8 @@ trait MainMenu extends View with CreateGameView:
 
   def handleExitButton(): Unit
 
-private class MainMenuImpl(parentStage: Stage, gameEngine: Engine) extends MainMenu:
+private class MainMenuImpl(parentStage: Stage, gameEngine: Engine)
+    extends MainMenu:
 
   val loader: FXMLLoader = FXMLLoader(getClass.getResource("/main.fxml"))
   val root: Pane = loader.load[javafx.scene.layout.GridPane]()
@@ -44,18 +45,12 @@ private class MainMenuImpl(parentStage: Stage, gameEngine: Engine) extends MainM
   getButton(root, "Start").setOnAction((_: ActionEvent) => handleStartButton())
   getButton(root, "Exit").setOnAction((_: ActionEvent) => handleExitButton())
   parentStage.setResizable(false)
-  parentStage.setOnCloseRequest((_ : WindowEvent) => handleWindowCloseRequest())
+  parentStage.setOnCloseRequest((_: WindowEvent) => handleWindowCloseRequest())
 
   def handleExitButton(): Unit =
     parentStage.close()
     gameEngine.stop()
     System.exit(0)
-
-  private def handleWindowCloseRequest(): Unit = {
-    parentStage.close()
-    gameEngine.stop()
-    System.exit(0)
-  }
 
   def handleStartButton(): Unit =
     val gameView = GameView(parentStage, Set(EntityManager, gameEngine))
@@ -67,6 +62,10 @@ private class MainMenuImpl(parentStage: Stage, gameEngine: Engine) extends MainM
 
   override def exitButton: Button = getButton(root, "Exit")
 
+  private def handleWindowCloseRequest(): Unit =
+    parentStage.close()
+    gameEngine.stop()
+    System.exit(0)
 
 object MainMenu:
   def apply(parentStage: Stage, gameEngine: Engine): MainMenu =
