@@ -122,6 +122,7 @@ La figura mette in correlazione le diverse classi esaltando le comunicazioni cre
 
 In figura viene mostrato un grafico descrivente il modulo relativo alla View:
 ![View_UML](../img/View.png)
+
 La *View* è stata realizzata utilizzando **JavaFx**, sfruttando l'interoperabilità di Java con Scala.
 
 - *View* è il trait da cui tutte le viste presenti nel gioco ereditano. Definisce che ogni *View* deve avere un *root* all'interno del quale renderizzare gli elementi e inoltre definisce una *given Conversion[View, Pane]* per convertire una *View* in un *Pane*.
