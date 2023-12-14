@@ -114,6 +114,9 @@ Bisogna notare all'interno del diagramma anche un riferimento all'interfaccia **
 3. Notifica alla View di effettuare il rendering sulla base dello stato dei sistemi.
 
 La notifyObservers in questo caso prende come argomento un evento definito attraverso una interfaccia che classifica le diverse azioni da far eseguire alla View. Si vuole mostrare un diagramma che mette in relazione questi concetti:
+![Observer_Diagram](../img/Observer.png)
+
+La figura mette in correlazione le diverse classi esaltando le comunicazioni create. La view dispone di un metodo *update()* che al suo interno può eseguire diversi tipologie di comportamento in base all'evento che gli viene passato.
 
 
 ### View
