@@ -36,8 +36,7 @@ Si riporta una breve spiegazione del diagramma:
  - **Enemy Bullet Entity**: è il proiettile nemico nella scena di gioco.
  - **Player Bullet Entity**: è il proiettile del giocatore nella scena di gioco.
 
-La creazione delle entità avviene sia in maniera statica al momento dell'avvio del gioco, sia in maniera dinamica durante l'esecuzione del gioco in base alle azioni svolte dal giocatore, mentre la loro rimozione soltanto in maniera dinamica.
-Così come le componenti ad essi associate.
+La creazione delle entità avviene sia in maniera statica al momento dell'avvio del gioco, sia in maniera dinamica durante l'esecuzione del gioco in base alle azioni svolte dal giocatore, mentre la loro rimozione soltanto in maniera dinamica, così come le componenti associate ad esse.
 
 Per quanto riguarda la creazione delle componenti si fornisce il seguente diagramma delle classi:
 ![Componenti di ECS](../img/Componenti.png)
