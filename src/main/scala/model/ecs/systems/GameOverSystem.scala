@@ -14,7 +14,7 @@ import model.ecs.entities.enemies.EnemyEntity
 
 trait GameOverSystem extends SystemWithoutTime
 
-private case class DeathSystemImpl(engine: Engine) extends GameOverSystem:
+private case class GameOverSystemImpl(engine: Engine) extends GameOverSystem:
   override def update(): Unit =
     if isGameOver() then gameOver() else ()
 
@@ -29,4 +29,4 @@ private case class DeathSystemImpl(engine: Engine) extends GameOverSystem:
     System.exit(0)
 
 object GameOverSystem:
-  def apply(engine: Engine): GameOverSystem = DeathSystemImpl(engine)
+  def apply(engine: Engine): GameOverSystem = GameOverSystemImpl(engine)
