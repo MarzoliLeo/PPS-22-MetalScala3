@@ -15,7 +15,8 @@ Il gioco consiste nel guidare un soldato, con una pistola e 10 bombe a mano nell
 3. [Design architetturale](./design_architetturale/design_architetturale.md).
 4. [Design di dettaglio](./design_di_dettaglio/design_di_dettaglio.md).
 5. [Implementazione](./implementazione/implementazione.md).
-6. [Restrospettiva](./restrospettiva/restrospettiva.md).
+6. [Restrospettiva](./retrospettiva/restrospettiva.md).
+7. [Backlogs](./retrospettiva/backlog.md).
    
 ## Contributors
 
