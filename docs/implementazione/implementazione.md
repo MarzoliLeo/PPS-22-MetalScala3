@@ -1,4 +1,6 @@
 # Implementazione
-per ogni studente, una sotto-sezione descrittiva di cosa fatto/co-fatto e con chi, e descrizione di aspetti implementativi importanti non già presenti nel design, come ad esempio relativamente all'uso di meccanismi avanzati di Scala
+Per ogni membro del gruppo riportiamo una sezione che specifica il lavoro svolto e gli aspetti implementativi degni di nota.
 
 * [Giacomo Romagnoli](./Giacomo_Romagnoli.md)
+* [Lorenzo Massone](./Lorenzo_Massone.md)
+* [Leo Marzoli](./Leo_Marzoli)
