@@ -33,11 +33,27 @@ Legenda dei nomi:
 # Sprint 3: Aggiunta di feature di gioco non banali.
 | Product Item | Attività                                                                        | Assegnato a | Ore Stim. | Ore Effett. | D1 | D2 | D3 | D4 | D5 | D6 |
 |:-------------|:--------------------------------------------------------------------------------|:------------|:----------|:------------|:--|:--|:--|:--|:--|:--|
-| PI-018       | Verificare che se due entità dispongono di una Collision Component succede qualcosa (come una stampa a video)| Lorenzo| 10 | | | | | | | |
+| PI-018       | Verificare che se due entità dispongono di una Collision Component succede qualcosa (come una stampa a video)| LM2 | 10 | | | | | | | |
 | PI-019       | Creazione di un Movement System per il bullet che sia lineare, dove una volta "spawnato" deve andare dritto per una direzione| Giacomo| 14 | | | | | | | |
-| PI-020       | Creazione di un Bullet Entity                                                 | Giacomo      | 8         |             |    |    |    |    |    |    |
-| PI-021       | Creazione di un Collision System                                               | Lorenzo     | 12        |             |    |    |    |    |    |    |
-| PI-022       | Component di Collision                                                        | Lorenzo     | 8         |             |    |    |    |    |    |    |
-| PI-023       | Creazione di una component Sprite                                             | Leo          | 10        |             |    |    |    |    |    |    |
-| PI-024       | Aggiungere fluidità ai movimenti del player                                   | Leo          | 8         |             |    |    |    |    |    |    |
-| PI-025       | Gestire animazioni degli Sprite                                               | Leo          | 10        |             |    |    |    |    |    |    |
+| PI-020       | Creazione di un Bullet Entity                                                 | GR      | 8         |             |    |    |    |    |    |    |
+| PI-021       | Creazione di un Collision System                                               | LM2     | 12        |             |    |    |    |    |    |    |
+| PI-022       | Component di Collision                                                        | LM2     | 8         |             |    |    |    |    |    |    |
+| PI-023       | Creazione di una component Sprite                                             | LM          | 10        |             |    |    |    |    |    |    |
+| PI-024       | Aggiungere fluidità ai movimenti del player                                   | LM          | 8         |             |    |    |    |    |    |    |
+| PI-025       | Gestire animazioni degli Sprite                                               | LM          | 10        |             |    |    |    |    |    |    |
+
+#Sprint 4:
+| Product Item | Attività                                                                        | Assegnato a | Ore Stim. | Ore Effett. | D1 | D2 | D3 | D4 | D5 | D6 |
+|:-------------|:--------------------------------------------------------------------------------|:------------|:----------|:------------|:--|:--|:--|:--|:--|:--|
+| PI-018       | Creato una rotazione degli sprite sulla base della direzione                     | LM           | 10        |             |    |    |    |    |    |    |
+| PI-019       | Introdurre una Componente di Velocity che rappresenta la velocità di una entità   | LM2          | 14        |             |    |    |    |    |    |    |
+| PI-020       | Refactor del metodo getComponent                                              | GR           | 8         |             |    |    |    |    |    |    |
+| PI-021       | Migliorare il movimento e il salto attraverso forze come gravità e attrito     | LM2          | 12        |             |    |    |    |    |    |    |
+| PI-022       | Introduzione di un Command Pattern per l'input                               | LM           | 10        |             |    |    |    |    |    |    |
+| PI-023       | Aggiornare il gioco tenendo conto dell'elapsed time, per rendere l'aggiornamento fluido | LM2 | 8  |             |    |    |    |    |    |    |
+| PI-024       | Cambiare la logica di render                                                 | LM           | 10        |             |    |    |    |    |    |    |
+| PI-025       | Refactor del command pattern                                                  | GR           | 8         |             |    |    |    |    |    |    |
+| PI-026       | Impostare la logica di gioco separando ECS-View                              | LM           | 14        |             |    |    |    |    |    |    |
+| PI-027       | Refactor Sprite component e Sprite System                                    | GR           | 12        |             |    |    |    |    |    |    |
+| PI-028       | Verificare che se due entità che dispongono di una Collision Component non si possono "attraversare" nel gioco (a livello grafico)| LM2 | 10 | | | | | | | |
+
