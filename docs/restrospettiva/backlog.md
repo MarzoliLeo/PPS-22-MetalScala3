@@ -15,4 +15,7 @@ Legenda dei nomi:
 | Creazione di una finestra di base con JavaFX       | LM2         | Completato | 12        | 12          | Lu| Ma| Me| Gi| Ve|   |
 | Creazione di un entity manager per l'entità giocatore| LM2       | Completato | 8         | 8           | Lu| Ma| Me| Gi| Ve|   |
 | Creazione di un sistema che simuli i tick dell'engine (tempo) tramite GameLoop| LM | Completato | 10| 10         | Lu| Ma| Me| Gi| Ve|   |
+| Collegare il movimento al rendering del giocatore nella finestra| LM2 | Completato | 8         | 8         | Lu| Ma| Me| Gi| Ve|   |
+| Creazione di un system manager per il sistema di movimento| LM | Completato | 5| 5         | Lu| Ma| Me| Gi| Ve|   |
 
+# Sprint 2
