@@ -113,7 +113,7 @@ Bisogna notare all'interno del diagramma anche un riferimento all'interfaccia **
 2. Aggiornamento dei sistemi e logica di gioco.
 3. Notifica alla View di effettuare il rendering sulla base dello stato dei sistemi.
 
-La notifyObservers in questo caso prende come argomento un evento definito attraverso una interfaccia che classifica le diverse azioni da far eseguire alla View . Inoltre, 
+La notifyObservers in questo caso prende come argomento un evento definito attraverso una interfaccia che classifica le diverse azioni da far eseguire alla View. Si vuole mostrare un diagramma che mette in relazione questi concetti:
 
 
 ### View
@@ -134,6 +134,7 @@ La schermata contiene due pulsanti, `Start` e `Exit`, mediante i quali è possib
 Premendo il tasto `Start`, il gioco inizia e in `GameView` viene caricata la schermata di gioco, caratterizzata dalle entità di gioco. `GameView` renderizza tutti gli elementi visivi all'interno di una Pane, `root`. Inoltre `GameView` implementa il trait  `Observer[T]`, restando in ascolto di eventi (`Observer[Event]`)  che vengono gestiti con il metodo `update` per aggiornare l'interfaccia sulla base dei cambiamenti catturati dall'evento.
 
 //TODOOOOOOOOOOOOOOOOOOOOOO
+//TODO Rimuovere nel primo diagramma delle classi il fatto che ci sia Observable... non ci doveva essere!!!!!!
 ### Command pattern
 ### Observer pattern 
 ### Singletone
