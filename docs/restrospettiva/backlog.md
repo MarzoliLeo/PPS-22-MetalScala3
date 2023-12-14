@@ -5,7 +5,7 @@ Legenda dei nomi:
 * GR = Giacomo Romagnoli
 
 
-# Sprint 1
+# Sprint 1: Implementazione delle Funzionalità di Base
 | Product Item | Attività                                          | Assegnato a | Stato      | Ore Stim. | Ore Effett. | D1 | D2 | D3 | D4 | D5 | D6 |
 |:-------------|:---------------------------------------------------|:------------|:-----------|:----------|:------------|:--|:--|:--|:--|:--|:--|
 | PI-001       | Implementazione di Pause e Resume del GameLoop     | LM          | Completato | 8         | 8           | Lu| Ma| Me| Gi| Ve|   |
