@@ -129,7 +129,7 @@ La *View* è stata realizzata utilizzando **JavaFx**, sfruttando l'interoperabil
 Il suo layout è definito all'interno di un file *.fxml* in quanto non vi era la necessità di dinamismo all'interno di questa schermata.
 La schermata contiene due pulsanti, *Start* e *Exit*, mediante i quali è possibile avviare il gioco o chiudere la finestra.  
 - *CreateGameView* è un mix-in associato con *MainMenu* che viene utilizzato per popolare *EntityManager* e *SystemManager* correttamente, prima che venga creata la *GameView*. 
-- Premendo il tasto *Start*, il gioco inizia e in `GameView` viene caricata la schermata di gioco, caratterizzata dalle entità di gioco. `GameView` renderizza tutti gli elementi visivi all'interno di una Pane, `root`. 
+- Premendo il tasto *Start*, il gioco inizia e in *GameView* viene caricata la schermata di gioco, caratterizzata dalle entità di gioco. *GameView* renderizza tutti gli elementi visivi all'interno di una Pane, *root*. 
 
 //TODOOOOOOOOOOOOOOOOOOOOOO
 //TODO Rimuovere nel primo diagramma delle classi il fatto che ci sia Observable... non ci doveva essere!!!!!!
