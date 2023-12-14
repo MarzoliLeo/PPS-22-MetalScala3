@@ -141,12 +141,10 @@ Si riporta un diagramma delle classi che visualizza l'implementazione del patter
 ![Command_Diagram](../img/Command.png)
 
 I concetti chiave da riassumere guardando il seguente diagramma sono: 
-Che i comandi rappresentano un'astrazione di un'operazione e includono tutte le informazioni necessarie la sua esecuzione. Vengono definiti all'interno dell'interfaccia *Command*. In questo caso chi crea il comando è la *Game View* che richiamando *Input Handler* tramite l'unico metodo da esso definito *handleInput(command: Entity => Unit): Unit* li inserisce all'interno di uno stack. Sarà poi compito dell'*input system* prendere il comando sulla cima dello stack, associarlo all'entità su cui si decide di applicarne gli effetti ed eseguire il comando.
+Che i comandi rappresentano un'astrazione di un'operazione e includono tutte le informazioni necessarie la sua esecuzione. Vengono definiti all'interno dell'interfaccia **Command**. In questo caso chi crea il comando è la *Game View* che richiamando **Input Handler** tramite l'unico metodo da esso definito *handleInput(command: Entity => Unit): Unit* li inserisce all'interno di uno stack. Sarà poi compito dell'**input system** prendere il comando sulla cima dello **stack**, associarlo all'entità su cui si decide di applicarne gli effetti ed eseguire il comando.
+Il Command Pattern è spesso utilizzato nei sistemi di gioco per gestire le interazioni utente, in questo caso la gestione degli input da tastiera. Nel contesto di un motore di gioco, i comandi possono rappresentare azioni come movimenti, sparare, lanciare bombe, ecc. 
+La gestione dei comandi sottoforma di coda ha apportato un vantaggio all'interno del progetto, ovvero questi ora possono essere accodati e successivamente eseguiti in modo sequenziale, fornendo un meccanismo flessibile per gestire le richieste. Arricchendo questo sistema si possono anche sviluppare meccaniche in futuro come l'undo dei comandi.
 
-Il vantaggio che questo ha apportato è che i comandi vengono gestiti come code: i comandi possono essere accodati e successivamente eseguiti in modo sequenziale, fornendo un meccanismo flessibile per gestire le richieste.
-
-
-Il Command Pattern è spesso utilizzato nei sistemi di gioco per gestire le interazioni utente, in questo caso la gestione degli input da tastiera. Nel contesto di un motore di gioco, i comandi possono rappresentare azioni come movimenti, sparare, lanciare bombe, ecc. Questi comandi vengono creati e associati a oggetti ricevitori specifici, come il personaggio principale del gioco. L'Invoker, che risulta essere  , chiede ai comandi di eseguire le azioni richieste, consentendo così una gestione flessibile ed estendibile delle interazioni di gioco.
 //TODOOOOOOOOOOOOOOOOOOOOOO
 //TODO Rimuovere nel primo diagramma delle classi il fatto che ci sia Observable... non ci doveva essere!!!!!!
 * [Home](../index.md).
