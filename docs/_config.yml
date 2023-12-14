@@ -8,6 +8,3 @@ github:
   license:
     name: MIT
   repository_url: "https://github.com/MarzoliLeo/PPS-22-MetalScala3"
-layout:
-  width: 1000
-  height: 800
