@@ -31,16 +31,20 @@ private case class JumpingSystemImpl() extends JumpingSystem:
           .getComponent[SizeComponent]
           .getOrElse(
             throw new IllegalStateException(
-              "JumpingSystem: JumpingComponent not found"
+              "JumpingSystem: SizeComponent not found"
             )
           )
-
-        val isOnGround =
-          currentPosition.y + size.height >= model.GUIHEIGHT && currentVelocity.y >= 0
-        if (isOnGround)
-          Some(JumpingComponent(false))
-
+        if isOnGround(currentPosition, currentVelocity, size) then entity.replaceComponent(JumpingComponent(false))
       }
+
+  private def isOnGround(
+      currentPosition: PositionComponent,
+      currentVelocity: VelocityComponent,
+      size: SizeComponent
+  ): Boolean = {
+    val entityLowerBound = currentPosition.y + size.height
+    entityLowerBound >= model.GUIHEIGHT && currentVelocity.y >= 0
+  }
 
 object JumpingSystem:
   def apply(): JumpingSystem = JumpingSystemImpl()
