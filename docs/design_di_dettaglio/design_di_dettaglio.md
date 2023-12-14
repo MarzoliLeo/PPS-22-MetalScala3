@@ -94,5 +94,21 @@ Entrambe le tipologie di sistemi ereditano da una classe system che permette di 
 ### Observer pattern 
 ## organizzazione del codice -- corredato da pochi ma efficaci diagrammi)
 
+### View
+In figura viene mostrato un grafico descrivente il modulo relativo alla `View`:
+![View_UML](../img/View.png)
+La `View` è stata realizzata utilizzando **JavaFx**, sfruttando l'interoperabilità di Java con Scala.
+#### View
+`View` è il trait da cui tutte le viste presenti nel gioco ereditano. Definisce che ogni `View` deve avere un `root` all'interno del quale renderizzare gli elementi e inoltre definisce una `given Conversion[View, Pane]` per convertire una `View` in un `Pane`.
+#### MainMenu
+`MainMenu` è la schermata di partenza che viene renderizzata all'avvio dell'applicazione. 
+Il suo layout è definito all'interno di un file `.fxml` in quanto non vi era la necessità di dinamismo all'interno di questa schermata.
+La schermata contiene due pulsanti, `Start` e `Exit`, mediante i quali è possibile avviare il gioco o chiudere la finestra.  
+
+#### CreateGameView
+`CreateGameView` è un mix-in associato con `MainMenu` che viene utilizzato per popolare `EntityManager` e `SystemManager` correttamente, prima che venga creata la `GameView`. 
+
+#### GameView
+Premendo il tasto `Start`, il gioco inizia e in `GameView` viene caricata la schermata di gioco, caratterizzata dalle entità di gioco. `GameView` renderizza tutti gli elementi visivi all'interno di una Pane, `root`. Inoltre `GameView` implementa il trait  `Observer[T]`, restando in ascolto di eventi (`Observer[Event]`)  che vengono gestiti con il metodo `update` per aggiornare l'interfaccia sulla base dei cambiamenti catturati dall'evento.
 
 * [Home](../index.md).
