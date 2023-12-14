@@ -52,8 +52,20 @@ Il collegamento dinamico di queste componenti permette di attivare la logica dei
 Di seguito si riporta una visione dei sistemi implementati: 
 ![Sistemi di ECS](../img/Systems.png)
 
+Di seguito una breve descrizione della logica rappresentata:
+- **Systems with Elapsed Time**: interfaccia utilizzata per definire quei sistemi che hanno bisogno di sincronizzarsi con il tempo di gioco.
+  - **AI System**: le entità utilizzate da questo system associano in un thread differente da quello principale il comportamento di una macchina a stati finiti sviluppata in Prolog per la scelta randomicizzata di tre azioni: movimento, rimanere fermi, sparare.
+  - **Bullet Movement System**: associa alle entità su cui si applica un movimento automatizzato, quindi senza bisogno di un input, nella scena di gioco lungo l'asse X della finestra di gioco.
+  - **Gravity System**: associa alle entità la forza di gravità.
+  - **Position update System**: associa alle entità su cui si applica un aggiornamento della posizione considerando se è o meno una posizione valida.
+- **Systems without Time**: interfaccia utilizzata per definire quei sistemi che astraggono dal tempo di gioco.
+  - **Death System**: verifica se effettuare il game over di gioco.
+  - **Input System**: applica la logica di input.
+  - **Jumping System**: applica una forza di salto.
+  - **Sprite System**: effettua l'assegnamento dello sprite corretto all'entità che hanno bisogno di essere renderizzate.
 
 
+### Command pattern
 ### Observable Pattern 
 ## organizzazione del codice -- corredato da pochi ma efficaci diagrammi)
 
