@@ -101,6 +101,12 @@ Entrambe le tipologie di sistemi ereditano da una classe system che permette di 
 All'interno dell'applicazione era necessario implementare una logica di gioco che diferisse dal main thread. Questa viene rappresentata tramite il seguente diagramma:
 ![Engine_Diagramma](../img/Engine.png)
 
+Questo infatti viene implementato nel seguente modo:
+- Viene definita una interfaccia **Game Engine** che generalizza al suo interno un unico metodo *tick(elapsedTime: Long): Unit*.
+- Viene creata una interfaccia Engine che specializza il metodo *tick(elpasedTime: Long): Unit* di Game Engine andando ad aggiornare al suo interno lo stato dei sistemi tramite l'invocazione di *updateAll(elapsedTime: Long)* . Questa aggiunge al suo interno la logica per gestire un vero e proprio motore di gioco, dunque aggiunge metodi come: start, stop, pause e resume.
+- L'interfaccia Game Loop estende da Thread, è bilateralmente dipendente da Engine che ha il compito di istanziarla tramite lo start e di fermarla tramite lo stop. All'interno del suo metodo predefinito "run" tramite la dipendenza di cui dispone con Engine, richiama il metodo *tick(elapsedTime: Long): Unit* andando ad aggiornare i frame di gioco in modo tale che i sistemi che ne fanno uso siano sincronizzati. ElapsedTime rappresenta l'intervallo di tempo trascorso tra un tick e quello successivo, questo infatti permette di rendere "fluido" il calcolo di variabili come la velocità o la posizione che altrimenti andrebbero a scatti.
+- L'interfaccia Game Status rappresenta la lista di stati possibili che l'engine e il game loop possono assumere.
+
 
 ### View
 In figura viene mostrato un grafico descrivente il modulo relativo alla View:
@@ -122,5 +128,6 @@ Premendo il tasto `Start`, il gioco inizia e in `GameView` viene caricata la sch
 //TODOOOOOOOOOOOOOOOOOOOOOO
 ### Command pattern
 ### Observer pattern 
+### Singletone
 
 * [Home](../index.md).
