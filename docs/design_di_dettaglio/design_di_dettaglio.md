@@ -132,8 +132,20 @@ La schermata contiene due pulsanti, *Start* e *Exit*, mediante i quali è possib
 - **CreateGameView** è un mix-in associato con *MainMenu* che viene utilizzato per popolare *EntityManager* e *SystemManager* correttamente, prima che venga creata la *GameView*. 
 - Premendo il tasto *Start*, il gioco inizia e in **GameView** viene caricata la schermata di gioco, caratterizzata dalle entità di gioco. *GameView* renderizza tutti gli elementi visivi all'interno di una Pane, *root*. 
 
+
+### Command pattern
+Il Command Pattern è un design pattern comportamentale che incapsula una richiesta come un oggetto, consentendo la parametrizzazione di client con code, richieste e operazioni. Questo pattern permette di parametrizzare gli oggetti con diverse richieste, di accodare le richieste e di supportare operazioni annullabili. 
+
+### Applicazione nel progetto:
+Si riporta un diagramma delle classi che visualizza l'implementazione del pattern:
+
+Concetti chiave: 
+I comandi rappresentano un'astrazione di un'operazione e includono tutte le informazioni necessarie la sua esecuzione. Vengono definiti all'interno dell'interfaccia *Command*. In questo caso chi crea il comando è la *Game View* che richiamando *Input Handler* tramite l'unico metodo da esso definito *handleInput(command: Entity => Unit): Unit* li inserisce all'interno di uno stack. Sarà poi compito dell'*input system* prendere il comando sulla cima dello stack, associarlo all'entità su cui si decide di applicarne gli effetti ed eseguire il comando.
+
+Il vantaggio che questo ha apportato è che i comandi vengono gestiti come code: i comandi possono essere accodati e successivamente eseguiti in modo sequenziale, fornendo un meccanismo flessibile per gestire le richieste.
+
+
+Il Command Pattern è spesso utilizzato nei sistemi di gioco per gestire le interazioni utente, in questo caso la gestione degli input da tastiera. Nel contesto di un motore di gioco, i comandi possono rappresentare azioni come movimenti, sparare, lanciare bombe, ecc. Questi comandi vengono creati e associati a oggetti ricevitori specifici, come il personaggio principale del gioco. L'Invoker, che risulta essere  , chiede ai comandi di eseguire le azioni richieste, consentendo così una gestione flessibile ed estendibile delle interazioni di gioco.
 //TODOOOOOOOOOOOOOOOOOOOOOO
 //TODO Rimuovere nel primo diagramma delle classi il fatto che ci sia Observable... non ci doveva essere!!!!!!
-### Command pattern
-
 * [Home](../index.md).
