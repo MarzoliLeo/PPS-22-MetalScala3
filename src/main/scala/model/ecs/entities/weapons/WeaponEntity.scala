@@ -18,7 +18,5 @@ trait WeaponEntity extends Entity:
 trait ShootingWeaponEntity extends WeaponEntity
 
 //Questo è a sua volta un mixin perché utilizza il trait che già era un mixin per overridare il campo damage.
-case class MachineGunEntity()
-    extends ShootingWeaponEntity
-    with BasicCollisionHandler:
+case class MachineGunEntity() extends ShootingWeaponEntity with BasicCollisionHandler:
   val damage = 1

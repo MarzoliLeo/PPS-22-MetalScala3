@@ -105,7 +105,7 @@ trait CreateGameView
           slugComponents(PositionComponent(500, 700)): _*
         )
       )
-    SystemManager(EntityManager)
+    SystemManager()
       .addSystem(InputSystem())
       .addSystem(JumpingSystem())
       .addSystem(GravitySystem())
