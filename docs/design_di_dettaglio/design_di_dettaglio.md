@@ -11,7 +11,7 @@ Il pattern ECS è costituito da tre parti fondamentali: entità, componenti e si
 
 ### *Applicazione al progetto*:
 Si è scelto di applicare il pattern attraverso un approccio di tipo Data-Driven: in questo approccio, le operazioni eseguite su dati sono separate dalla logica di controllo, favorendo una maggiore modularità e flessibilità nel sistema. L’ECS in questo caso sarà caratterizzato da moduli di gestione ai quali saranno delegati il controllo e la connessione di entità e componenti, quest'ultimi prendono il nome di Manager.
-All'interno del nostro pattern ECS si è scelto la disposizione di due Manager:
+All'interno del nostro pattern ECS si è scelto la disposizione di due Manager implementati come **Singleton**:
  1. **Entity Manager**: è responsabile della gestione delle entità nel sistema. Ha la capacità di creare nuove entità, recuperare entità esistenti, e rimuovere entità. Inoltre, tiene traccia di un identificatore univoco per ciascuna entità, garantendo la distinzione tra di esse.
  2. **System Manager**: si occupa della gestione dei sistemi nel sistema ECS. Può aggiungere e rimuovere sistemi, oltre a coordinare l'aggiornamento di tutti i sistemi. In questo contesto, un "sistema" è responsabile dell'elaborazione dei dati delle entità. La funzione update_systems richiama l'aggiornamento di ciascun sistema, consentendo loro di operare sui dati delle entità.
 
@@ -118,28 +118,21 @@ La notifyObservers in questo caso prende come argomento un evento definito attra
 
 La figura mette in correlazione le diverse classi esaltando le comunicazioni create. La view dispone di un metodo *update()* che al suo interno può eseguire diversi tipologie di comportamento in base all'evento che gli viene passato.
 
+#### View
 
-### View
 In figura viene mostrato un grafico descrivente il modulo relativo alla View:
 ![View_UML](../img/View.png)
-La `View` è stata realizzata utilizzando **JavaFx**, sfruttando l'interoperabilità di Java con Scala.
-#### View
-`View` è il trait da cui tutte le viste presenti nel gioco ereditano. Definisce che ogni `View` deve avere un `root` all'interno del quale renderizzare gli elementi e inoltre definisce una `given Conversion[View, Pane]` per convertire una `View` in un `Pane`.
-#### MainMenu
-`MainMenu` è la schermata di partenza che viene renderizzata all'avvio dell'applicazione. 
-Il suo layout è definito all'interno di un file `.fxml` in quanto non vi era la necessità di dinamismo all'interno di questa schermata.
-La schermata contiene due pulsanti, `Start` e `Exit`, mediante i quali è possibile avviare il gioco o chiudere la finestra.  
+La *View* è stata realizzata utilizzando **JavaFx**, sfruttando l'interoperabilità di Java con Scala.
 
-#### CreateGameView
-`CreateGameView` è un mix-in associato con `MainMenu` che viene utilizzato per popolare `EntityManager` e `SystemManager` correttamente, prima che venga creata la `GameView`. 
-
-#### GameView
-Premendo il tasto `Start`, il gioco inizia e in `GameView` viene caricata la schermata di gioco, caratterizzata dalle entità di gioco. `GameView` renderizza tutti gli elementi visivi all'interno di una Pane, `root`. Inoltre `GameView` implementa il trait  `Observer[T]`, restando in ascolto di eventi (`Observer[Event]`)  che vengono gestiti con il metodo `update` per aggiornare l'interfaccia sulla base dei cambiamenti catturati dall'evento.
+- *View* è il trait da cui tutte le viste presenti nel gioco ereditano. Definisce che ogni *View* deve avere un *root* all'interno del quale renderizzare gli elementi e inoltre definisce una *given Conversion[View, Pane]* per convertire una *View* in un *Pane*.
+- *MainMenu* è la schermata di partenza che viene renderizzata all'avvio dell'applicazione. 
+Il suo layout è definito all'interno di un file *.fxml* in quanto non vi era la necessità di dinamismo all'interno di questa schermata.
+La schermata contiene due pulsanti, *Start* e *Exit*, mediante i quali è possibile avviare il gioco o chiudere la finestra.  
+- *CreateGameView* è un mix-in associato con *MainMenu* che viene utilizzato per popolare *EntityManager* e *SystemManager* correttamente, prima che venga creata la *GameView*. 
+- Premendo il tasto *Start*, il gioco inizia e in `GameView` viene caricata la schermata di gioco, caratterizzata dalle entità di gioco. `GameView` renderizza tutti gli elementi visivi all'interno di una Pane, `root`. 
 
 //TODOOOOOOOOOOOOOOOOOOOOOO
 //TODO Rimuovere nel primo diagramma delle classi il fatto che ci sia Observable... non ci doveva essere!!!!!!
 ### Command pattern
-### Observer pattern 
-### Singletone
 
 * [Home](../index.md).
