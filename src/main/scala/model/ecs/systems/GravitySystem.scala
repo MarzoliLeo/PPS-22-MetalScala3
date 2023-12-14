@@ -12,6 +12,7 @@ import model.{GRAVITY_VELOCITY, VERTICAL_COLLISION_SIZE, isGravityEnabled}
 trait GravitySystem extends SystemWithElapsedTime
 
 private case class GravitySystemImpl() extends GravitySystem:
+  
   override def update(elapsedTime: Long): Unit =
     EntityManager
       .getEntitiesWithComponent(

@@ -1,4 +1,4 @@
-package ecs.systems
+package model.ecs.systems
 
 import model.ecs.components.{JumpingComponent, PositionComponent, SizeComponent, VelocityComponent}
 import model.ecs.entities.environment.BoxEntity

@@ -1,4 +1,4 @@
-package ecs.systems
+package model.ecs.systems
 
 import model.ecs.entities.EntityManager
 import model.ecs.systems.{SystemManager, SystemWithElapsedTime, SystemWithoutTime}

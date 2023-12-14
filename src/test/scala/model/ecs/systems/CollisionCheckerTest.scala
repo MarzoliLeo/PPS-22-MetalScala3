@@ -1,4 +1,4 @@
-package ecs.systems
+package model.ecs.systems
 
 import model.ecs.collision_handlers.CollisionChecker
 import model.ecs.components.{CollisionComponent, PositionComponent, SizeComponent}
