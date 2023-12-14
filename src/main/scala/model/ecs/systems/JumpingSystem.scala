@@ -34,17 +34,10 @@ private case class JumpingSystemImpl() extends JumpingSystem:
               "JumpingSystem: SizeComponent not found"
             )
           )
-        if isOnGround(currentPosition, currentVelocity, size) then entity.replaceComponent(JumpingComponent(false))
+        val isOnGround =
+          currentPosition.y + size.height >= model.GUIHEIGHT && currentVelocity.y >= 0
+        if isOnGround then entity.replaceComponent(JumpingComponent(false))
       }
-
-  private def isOnGround(
-      currentPosition: PositionComponent,
-      currentVelocity: VelocityComponent,
-      size: SizeComponent
-  ): Boolean = {
-    val entityLowerBound = currentPosition.y + size.height
-    entityLowerBound >= model.GUIHEIGHT && currentVelocity.y >= 0
-  }
 
 object JumpingSystem:
   def apply(): JumpingSystem = JumpingSystemImpl()
