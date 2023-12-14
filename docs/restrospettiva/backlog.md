@@ -30,3 +30,14 @@ Legenda dei nomi:
 | PI-016       | Verificare che l'engine decrementi la y per arrivare al fondo della finestra.| LM | 6|    |    |    |    |    |    |
 | PI-017       | Collegare il systemGravity alla box (player) della View per verificare che non esca dal bordo della finestra in altezza.| LM| 8|    |    |    |    |    |    |
 
+# Sprint 3: Aggiunta di feature di gioco non banali.
+| Product Item | Attività                                                                        | Assegnato a | Ore Stim. | Ore Effett. | D1 | D2 | D3 | D4 | D5 | D6 |
+|:-------------|:--------------------------------------------------------------------------------|:------------|:----------|:------------|:--|:--|:--|:--|:--|:--|
+| PI-018       | Verificare che se due entità dispongono di una Collision Component succede qualcosa (come una stampa a video)| Lorenzo| 10 | | | | | | | |
+| PI-019       | Creazione di un Movement System per il bullet che sia lineare, dove una volta "spawnato" deve andare dritto per una direzione| Giacomo| 14 | | | | | | | |
+| PI-020       | Creazione di un Bullet Entity                                                 | Giacomo      | 8         |             |    |    |    |    |    |    |
+| PI-021       | Creazione di un Collision System                                               | Lorenzo     | 12        |             |    |    |    |    |    |    |
+| PI-022       | Component di Collision                                                        | Lorenzo     | 8         |             |    |    |    |    |    |    |
+| PI-023       | Creazione di una component Sprite                                             | Leo          | 10        |             |    |    |    |    |    |    |
+| PI-024       | Aggiungere fluidità ai movimenti del player                                   | Leo          | 8         |             |    |    |    |    |    |    |
+| PI-025       | Gestire animazioni degli Sprite                                               | Leo          | 10        |             |    |    |    |    |    |    |
