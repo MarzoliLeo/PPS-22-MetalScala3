@@ -18,7 +18,26 @@ All'interno del nostro pattern ECS si è scelto la disposizione di due Manager:
 Di seguito viene riportata una rappresentazione tramite diagramma delle classi della nostra implementazione del pattern ECS.
 ![ECS Class Diagram](../img/ECSDiagram.png)
 
-Ciò che si può notare oltre alle entità precedentemente descritte è la scelta progettuale effettuata per la gestione delle componenti la quale avviene all'interno del trait Entity. Infatti, ogni entità tiene traccia in maniera immutabile di quelle che sono le componenti ad essa associate e quando si va ad aggiornare si sceglie volontariamente di eliminare il tipo precedente per andarlo a sostituire con una nuova componente aggiornata.
+Ciò che si può notare oltre a ciò che è stato precedentemente descritto è la scelta progettuale effettuata per la gestione delle componenti la quale avviene all'interno del trait Entity. Infatti, ogni entità tiene traccia in maniera immutabile di quelle che sono le componenti ad essa associate e quando si va ad aggiornare si sceglie volontariamente di eliminare il tipo precedente per andarlo a sostituire con una nuova componente aggiornata.
+
+Di seguito si riporta una diagramma rappresentativo delle entità coinvolte all'interno dell'applicativo:
+![Entity di ECS](../img/entities.png)
+
+???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????!!!!!!!!!?!?!??!?!?!!
+//TODO MODIFICARE L'IMMAGINE PER FAR VEDERE CHE é UN MIXIN, WeaponEntity <- Shooting Weapong Entity <- MachineGun entity
+//TODO COSA C'ENTRA COLLISION HANDLER IN QUESTA IMMAGINE! AL MASSIMO ACCENNALO NELLA IMG MA POI DEVI PARLARE DELLE COLLISIONI IN UNA SEZIONE A PARTE.
+Si riporta una breve spiegazione del diagramma:
+ - **Weapon Entity**: è una generalizzazione del concetto di arma.
+ - **Shooting Weapon Entity**: rappresenta la specializzazione dell'arma nel caso base, l'arma che il giocatore ha di default.
+ - **MachineGun Entity**: rappresenta la specializzazione dell'arma nel caso di un powerup.
+ - **Enemy Entity**: è il nemico nella scena di gioco.
+ - **Box Entity**: è l'ostacolo nella scena di gioco.
+ - **Player Entity**: è il giocatore principale nella scena di gioco.
+ - **Slug Entity**: è lo slug nella scena di gioco.
+ - **Ammo Box Entity**: è la scatola delle munizioni nella scena di gioco.
+ - **Bomb Entity**: è la bomba nella scena di gioco.
+ - **Enemy Bullet Entity**: è il proiettile nemico nella scena di gioco.
+ - **Player Bullet Entity**: è il proiettile del giocatore nella scena di gioco.
 
 Per quanto riguarda la creazione delle componenti si fornisce il seguente diagramma delle classi:
 ![Componenti di ECS](../img/Componenti.png)
@@ -49,6 +68,8 @@ Dovendo descrivere brevemente ciascuna di queste:
 
 Il collegamento dinamico di queste componenti permette di attivare la logica dei sistemi che filtrano le entità in base alle componenti di cui dispongono per l'attivazione della loro logica o meno. Successivamente applicano la logica alle entità selezionate risultando nella creazione di nuove meccaniche di gioco per ciascuna di esse.
 
+?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????!?!?!?!?!?!!!
+//CAMBIARE IMMAGINE LA DIPEDENZA NON E' DA SYSTEM A SYSTEM MANAGER, MA E' DA SYSTEM MANAGER A SYSTEM.
 Di seguito si riporta una visione dei sistemi implementati: 
 ![Sistemi di ECS](../img/Systems.png)
 
