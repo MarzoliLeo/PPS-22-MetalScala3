@@ -30,7 +30,7 @@ I comandi sono stati implementati come funzioni ```Entity => Unit``` facenti par
     def right(entity: Entity): Unit = ...
     ...
 ```
-Alla pressione di un tasto un listener associa il tasto al commando via pattern matching, e impila in uno ```Stack```, .
+Alla pressione di un tasto un listener associa il tasto al commando via pattern matching, e impila in uno ```Stack```.
 ```
   scene.setOnKeyPressed { k =>
       k.getCode match
