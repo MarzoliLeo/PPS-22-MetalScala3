@@ -6,6 +6,7 @@ Legenda dei nomi:
 * GR = Giacomo Romagnoli
 
 # Sprint 1: Implementazione delle Funzionalità di Base
+
 | Product Item | Attività                                          | Assegnato a | Ore Stim. | Ore Effett. | D1 | D2 | D3 | D4 | D5 | D6 |
 |:-------------|:---------------------------------------------------|:------------|:----------|:------------|:--|:--|:--|:--|:--|:--|
 | PI-001       | Implementazione di Pause e Resume del GameLoop     | LM          | 8         | 8           | | | | | |   |
@@ -19,7 +20,8 @@ Legenda dei nomi:
 | PI-009       | Creazione di un system manager per il sistema di movimento| LM | 5| 5         | | | | | |   |
 
 
-# Sprint 2: Miglioramenti e Ottimizzazioni
+# Sprint 2: Miglioramenti e Ottimizzazion
+
 | Product Item | Attività                                      | Assegnato a | Ore Stim. | Ore Effett. | D1 | D2 | D3 | D4 | D5 | D6 |
 |:-------------|:----------------------------------------------|:------------|:----------|:------------|:--|:--|:--|:--|:--|:--|
 | PI-010       | Refactoring di ECS                             | GR          | 12        |             | Lu| Ma| Me| Gi| Ve|   |
@@ -32,6 +34,7 @@ Legenda dei nomi:
 | PI-017       | Collegare il systemGravity alla box (player) della View per verificare che non esca dal bordo della finestra in altezza.| LM| 8|    |    |    |    |    |    |
 
 # Sprint 3: Aggiunta di feature di gioco non banali.
+
 | Product Item | Attività                                                                        | Assegnato a | Ore Stim. | Ore Effett. | D1 | D2 | D3 | D4 | D5 | D6 |
 |:-------------|:--------------------------------------------------------------------------------|:------------|:----------|:------------|:--|:--|:--|:--|:--|:--|
 | PI-018       | Verificare che se due entità dispongono di una Collision Component succede qualcosa (come una stampa a video)| LM2 | 10 | | | | | | | |
@@ -44,6 +47,7 @@ Legenda dei nomi:
 | PI-025       | Gestire animazioni degli Sprite                                               | LM          | 10        |             |    |    |    |    |    |    |
 
 # Sprint 4: Nuove Funzionalità e Miglioramenti
+
 | Product Item | Attività                                                                        | Assegnato a | Ore Stim. | Ore Effett. | D1 | D2 | D3 | D4 | D5 | D6 |
 |:-------------|:--------------------------------------------------------------------------------|:------------|:----------|:------------|:--|:--|:--|:--|:--|:--|
 | PI-018       | Creato una rotazione degli sprite sulla base della direzione                     | LM           | 10        |             |    |    |    |    |    |    |
@@ -59,6 +63,7 @@ Legenda dei nomi:
 | PI-028       | Verificare che se due entità che dispongono di una Collision Component non si possono "attraversare" nel gioco (a livello grafico)| LM2 | 10 |             |    |    |    |    |    |    |
 
 # Sprint 5: Espansione delle Funzionalità di Gioco
+
 | Product Item | Attività                                                                        | Assegnato a | Ore Stim. | Ore Effett. | D1 | D2 | D3 | D4 | D5 | D6 |
 |:-------------|:--------------------------------------------------------------------------------|:------------|:----------|:------------|:--|:--|:--|:--|:--|:--|
 | PI-029       | Creare un componente Weapon, possibilmente il più generalizzato possibile in modo da creare in futuro diverse armi | LM2 | 12 |             |    |    |    |    |    |    |
@@ -69,6 +74,7 @@ Legenda dei nomi:
 | PI-034       | Implementare una generalizzazione del concetto di CollisionHandler              | LM2     | 12 |             |    |    |    |    |    |    |
 
 # Sprint 6: Refactoring e Miglioramenti
+
 | Product Item | Attività                                                                        | Assegnato a | Ore Stim. | Ore Effett. | D1 | D2 | D3 | D4 | D5 | D6 |
 |:-------------|:--------------------------------------------------------------------------------|:------------|:----------|:------------|:--|:--|:--|:--|:--|:--|
 | PI-035       | Se collido con un'arma devo salvare in qualche modo nel player il tipo di arma che ho preso e cambiare lo sprite dei proiettili in corrispondenza | LM2 | 12 | | | | | | | |
@@ -93,6 +99,7 @@ Legenda dei nomi:
 | PI-054       | Creare un livello da game designer                                              | GR          | 12 | | | | | | | |
 
 # Sprint 7: Ottimizzazioni finali.
+
 | Product Item | Attività                                                                        | Assegnato a | Ore Stim. | Ore Effett. | D1 | D2 | D3 | D4 | D5 | D6 |
 |:-------------|:--------------------------------------------------------------------------------|:------------|:----------|:------------|:--|:--|:--|:--|:--|:--|
 | PI-055       | Posizione randomica dei nemici e delle armi e delle munizioni                   | LM          | 10 | | | | | | | |
@@ -102,6 +109,7 @@ Legenda dei nomi:
 | PI-059       | Quando il player muore il gioco si ferma                                       | GR, LM       | 10 | | | | | | | |
 
 # Product Backlog Riassuntivo:
+
 | Id | Item                                               | Stima in ore | Ore effettive | Sprint1      | Sprint2      | Sprint3      | Sprint4      | Sprint5      | Sprint6      | Sprint7      |
 |----|----------------------------------------------------|--------------|---------------|--------------|--------------|--------------|--------------|--------------|--------------|--------------|
 | 1  | Implementazione di Funzionalità di Base           | -            | -             | Completato   |              |              |              |              |              |              |
