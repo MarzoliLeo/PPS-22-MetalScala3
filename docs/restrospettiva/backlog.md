@@ -34,7 +34,7 @@ Legenda dei nomi:
 | Product Item | Attività                                                                        | Assegnato a | Ore Stim. | Ore Effett. | D1 | D2 | D3 | D4 | D5 | D6 |
 |:-------------|:--------------------------------------------------------------------------------|:------------|:----------|:------------|:--|:--|:--|:--|:--|:--|
 | PI-018       | Verificare che se due entità dispongono di una Collision Component succede qualcosa (come una stampa a video)| LM2 | 10 | | | | | | | |
-| PI-019       | Creazione di un Movement System per il bullet che sia lineare, dove una volta "spawnato" deve andare dritto per una direzione| Giacomo| 14 | | | | | | | |
+| PI-019       | Creazione di un Movement System per il bullet che sia lineare, dove una volta "spawnato" deve andare dritto per una direzione| GR | 14 | | | | | | | |
 | PI-020       | Creazione di un Bullet Entity                                                 | GR      | 8         |             |    |    |    |    |    |    |
 | PI-021       | Creazione di un Collision System                                               | LM2     | 12        |             |    |    |    |    |    |    |
 | PI-022       | Component di Collision                                                        | LM2     | 8         |             |    |    |    |    |    |    |
