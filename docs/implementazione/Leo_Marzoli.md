@@ -10,7 +10,7 @@ All'interno del progetto mi sono occupato di:
 
 ## Implementazione del game engine.
 
-Il problema sorto durente lo sviluppo dell'engine ha riguardato la necessità di implementare un motore di gioco in grado di interlacciarsi con il calcolo della logica in ECS e il suo rendering tramite la View, facendo così da ponte separando le due responsabilità. Il tutto doveva essere gestito non aggravando sulle performance del main thread. Dunque, per risolvere questo problema si è deciso di implementare il *Game Loop* nel seguente modo:
+Il problema sorto durante lo sviluppo dell'engine ha riguardato la necessità di implementare un motore di gioco in grado di interlacciarsi con il calcolo della logica in ECS e il suo rendering tramite la View, facendo così da ponte separando le due responsabilità. Il tutto doveva essere gestito non aggravando sulle performance del main thread. Dunque, per risolvere questo problema si è deciso di implementare il *Game Loop* nel seguente modo:
 
 ```scala
 
