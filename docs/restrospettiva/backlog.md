@@ -24,7 +24,7 @@ Legenda dei nomi:
 
 | Product Item | Attività                                      | Assegnato a | Ore Stim. | Ore Effett. | D1 | D2 | D3 | D4 | D5 | D6 |
 |:-------------|:----------------------------------------------|:------------|:----------|:------------|:--|:--|:--|:--|:--|:--|
-| PI-010       | Refactoring di ECS                             | GR          | 12        |             | Lu| Ma| Me| Gi| Ve|   |
+| PI-010       | Refactoring di ECS                             | GR          | 12        | 15            | Lu| Ma| Me| Gi| Ve|   |
 | PI-011       | Aggiustare i Test per ECS e aggiungerne       | LM2         | 14        |             |    |    |    |    |    |    |
 | PI-012       | Creazione di un SystemGravity                  | LM          | 10        |             |    |    |    |    |    |    |
 | PI-013       | Aggiustare Test Engine e aggiungerne          | LM          | 8         |             |    |    |    |    |    |    |
@@ -38,8 +38,8 @@ Legenda dei nomi:
 | Product Item | Attività                                                                        | Assegnato a | Ore Stim. | Ore Effett. | D1 | D2 | D3 | D4 | D5 | D6 |
 |:-------------|:--------------------------------------------------------------------------------|:------------|:----------|:------------|:--|:--|:--|:--|:--|:--|
 | PI-018       | Verificare che se due entità dispongono di una Collision Component succede qualcosa (come una stampa a video)| LM2 | 10 | | | | | | | |
-| PI-019       | Creazione di un Movement System per il bullet che sia lineare, dove una volta "spawnato" deve andare dritto per una direzione| GR | 14 | | | | | | | |
-| PI-020       | Creazione di un Bullet Entity                                                 | GR      | 8         |             |    |    |    |    |    |    |
+| PI-019       | Creazione di un Movement System per il bullet che sia lineare, dove una volta "spawnato" deve andare dritto per una direzione| GR | 14 | 14 | | | | | | |
+| PI-020       | Creazione di un Bullet Entity                                                 | GR      | 8         | 8            |    |    |    |    |    |    |
 | PI-021       | Creazione di un Collision System                                               | LM2     | 12        |             |    |    |    |    |    |    |
 | PI-022       | Component di Collision                                                        | LM2     | 8         |             |    |    |    |    |    |    |
 | PI-023       | Creazione di una component Sprite                                             | LM          | 10        |             |    |    |    |    |    |    |
@@ -51,14 +51,14 @@ Legenda dei nomi:
 | Product Item | Attività                                                                        | Assegnato a | Ore Stim. | Ore Effett. | D1 | D2 | D3 | D4 | D5 | D6 |
 |:-------------|:--------------------------------------------------------------------------------|:------------|:----------|:------------|:--|:--|:--|:--|:--|:--|
 | PI-018       | Creato una rotazione degli sprite sulla base della direzione                     | LM           | 10        |             |    |    |    |    |    |    |
-| PI-019       | Introdurre una Componente di Velocity che rappresenta la velocità di una entità   | LM2, GR          | 14        |             |    |    |    |    |    |    |
-| PI-020       | Refactor del metodo getComponent                                              | GR           | 8         |             |    |    |    |    |    |    |
+| PI-019       | Introdurre una Componente di Velocity che rappresenta la velocità di una entità   | LM2, GR          | 14        | 14            |    |    |    |    |    |    |
+| PI-020       | Refactor del metodo getComponent                                              | GR           | 8         | 10            |    |    |    |    |    |    |
 | PI-021       | Migliorare il movimento e il salto attraverso forze come gravità e attrito     | LM2          | 12        |             |    |    |    |    |    |    |
 | PI-022       | Introduzione di un Command Pattern per l'input                               | LM           | 10        |             |    |    |    |    |    |    |
-| PI-023       | Aggiornare il gioco tenendo conto dell'elapsed time, per rendere l'aggiornamento fluido | LM2, GR | 8  |             |    |    |    |    |    |    |
+| PI-023       | Aggiornare il gioco tenendo conto dell'elapsed time, per rendere l'aggiornamento fluido | LM2, GR | 8  | 8            |    |    |    |    |    |    |
 | PI-024       | Cambiare la logica di render                                                 | LM           | 10        |             |    |    |    |    |    |    |
-| PI-025       | Refactor del command pattern                                                  | GR           | 8         |             |    |    |    |    |    |    |
-| PI-026       | Impostare la logica di gioco separando ECS-View                              | LM, GR, LM2           | 14        |             |    |    |    |    |    |    |
+| PI-025       | Refactor del command pattern                                                  | GR           | 8         | 8            |    |    |    |    |    |    |
+| PI-026       | Impostare la logica di gioco separando ECS-View                              | LM, GR, LM2           | 14        | 14            |    |    |    |    |    |    |
 | PI-027       | Refactor Sprite component e Sprite System                                    | LM, GR           | 12        |             |    |    |    |    |    |    |
 | PI-028       | Verificare che se due entità che dispongono di una Collision Component non si possono "attraversare" nel gioco (a livello grafico)| LM2 | 10 |             |    |    |    |    |    |    |
 
@@ -78,12 +78,12 @@ Legenda dei nomi:
 | Product Item | Attività                                                                        | Assegnato a | Ore Stim. | Ore Effett. | D1 | D2 | D3 | D4 | D5 | D6 |
 |:-------------|:--------------------------------------------------------------------------------|:------------|:----------|:------------|:--|:--|:--|:--|:--|:--|
 | PI-035       | Se collido con un'arma devo salvare in qualche modo nel player il tipo di arma che ho preso e cambiare lo sprite dei proiettili in corrispondenza | LM2 | 12 | | | | | | | |
-| PI-036       | Separare il positionUpdateSystem                                                | LM, GR, LM2       | 14 | | | | | | | |
-| PI-037       | Separare l'AI del nemico                                                        | LM, GR, LM2       | 16 | | | | | | | |
-| PI-038       | Separare l'Input Movement System                                                | LM, GR, LM2       | 10 | | | | | | | |
-| PI-039       | Separare il Bullet Movement System                                              | LM, GR, LM2       | 12 | | | | | | | |
-| PI-040       | Separare il Gravity System                                                      | LM, GR, LM2       | 10 | | | | | | | |
-| PI-041       | La gravità deve essere soggettiva, ovvero si applica se hai il componente        | LM, GR, LM2       | 8  | | | | | | | |
+| PI-036       | Separare il positionUpdateSystem                                                | LM, GR, LM2       | 14 | 14 | | | | | | |
+| PI-037       | Separare l'AI del nemico                                                        | LM, GR, LM2       | 16 | 16 | | | | | | |
+| PI-038       | Separare l'Input Movement System                                                | LM, GR, LM2       | 10 | 10 | | | | | | |
+| PI-039       | Separare il Bullet Movement System                                              | LM, GR, LM2       | 12 | 12 | | | | | | |
+| PI-040       | Separare il Gravity System                                                      | LM, GR, LM2       | 10 | 10 | | | | | | |
+| PI-041       | La gravità deve essere soggettiva, ovvero si applica se hai il componente        | LM, GR, LM2       | 8  | 8 | | | | | | |
 | PI-042       | Estratto la logica degli sprite in un system                                    | LM          | 10 | | | | | | | |
 | PI-043       | Scaricati le immagini degli sprite e creato animazioni                          | LM          | 12 | | | | | | | |
 | PI-044       | Far funzionare la logica di AI dei nemici per più nemici nella scena di gioco, non solo per uno | LM | 14 | | | | | | | |
@@ -92,11 +92,11 @@ Legenda dei nomi:
 | PI-047       | Sistemare la direction del projectile in modo che segua l'enemy e non il player | LM          | 10 | | | | | | | |
 | PI-048       | Sistemare la grafica in modo che il proiettile ruoti opportunamente             | LM          | 8  | | | | | | | |
 | PI-049       | Fixare il fatto che se un enemy sbatte contro un box deve collidere      | LM          | 10 | | | | | | | |
-| PI-050       | Ridurre la collision box quando si effettua il comando B da tastiera             | GR          | 8  | | | | | | | |
-| PI-051       | Mettere le collisioni nel cluch                                                 | LM, GR       | 12 | | | |
+| PI-050       | Ridurre la collision box quando si effettua il comando B da tastiera             | GR          | 8  | 8 | | | | | | |
+| PI-051       | Mettere le collisioni nel cluch                                                 | LM, GR       | 12 | 12 | | |
 | PI-052       | Implementare una nuova entità di Slug                                          | LM          | 10 | | | | | | | |
 | PI-053       | Creare una nuova entità "AmmoBox", a cui attaccare una collisione, quando si collide guadagni munizioni per l'arma corrente | LM2 | 14 | | | | | | | |
-| PI-054       | Creare un livello da game designer                                              | GR          | 12 | | | | | | | |
+| PI-054       | Creare un livello da game designer                                              | GR          | 12 | 12 | | | | | | |
 
 # Sprint 7: Ottimizzazioni finali.
 
@@ -105,8 +105,8 @@ Legenda dei nomi:
 | PI-055       | Posizione randomica dei nemici e delle armi e delle munizioni                   | LM          | 10 | | | | | | | |
 | PI-056       | Sistemare lo spawn dei proiettili in modo che sia quanto più vicino possibile alle entità che lo sparano | LM2 | 14 | | | | | | | |
 | PI-057       | Quando un player o un nemico sta sopra un oggetto, la gravità continua ad aumentare e ad un certo punto bypassa le collisioni se stai fermo in volo | LM | 16 | | | | | | | |
-| PI-058       | Aggiungere il comando B (lettera che volete voi), sostituire lo sprite dei proiettili a bombe (10) e aggiungi la gravità alle bombe | LM, GR, LM2 | 18 | | | | | | | |
-| PI-059       | Quando il player muore il gioco si ferma                                       | GR, LM       | 10 | | | | | | | |
+| PI-058       | Aggiungere il comando B (lettera che volete voi), sostituire lo sprite dei proiettili a bombe (10) e aggiungi la gravità alle bombe | LM, GR, LM2 | 18 | 18 | | | | | | |
+| PI-059       | Quando il player muore il gioco si ferma                                       | GR, LM       | 10 | 10 | | | | | | |
 
 # Product Backlog Riassuntivo:
 
