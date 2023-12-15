@@ -98,6 +98,19 @@ Legenda dei nomi:
 | PI-056       | Sistemare lo spawn dei proiettili in modo che sia quanto più vicino possibile alle entità che lo sparano | LM2 | 14 | | | | | | | |
 | PI-057       | Quando un player o un nemico sta sopra un oggetto, la gravità continua ad aumentare e ad un certo punto bypassa le collisioni se stai fermo in volo | LM | 16 | | | | | | | |
 | PI-058       | Aggiungere il comando B (lettera che volete voi), sostituire lo sprite dei proiettili a bombe (10) e aggiungi la gravità alle bombe | LM, GR, LM2 | 18 | | | | | | | |
+
+
+# Product Backlog Riassuntivo:
+| Id | Item                                               | Stima in ore | Ore effettive | Sprint1 | Sprint2 | Sprint3 | Sprint4 | Sprint5 | Sprint6 | Sprint7 |
+|----|----------------------------------------------------|--------------|---------------|---------|---------|---------|---------|---------|---------|---------|
+| 1  | Implementazione di Funzionalità di Base           | -            | -             | Completato | | | | | | |
+| 2  | Miglioramenti e Ottimizzazioni                    | -            | -             | | Completato | | | | | |
+| 3  | Aggiunta di Feature di Gioco non Banali            | -            | -             | | | Completato | | | | |
+| 4  | Nuove Funzionalità e Miglioramenti                | -            | -             | | | | Completato | | | |
+| 5  | Espansione delle Funzionalità di Gioco             | -            | -             | | | | | Completato | | |
+| 6  | Refactoring e Miglioramenti                       | -            | -             | | | | | | Completato |
+| 7  | Ottimizzazioni Finali                              | -            | -             | | | | | | | Completato |
+
 | PI-059       | Quando il player muore il gioco si ferma                                       | GR, LM       | 10 | | | | | | | |
 
 
