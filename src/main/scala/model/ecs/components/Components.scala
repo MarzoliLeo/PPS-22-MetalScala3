@@ -73,7 +73,6 @@ case class SpriteComponent(spritePath: String) extends Component
 case class DirectionComponent(d: Direction) extends Component
 case class AIComponent() extends Component
 
-
 /** Represents a player entity.
   */
 case class PlayerComponent() extends Component
@@ -111,8 +110,6 @@ case class VelocityComponent(var x: Double, var y: Double) extends Component:
 
 case class CollisionComponent(var isColliding: Boolean = false) extends Component
 
-
 trait AmmoComponent(ammo: Int) extends Component
 case class SpecialWeaponAmmoComponent(ammo: Int) extends AmmoComponent(ammo)
 case class BombAmmoComponent(ammo: Int) extends AmmoComponent(ammo)
-
