@@ -9,7 +9,7 @@ Il gioco consiste nel guidare un soldato, con una pistola e 10 bombe a mano nell
 
  Completare la missione assegnata terminando con una vittoria.
 
-### Requisiti Obbligatori
+## Requisiti Obbligatori
 
 - Creazione di un motore di gioco personalizzato: la logica di esecuzione del platform viene creata ad hoc senza ricorrere all’utilizzo di game engine esterni.
 - Implementazione del gioco: si vuole replicare quanto più fedelmente le meccaniche di gioco originali, tra cui quelle essenziali che risultano:
@@ -24,7 +24,7 @@ Il gioco consiste nel guidare un soldato, con una pistola e 10 bombe a mano nell
 - Gestione degli NPC (Non-Playable Character): definizione di un modello di gioco per entità malevoli atte ad ostacolare il giocatore.
 - Rendering grafico: creazione di una finestra visiva per visualizzare il campo di gioco.
 
-### Requisiti Opzionali
+## Requisiti Opzionali
 
 - Aggiunta di meccaniche di gioco come:
   - Liberare prigionieri.
