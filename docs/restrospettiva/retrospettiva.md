@@ -1,3 +1,4 @@
 # Retrospettiva
-descrizione finale dettagliata dell'andamento dello sviluppo, del backlog, delle iterazioni; commenti finali)
+* [Giacomo Romagnoli](./Giacomo_Romagnoli.md)
+* [Backlog](./backlog.md)
 
