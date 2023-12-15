@@ -4,3 +4,7 @@ Si premette che la maggior parte del lavoro all'interno del progetto è stata vi
 * [Giacomo Romagnoli](./Giacomo_Romagnoli.md)
 * [Lorenzo Massone](./Lorenzo_Massone.md)
 * [Leo Marzoli](./Leo_Marzoli.md)
+
+
+
+[Home.](../index.md)
