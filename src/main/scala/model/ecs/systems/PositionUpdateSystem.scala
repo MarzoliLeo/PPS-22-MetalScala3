@@ -19,16 +19,16 @@ private case class PositionUpdateSystemImpl() extends PositionUpdateSystem:
         classOf[JumpingComponent]
       )
       .foreach(entity =>
-        given currentPosition: PositionComponent =
+        val currentPosition: PositionComponent =
           entity.getComponent[PositionComponent].get
-        given currentVelocity: VelocityComponent =
+        given VelocityComponent =
           entity.getComponent[VelocityComponent].get
         entity.replaceComponent(getUpdatedVelocity)
 
         val proposedPosition = currentPosition.getUpdatedPosition(elapsedTime)
         entity.handleCollision(proposedPosition) match
           case Some(handledPosition) => entity.replaceComponent(handledPosition)
-          case None => ()
+          case None                  => ()
       )
 
   private def getUpdatedVelocity(using
