@@ -39,5 +39,3 @@ trait Entity extends CollisionHandler:
   def isSameEntity(entity: Entity): Boolean =
     entity.id == id
 
-  override def toString: String =
-    s"Entity(id: $id, components: $signature)"

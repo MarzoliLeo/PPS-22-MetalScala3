@@ -53,7 +53,7 @@ private class MainMenuImpl(parentStage: Stage, gameEngine: Engine)
     System.exit(0)
 
   def handleStartButton(): Unit =
-    val gameView = GameView(parentStage, Set(EntityManager, gameEngine))
+    val gameView = GameView(parentStage, Set(gameEngine))
     createGame(gameEngine)
     parentStage.getScene.setRoot(gameView)
     gameEngine.start()

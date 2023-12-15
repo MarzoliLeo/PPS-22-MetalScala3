@@ -47,9 +47,6 @@ case class PositionComponent(x: Double, y: Double) extends Component:
   def +(v: VelocityComponent): PositionComponent =
     PositionComponent(x + v.x, y + v.y)
 
-  override def toString: String =
-    s"PositionComponent($x,$y)"
-
 /** Represents the gravity applied to an entity.
   * @param gravity
   *   The gravity value.
@@ -80,11 +77,6 @@ case class AIComponent() extends Component
   */
 case class PlayerComponent() extends Component
 
-/** Represents the health of an entity.
-  * @param currentHealth
-  *   The current health value.
-  */
-case class HealthComponent(var currentHealth: Int) extends Component
 
 /** Represents the velocity of an entity.
   * @param x
@@ -116,15 +108,8 @@ case class VelocityComponent(var x: Double, var y: Double) extends Component:
   def *(fact: Double): VelocityComponent =
     VelocityComponent(x * fact, y * fact)
 
-  /** Returns a string representation of the velocity component.
-    *
-    * @return
-    *   The string representation of the velocity component.
-    */
-  override def toString: String = s"VelocityComponent($x,$y)"
+case class CollisionComponent(var isColliding: Boolean = false) extends Component
 
-trait AmmoComponent() extends Component
-case class SpecialWeaponAmmoComponent(ammo: Int) extends AmmoComponent()
-case class BombAmmoComponent(ammo: Int) extends AmmoComponent()
-case class CollisionComponent(var isColliding: Boolean = false)
-    extends Component
+trait AmmoComponent(ammo: Int) extends Component
+case class SpecialWeaponAmmoComponent(ammo: Int) extends AmmoComponent(ammo)
+case class BombAmmoComponent(ammo: Int) extends AmmoComponent(ammo)

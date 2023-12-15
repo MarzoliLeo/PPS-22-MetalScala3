@@ -17,18 +17,16 @@ trait Engine extends GameEngine with Observable[Event]{
   def stop(): Unit
   def pause(): Unit
   def resume(): Unit
-  def getStatus(): GameStatus
 
 }
 
 object Engine {
   def apply(): Engine = EngineImpl()
   private case class EngineImpl() extends Engine {
-    private val systemManager = SystemManager(EntityManager)
     private val gameLoop = GameLoop(Fps, this)
 
     override def tick(elapsedTime: Long): Unit =
-      systemManager.updateAll(elapsedTime)
+      SystemManager().updateAll(elapsedTime)
       notifyObservers(Tick(EntityManager.entities))
 
     override def start(): Unit = {
@@ -43,15 +41,11 @@ object Engine {
       gameLoop.halt()
     }
 
-    //TODO sono inutili per ora.
     override def pause(): Unit =
       gameLoop.pause()
 
     override def resume(): Unit =
       gameLoop.unPause()
-
-    // Method for testing purposes
-    override def getStatus(): GameStatus = gameLoop.status
 
   }
 }
