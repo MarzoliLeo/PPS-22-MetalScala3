@@ -57,3 +57,14 @@ Legenda dei nomi:
 | PI-027       | Refactor Sprite component e Sprite System                                    | LM, GR           | 12        |             |    |    |    |    |    |    |
 | PI-028       | Verificare che se due entità che dispongono di una Collision Component non si possono "attraversare" nel gioco (a livello grafico)| LM2 | 10 |             |    |    |    |    |    |    |
 
+# Sprint 5: Espansione delle Funzionalità di Gioco
+| Product Item | Attività                                                                        | Assegnato a | Ore Stim. | Ore Effett. | D1 | D2 | D3 | D4 | D5 | D6 |
+|:-------------|:--------------------------------------------------------------------------------|:------------|:----------|:------------|:--|:--|:--|:--|:--|:--|
+| PI-029       | Creare un componente Weapon, possibilmente il più generalizzato possibile in modo da creare in futuro diverse armi | LM2 | 12 |             |    |    |    |    |    |    |
+| PI-030       | Collegamento della logica in TuProlog al codice Scala3                          | LM         | 14 |             |    |    |    |    |    |    |
+| PI-031       | Attaccare una collision al projectile                                           | LM2     | 10 |             |    |    |    |    |    |    |
+| PI-032       | Verificare che una volta che il projectile collida con un enemy (o col bordo finestra se sei cieco e lo manchi mentre spari) poi venga distrutto ed eliminato come entità | Lorenzo | 14 |             |    |    |    |    |    |    |
+| PI-033       | Sviluppo di una logica AI per il nemico in TuProlog                             | LM         | 16 |             |    |    |    |    |    |    |
+| PI-034       | Implementare una generalizzazione del concetto di CollisionHandler              | LM2     | 12 |             |    |    |    |    |    |    |
+
+
