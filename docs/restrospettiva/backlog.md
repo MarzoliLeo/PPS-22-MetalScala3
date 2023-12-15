@@ -55,5 +55,5 @@ Legenda dei nomi:
 | PI-025       | Refactor del command pattern                                                  | GR           | 8         |             |    |    |    |    |    |    |
 | PI-026       | Impostare la logica di gioco separando ECS-View                              | LM, GR, LM2           | 14        |             |    |    |    |    |    |    |
 | PI-027       | Refactor Sprite component e Sprite System                                    | LM, GR           | 12        |             |    |    |    |    |    |    |
-| PI-028       | Verificare che se due entità che dispongono di una Collision Component non si possono "attraversare" nel gioco (a livello grafico)| LM2 | 10 | | | | | | | |
+| PI-028       | Verificare che se due entità che dispongono di una Collision Component non si possono "attraversare" nel gioco (a livello grafico)| LM2 | 10 |             |    |    |    |    |    |    |
 
