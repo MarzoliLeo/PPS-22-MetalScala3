@@ -29,17 +29,15 @@ object Engine {
       SystemManager().updateAll(elapsedTime)
       notifyObservers(Tick(EntityManager.entities))
 
-    override def start(): Unit = {
+    override def start(): Unit =
       gameLoop.status match {
         case Stopped =>
-          gameLoop.start() // .start() its because gameloop is a thread.
+          gameLoop.start()
         case _ => print("GameLoop already started")
       }
-    }
 
-    override def stop(): Unit = {
+    override def stop(): Unit =
       gameLoop.halt()
-    }
 
     override def pause(): Unit =
       gameLoop.pause()
