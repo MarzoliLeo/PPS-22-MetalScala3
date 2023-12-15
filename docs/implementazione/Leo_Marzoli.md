@@ -2,7 +2,7 @@
 
 All'interno del progetto mi sono occupato di:
 * Creazione di un game engine e dei suoi stati.
-* Creazione di una logica per i nemici basata sul Prolog.
+* Creazione di una logica per i nemici basata sul TuProlog.
 * Creazione di uno sprite system per il rendering degli oggetti.
 * Implementazione del pattern singleton per i manager.
 * Lancio delle bombe del giocatore con aiuto di Giacomo Romagnoli.
