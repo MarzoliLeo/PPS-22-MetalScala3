@@ -5,20 +5,20 @@ import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.{Entity, EntityManager}
 import model.ecs.systems.PositionUpdateSystem
-import org.scalatest.BeforeAndAfterEach
+import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
 class PositionUpdateSystemTest
     extends AnyFlatSpec
     with Matchers
-    with BeforeAndAfterEach {
+    with BeforeAndAfter {
   val startingPosition: PositionComponent = PositionComponent(0, 0)
   val elapsedTime = 1L
   var positionUpdateSystem: PositionUpdateSystem = _
   var entity: Entity = _
 
-  override def beforeEach(): Unit = {
+  before {
     positionUpdateSystem = PositionUpdateSystem()
     entity = BoxEntity()
 

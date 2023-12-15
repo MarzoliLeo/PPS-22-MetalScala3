@@ -12,9 +12,9 @@ import model.engine.Engine
 import model.event.observer.Observable
 import model.ecs.entities.enemies.EnemyEntity
 
-trait GameOverSystem extends SystemWithoutTime
+trait DeathSystem extends SystemWithoutTime
 
-private case class GameOverSystemImpl(engine: Engine) extends GameOverSystem:
+private case class DeathSystemImpl(engine: Engine) extends DeathSystem:
   override def update(): Unit =
     if isGameOver() then gameOver() else ()
 
@@ -28,5 +28,5 @@ private case class GameOverSystemImpl(engine: Engine) extends GameOverSystem:
     Thread.sleep(1000)
     System.exit(0)
 
-object GameOverSystem:
-  def apply(engine: Engine): GameOverSystem = GameOverSystemImpl(engine)
+object DeathSystem:
+  def apply(engine: Engine): DeathSystem = DeathSystemImpl(engine)

@@ -6,13 +6,12 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-// Define your concrete implementations of Systems
 object TestSystemWithoutTime extends SystemWithoutTime {
-  def update(): Unit = ???
+  def update(): Unit = ()
 }
 
 object TestSystemWithElapsedTime extends SystemWithElapsedTime {
-  def update(elapsedTime: Long): Unit = ???
+  def update(elapsedTime: Long): Unit = ()
 }
 
 class SystemManagerTest extends AnyFlatSpec with Matchers with BeforeAndAfterEach {
@@ -37,12 +36,12 @@ class SystemManagerTest extends AnyFlatSpec with Matchers with BeforeAndAfterEac
   it should "remove a system without time" in {
     manager.addSystem(TestSystemWithoutTime)
     manager.removeSystem(TestSystemWithoutTime)
-    manager.systems should not contain(TestSystemWithoutTime)
+    manager.systems should not contain TestSystemWithoutTime
   }
 
   it should "remove a system with elapsed time" in {
     manager.addSystem(TestSystemWithElapsedTime)
     manager.removeSystem(TestSystemWithElapsedTime)
-    manager.systems should not contain(TestSystemWithElapsedTime)
+    manager.systems should not contain TestSystemWithElapsedTime
   }
 }

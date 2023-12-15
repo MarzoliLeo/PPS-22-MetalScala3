@@ -1,21 +1,25 @@
 package model.ecs.systems
 
 import model.ecs.collision_handlers.CollisionChecker
-import model.ecs.components.{CollisionComponent, PositionComponent, SizeComponent}
+import model.ecs.components.{
+  CollisionComponent,
+  PositionComponent,
+  SizeComponent
+}
 import model.ecs.entities.environment.BoxEntity
 import model.ecs.entities.{Entity, EntityManager}
-import org.mockito.Mockito
-import org.mockito.Mockito.when
-import org.scalatest.BeforeAndAfterEach
+import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
 class CollisionCheckerTest
     extends AnyFlatSpec
     with Matchers
-    with BeforeAndAfterEach {
-  override def beforeEach(): Unit =
+    with BeforeAndAfter {
+
+  before {
     EntityManager.entities.foreach(EntityManager.removeEntity)
+  }
 
   "getCollidingEntity" should "return the colliding entity" in {
     val entity1 = BoxEntity()

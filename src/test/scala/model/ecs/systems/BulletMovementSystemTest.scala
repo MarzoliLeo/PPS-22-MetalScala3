@@ -1,5 +1,3 @@
-// FILEPATH: /c:/Users/loren/Documents/uni/anno 1/2_sem/paradigmi/PPS-22-MetalScala3/src/test/scala/model/ecs/systems/BulletMovementSystemTest.scala
-
 package model.ecs.systems
 
 import model.ecs.components.{PositionComponent, SizeComponent, VelocityComponent}

@@ -125,7 +125,7 @@ trait CreateGameView:
       .addSystem(BulletMovementSystem())
       .addSystem(AISystem())
       .addSystem(SpriteSystem())
-      .addSystem(GameOverSystem(gameEngine))
+      .addSystem(DeathSystem(gameEngine))
 
   private def createEntity(entity: Entity, components: Component*): Entity =
     components.foldLeft(entity) { (e, component) =>
