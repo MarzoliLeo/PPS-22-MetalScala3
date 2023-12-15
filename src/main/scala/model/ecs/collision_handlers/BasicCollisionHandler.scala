@@ -11,6 +11,8 @@ import model.{
   HORIZONTAL_COLLISION_SIZE,
   VERTICAL_COLLISION_SIZE
 }
+import model.ecs.entities.weapons.EnemyBulletEntity
+import model.ecs.entities.enemies.EnemyEntity
 
 /** The BasicCollisionHandler trait implements collision handling logic for
   * entities. It extends the CollisionHandler trait and requires the entity to
@@ -53,31 +55,25 @@ trait BasicCollisionHandler extends CollisionHandler:
         )
       )
 
-  /** Returns the final position based on the proposed position and the current
-    * position.
-    *
-    * @param proposedPosition
-    *   The proposed position to check for collisions.
-    * @param currentPosition
-    *   The current position to use if collisions occur.
-    * @return
-    *   The final position after considering collisions. If a collision occurs,
-    *   the current position is returned; otherwise, the proposed position is
-    *   returned.
-    */
   private def getFinalPosition(
       proposedPosition: PositionComponent,
       currentPosition: PositionComponent
-  ): PositionComponent = {
-    getCollidingEntity(this, proposedPosition) match {
+  ): PositionComponent =
+    if canPassThrough(proposedPosition) then proposedPosition
+    else currentPosition
+
+  private def canPassThrough(
+      proposedPosition: PositionComponent
+  ): Boolean =
+    getCollidingEntity(this, proposedPosition) match
       case Some(_: PlayerBulletEntity) if this.isInstanceOf[PlayerEntity] =>
-        proposedPosition
+        true
       case Some(_: PlayerEntity) if this.isInstanceOf[PlayerBulletEntity] =>
-        proposedPosition
-      case None => proposedPosition
-      case _    => currentPosition
-    }
-  }
+        true
+      case Some(_: EnemyEntity) if this.isInstanceOf[EnemyBulletEntity] => true
+      case Some(_: EnemyBulletEntity) if this.isInstanceOf[EnemyEntity] => true
+      case None                                                         => true
+      case _                                                            => false
 
   protected def handleSpecialCollision(
       collidingEntity: Option[Entity]
