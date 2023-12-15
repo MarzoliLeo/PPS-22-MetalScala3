@@ -1,4 +1,4 @@
-package ecs.components
+package model.ecs.components
 
 import model.ecs.components.{PositionComponent, VelocityComponent}
 import org.scalatest.flatspec.AnyFlatSpec
