@@ -6,8 +6,6 @@ import model.ecs.entities.player.PlayerEntity
 import model.ecs.entities.weapons.{BombEntity, EnemyBulletEntity, PlayerBulletEntity}
 import model.ecs.entities.{Entity, EntityManager}
 
-import scala.util.Try
-
 object Command:
   def jump(entity: Entity): Unit =
     entity.getComponent[JumpingComponent] match

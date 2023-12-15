@@ -5,7 +5,7 @@ import model.event.Event
 import model.event.observer.Observable
 import scala.collection.immutable.{AbstractSeq, LinearSeq}
 
-trait EntityManager extends Observable[Event]:
+trait EntityManager:
   def addEntity(entity: Entity): EntityManager
   def removeEntity(entity: Entity): EntityManager
   def getEntitiesWithComponent(types: Class[_ <: Component]*): List[Entity]
