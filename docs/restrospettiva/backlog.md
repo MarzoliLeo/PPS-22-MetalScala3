@@ -71,12 +71,12 @@ Legenda dei nomi:
 | Product Item | Attività                                                                        | Assegnato a | Ore Stim. | Ore Effett. | D1 | D2 | D3 | D4 | D5 | D6 |
 |:-------------|:--------------------------------------------------------------------------------|:------------|:----------|:------------|:--|:--|:--|:--|:--|:--|
 | PI-035       | Se collido con un'arma devo salvare in qualche modo nel player il tipo di arma che ho preso e cambiare lo sprite dei proiettili in corrispondenza | LM2 | 12 | | | | | | | |
-| PI-036       | Separare il positionUpdateSystem                                                | LM, GR       | 14 | | | | | | | |
-| PI-037       | Separare l'AI del nemico                                                        | LM, GR       | 16 | | | | | | | |
-| PI-038       | Separare l'Input Movement System                                                | LM, GR       | 10 | | | | | | | |
-| PI-039       | Separare il Bullet Movement System                                              | LM, GR       | 12 | | | | | | | |
-| PI-040       | Separare il Gravity System                                                      | LM, GR       | 10 | | | | | | | |
-| PI-041       | La gravità deve essere soggettiva, ovvero si applica se hai il componente        | LM, GR       | 8  | | | | | | | |
+| PI-036       | Separare il positionUpdateSystem                                                | LM, GR, LM2       | 14 | | | | | | | |
+| PI-037       | Separare l'AI del nemico                                                        | LM, GR, LM2       | 16 | | | | | | | |
+| PI-038       | Separare l'Input Movement System                                                | LM, GR, LM2       | 10 | | | | | | | |
+| PI-039       | Separare il Bullet Movement System                                              | LM, GR, LM2       | 12 | | | | | | | |
+| PI-040       | Separare il Gravity System                                                      | LM, GR, LM2       | 10 | | | | | | | |
+| PI-041       | La gravità deve essere soggettiva, ovvero si applica se hai il componente        | LM, GR, LM2       | 8  | | | | | | | |
 | PI-042       | Estratto la logica degli sprite in un system                                    | LM          | 10 | | | | | | | |
 | PI-043       | Scaricati le immagini degli sprite e creato animazioni                          | LM          | 12 | | | | | | | |
 | PI-044       | Far funzionare la logica di AI dei nemici per più nemici nella scena di gioco, non solo per uno | LM | 14 | | | | | | | |
@@ -91,6 +91,14 @@ Legenda dei nomi:
 | PI-053       | Creare una nuova entità "AmmoBox", a cui attaccare una collisione, quando si collide guadagni munizioni per l'arma corrente | LM2 | 14 | | | | | | | |
 | PI-054       | Creare un livello da game designer                                              | GR          | 12 | | | | | | | |
 
+# Sprint 7: Ottimizzazioni finali.
+| Product Item | Attività                                                                        | Assegnato a | Ore Stim. | Ore Effett. | D1 | D2 | D3 | D4 | D5 | D6 |
+|:-------------|:--------------------------------------------------------------------------------|:------------|:----------|:------------|:--|:--|:--|:--|:--|:--|
+| PI-055       | Posizione randomica dei nemici e delle armi e delle munizioni                   | LM          | 10 | | | | | | | |
+| PI-056       | Sistemare lo spawn dei proiettili in modo che sia quanto più vicino possibile alle entità che lo sparano | LM2 | 14 | | | | | | | |
+| PI-057       | Quando un player o un nemico sta sopra un oggetto, la gravità continua ad aumentare e ad un certo punto bypassa le collisioni se stai fermo in volo | LM | 16 | | | | | | | |
+| PI-058       | Aggiungere il comando B (lettera che volete voi), sostituire lo sprite dei proiettili a bombe (10) e aggiungi la gravità alle bombe | LM, GR, LM2 | 18 | | | | | | | |
+| PI-059       | Quando il player muore il gioco si ferma                                       | GR, LM       | 10 | | | | | | | |
 
 
 
