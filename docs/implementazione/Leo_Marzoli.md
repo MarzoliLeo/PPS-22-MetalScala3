@@ -77,3 +77,4 @@ override def tick(elapsedTime: Long): Unit =
   notifyObservers(Tick(EntityManager.entities))
 ```
 
+## Creazione dell'AI nemico in TuProlog.
