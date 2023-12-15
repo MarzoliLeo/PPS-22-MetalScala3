@@ -60,3 +60,6 @@ Durante l'iterazione del game loop i comandi vengono eseguiti.
           inputsQueue = inputsQueue.pop.getOrElse(Empty)
       }
 ```
+
+
+[Home.](../index.md)
