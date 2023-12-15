@@ -6,6 +6,9 @@ Nonostante gli imprevisti che si sono presentati durante il percorso, ho gestito
 
 La metodologia di lavoro ha dimostrato efficienza, evidenziando progressi costanti tramite le pull request. L'esperienza ha arricchito la mia comprensione della programmazione funzionale e logica.
 
-Desidero ringraziare i compagni di gruppo per la collaborazione, elemento chiave nel raggiungimento dei nostri obiettivi. In conclusione, la retrospettiva rappresenta una significativa crescita personale e professionale.
+Desidero ringraziare i compagni di gruppo per la collaborazione, elemento chiave nel raggiungimento dei nostri obiettivi. 
+
+# In conclusione
+La retrospettiva rappresenta una significativa crescita personale e professionale.
 
 [Home.](../index.md)
