@@ -187,7 +187,7 @@ object Scala2P {
   implicit def tuple2Term[T1, T2](tuple2: (T1, T2)): Term = Term.createTerm(tuple2.toString())
 }
 ```
-4. Svolegere una query al file TuProlog all'interno del task Runnable nel sistema:
+4. Svolegere una query al file TuProlog all'interno del task Runnable nel sistema, passando come parametri il nome della regola a cui fare riferimento, un valore di randomess, la posizione del player, la posizione del nemico e una variabile il cui valore è da definire in modo da salvare il risultato:
 ```Scala
 override def run(): Unit = {
     try {
@@ -218,4 +218,8 @@ La query in caso di successo ritorna un valore salvato all'interno della variabi
 ```Scala
 val prologPositionX = extractTerm(solution, 3)
 ```
-Dove il 3 sta ad indicare la posizione del parametro utilizzato come risultato nella definizione della regola nel file TuProlog.
+Dove il 3 sta ad indicare la posizione del parametro utilizzato come risultato, nella definizione della regola, nel file TuProlog.
+
+Questo valore verrà aggiunto alla velocità e alla posizione del nemico risultando in un movimento.
+
+[Home.](../index.md)
