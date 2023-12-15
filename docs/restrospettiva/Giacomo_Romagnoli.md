@@ -11,7 +11,7 @@ Gli aspetti positivi sono per lo più legati all'organizzazione del lavoro e al 
 
 Gli aspetti negativi riguardono, invece, l'impatto che la metologià ha avuto sull'implementazione e sugli sviluppatori:
 * Scarsa visione d'insieme del progetto finale
-* Scarsa attenzione alla qualità in favore della funzionalità
+* Meno attenzione alla qualità in favore della funzionalità con necessità di rifattorizzare spesso
 * Difficoltà di integrazione dei lavori svolti in parallelo
 
 Tutto sommato gli aspetti positivi compensano quelli negativi, dimostrando che la metologia adottata risulta vincente, avendo permesso al gruppo di rispettare tutti i requirements del progetto.
