@@ -1,4 +1,5 @@
 # Backlogs
+Ciascuno sprint aveva cadenza settimanale. Il venerdì di ciascuna settimana si passava ad una nuova fase di sprint.
 Legenda dei nomi: 
 * LM = Leo Marzoli
 * LM2 = Lorenzo Massone
