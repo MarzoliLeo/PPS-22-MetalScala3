@@ -4,8 +4,6 @@ Legenda dei nomi:
 * LM2 = Lorenzo Massone
 * GR = Giacomo Romagnoli
 
-
-# Sprint 1: Implementazione delle Funzionalità di Base
 # Sprint 1: Implementazione delle Funzionalità di Base
 | Product Item | Attività                                          | Assegnato a | Ore Stim. | Ore Effett. | D1 | D2 | D3 | D4 | D5 | D6 |
 |:-------------|:---------------------------------------------------|:------------|:----------|:------------|:--|:--|:--|:--|:--|:--|
