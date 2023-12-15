@@ -84,8 +84,8 @@ Legenda dei nomi:
 | PI-046       | Se un proiettile nemico spara ad un nemico non deve eliminarlo                  | LM          | 12 | | | | | | | |
 | PI-047       | Sistemare la direction del projectile in modo che segua l'enemy e non il player | LM          | 10 | | | | | | | |
 | PI-048       | Sistemare la grafica in modo che il proiettile ruoti opportunamente             | LM          | 8  | | | | | | | |
-| PI-049       | [Nuovo] Fixare il fatto che se un enemy sbatte contro un box deve collidere      | LM          | 10 | | | | | | | |
-| PI-050       | Ridurre la collision box quando si effettua il comando S da tastiera             | GR          | 8  | | | | | | | |
+| PI-049       | Fixare il fatto che se un enemy sbatte contro un box deve collidere      | LM          | 10 | | | | | | | |
+| PI-050       | Ridurre la collision box quando si effettua il comando B da tastiera             | GR          | 8  | | | | | | | |
 | PI-051       | Mettere le collisioni nel cluch                                                 | LM, GR       | 12 | | | |
 
 
