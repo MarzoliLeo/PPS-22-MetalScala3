@@ -67,7 +67,7 @@ override def start(): Unit =
 
 ```
 
-Il thread si ferma soltanto quando la sua variabile *_status* di tipo *@volatile*, in quanto garantisce immediata propagazione del suo contenuto a tutti i thread che ne fanno utilizzo, assume il valore di *Stopped*.
+Il thread si ferma soltanto quando la sua variabile *_status* di tipo *@volatile*, definita volontariamente in questo modo in quanto garantisce immediata propagazione del suo contenuto a tutti i thread che ne fanno utilizzo, assume il valore di *Stopped*.
 
 Il game loop al suo interno invoca continuamente il metodo *tick()* specializzato all'interno di Engine che dopo aver aggiornato lo stato dei sistemi notifica il rendering della view, fintanto che il gioco sta eseguendo: 
 
