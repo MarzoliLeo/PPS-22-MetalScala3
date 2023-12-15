@@ -87,6 +87,10 @@ Legenda dei nomi:
 | PI-049       | Fixare il fatto che se un enemy sbatte contro un box deve collidere      | LM          | 10 | | | | | | | |
 | PI-050       | Ridurre la collision box quando si effettua il comando B da tastiera             | GR          | 8  | | | | | | | |
 | PI-051       | Mettere le collisioni nel cluch                                                 | LM, GR       | 12 | | | |
+| PI-052       | Implementare una nuova entità di Slug                                          | LM          | 10 | | | | | | | |
+| PI-053       | Creare una nuova entità "AmmoBox", a cui attaccare una collisione, quando si collide guadagni munizioni per l'arma corrente | LM2 | 14 | | | | | | | |
+| PI-054       | Creare un livello da game designer                                              | GR          | 12 | | | | | | | |
+
 
 
 
