@@ -67,4 +67,26 @@ Legenda dei nomi:
 | PI-033       | Sviluppo di una logica AI per il nemico in TuProlog                             | LM         | 16 |             |    |    |    |    |    |    |
 | PI-034       | Implementare una generalizzazione del concetto di CollisionHandler              | LM2     | 12 |             |    |    |    |    |    |    |
 
+# Sprint 6: Refactoring e Miglioramenti
+| Product Item | Attività                                                                        | Assegnato a | Ore Stim. | Ore Effett. | D1 | D2 | D3 | D4 | D5 | D6 |
+|:-------------|:--------------------------------------------------------------------------------|:------------|:----------|:------------|:--|:--|:--|:--|:--|:--|
+| PI-035       | Se collido con un'arma devo salvare in qualche modo nel player il tipo di arma che ho preso e cambiare lo sprite dei proiettili in corrispondenza | LM2 | 12 | | | | | | | |
+| PI-036       | Separare il positionUpdateSystem                                                | LM, GR       | 14 | | | | | | | |
+| PI-037       | Separare l'AI del nemico                                                        | LM, GR       | 16 | | | | | | | |
+| PI-038       | Separare l'Input Movement System                                                | LM, GR       | 10 | | | | | | | |
+| PI-039       | Separare il Bullet Movement System                                              | LM, GR       | 12 | | | | | | | |
+| PI-040       | Separare il Gravity System                                                      | LM, GR       | 10 | | | | | | | |
+| PI-041       | La gravità deve essere soggettiva, ovvero si applica se hai il componente        | LM, GR       | 8  | | | | | | | |
+| PI-042       | Estratto la logica degli sprite in un system                                    | LM          | 10 | | | | | | | |
+| PI-043       | Scaricati le immagini degli sprite e creato animazioni                          | LM          | 12 | | | | | | | |
+| PI-044       | Far funzionare la logica di AI dei nemici per più nemici nella scena di gioco, non solo per uno | LM | 14 | | | | | | | |
+| PI-045       | Fatto in modo che se un proiettile colpisce un nemico questo venga eliminato    | LM          | 10 | | | | | | | |
+| PI-046       | Se un proiettile nemico spara ad un nemico non deve eliminarlo                  | LM          | 12 | | | | | | | |
+| PI-047       | Sistemare la direction del projectile in modo che segua l'enemy e non il player | LM          | 10 | | | | | | | |
+| PI-048       | Sistemare la grafica in modo che il proiettile ruoti opportunamente             | LM          | 8  | | | | | | | |
+| PI-049       | [Nuovo] Fixare il fatto che se un enemy sbatte contro un box deve collidere      | LM          | 10 | | | | | | | |
+| PI-050       | Ridurre la collision box quando si effettua il comando S da tastiera             | GR          | 8  | | | | | | | |
+| PI-051       | Mettere le collisioni nel cluch                                                 | LM, GR       | 12 | | | |
+
+
 
