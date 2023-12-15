@@ -19,7 +19,7 @@ class SystemManagerTest extends AnyFlatSpec with Matchers with BeforeAndAfterEac
   var manager: SystemManager = _
 
   override def beforeEach(): Unit = {
-    manager = SystemManager(EntityManager)
+    manager = SystemManager()
     super.beforeEach() // To be stackable, must call super.beforeEach()
   }
 
