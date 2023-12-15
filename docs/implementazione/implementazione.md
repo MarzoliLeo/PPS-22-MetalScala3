@@ -3,4 +3,4 @@ Per ogni membro del gruppo riportiamo una sezione che specifica il lavoro svolto
 
 * [Giacomo Romagnoli](./Giacomo_Romagnoli.md)
 * [Lorenzo Massone](./Lorenzo_Massone.md)
-* [Leo Marzoli](./Leo_Marzoli)
+* [Leo Marzoli](./Leo_Marzoli.md)
