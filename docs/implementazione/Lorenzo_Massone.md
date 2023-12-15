@@ -6,7 +6,9 @@ I compiti da me svolti durante lo sviluppo sono i seguenti:
 - Implementazione della logica di collisione;
 - Implementazione di armi e munizioni;
 - Implementazione del sistema di aggiornamento della posizione.
-  Di seguito una descrizione delle feature più interessanti da analizzare.
+
+
+Di seguito una descrizione delle feature più interessanti da analizzare.
 ## Gestione delle collisioni
 Per gestire le collisioni tra le entità presenti all'interno del gioco ho scelto di implementare un  mix-in **CollisionHandler** che utilizza un **self-type** su **Entity** per garantire che un CollisionHandler possa essere utilizzato solamente da un'entità:
 ```scala
