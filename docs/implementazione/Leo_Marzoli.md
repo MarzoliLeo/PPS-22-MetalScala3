@@ -8,6 +8,8 @@ All'interno del progetto mi sono occupato di:
 * Lancio delle bombe del giocatore con aiuto di Giacomo Romagnoli.
 * Creazione di un sistema per la gravità con aiuto di Lorenzo Massone.
 
+Di seguito vengono riportati gli aspetti che ritengo più rilevanti durante lo sviluppo del codice da me affrontato.
+
 ## Implementazione del game engine.
 
 Il problema sorto durante lo sviluppo dell'engine ha riguardato la necessità di implementare un motore di gioco in grado di interlacciarsi con il calcolo della logica in ECS e il suo rendering tramite la View, facendo così da ponte separando le due responsabilità. Il tutto doveva essere gestito non aggravando sulle performance del main thread. Dunque, per risolvere questo problema si è deciso di implementare il *Game Loop* nel seguente modo:
