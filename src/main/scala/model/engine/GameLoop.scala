@@ -14,10 +14,8 @@ private[engine] object GameLoop:
   def apply(fps: Int, gameEngine: GameEngine): GameLoop =
     GameLoopImpl(fps, gameEngine)
 
-  private case class GameLoopImpl(override var fps: Int, gameEngine: GameEngine)
-      extends GameLoop {
+  private case class GameLoopImpl(override var fps: Int, gameEngine: GameEngine) extends GameLoop {
     private val millisecond = 1000
-    // volatile makes the variable thread safe and fast to updates.
     @volatile private var _status: GameStatus = Stopped
 
     override def run(): Unit = {
@@ -33,12 +31,10 @@ private[engine] object GameLoop:
         val currentTime: Long = System.currentTimeMillis()
         val elapsedTime: Long = currentTime - lastTime
 
-        // Update all the systems.
         gameEngine.tick(elapsedTime)
 
         // Wait for the next tick (calculating the time to wait).
         val tickTime = System.currentTimeMillis() - currentTime
-        // print("[Tick] Lo stato del sistema è: " + _status + "\n")
         val timeTaken: Long = (millisecond / fps) - tickTime
         if (timeTaken > 0) {
           Thread.sleep(timeTaken)
