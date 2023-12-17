@@ -6,7 +6,7 @@ import model.Fps
 import model.ecs.components.PositionComponent
 import model.ecs.entities.EntityManager
 import model.ecs.entities.player.PlayerEntity
-import model.ecs.systems.{AISystem, DeathSystem, SystemManager}
+import model.ecs.systems.{AISystem, GameOverSystem, SystemManager}
 import model.event.Event
 import model.event.Event.Tick
 import model.event.observer.Observable
