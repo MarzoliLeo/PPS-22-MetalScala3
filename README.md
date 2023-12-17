@@ -6,7 +6,7 @@ Progetto di Paradigmi di Programmazione e Sviluppo.
 
 Per informazioni dettagliate visionare la documentazione al seguente link:
 
-[Documentazione Metal Scala 3](https://marzoli.me/PPS-22-MetalScala3/)
+[Documentazione Metal Scala 3](https://marzolileo.github.io/PPS-22-MetalScala3/)
 
 ## Contributi
 
