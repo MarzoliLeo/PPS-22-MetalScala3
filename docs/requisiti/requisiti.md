@@ -52,5 +52,5 @@ Di seguito riportiamo una immagine rappresentativa del gioco originale.
 * Proprietario senza usufruire di soluzioni già esistenti
 
 
-[Home.](../index.md).
+[Home.](../index.md)
 
