@@ -12,3 +12,8 @@ lazy val root = (project in file("."))
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.17" % "test",
     libraryDependencies += "it.unibo.alice.tuprolog" % "tuprolog" % "3.3.0"
   )
+
+javaOptions ++= Seq(
+  "--module-path lib/javafx-sdk-21.0.1/lib ",
+  "--add-modules javafx.controls,javafx.fxml"
+)
