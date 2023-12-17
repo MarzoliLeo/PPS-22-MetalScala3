@@ -1,4 +1,4 @@
-package ecs.entities.weapons
+package model.ecs.entities.weapons
 
 import model.ecs.components.{PositionComponent, VelocityComponent}
 import model.ecs.entities.Entity

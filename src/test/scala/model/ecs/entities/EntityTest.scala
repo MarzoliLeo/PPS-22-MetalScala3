@@ -1,4 +1,4 @@
-package ecs.entities
+package model.ecs.entities
 
 import model.ecs.components.PositionComponent
 import model.ecs.entities.Entity
