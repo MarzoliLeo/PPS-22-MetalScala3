@@ -19,8 +19,6 @@ trait AISystem extends SystemWithElapsedTime {
   private val prologFile = new java.io.File("src/main/resources/EnemyAI.pl")
   engine.setTheory(new Theory(new FileInputStream(prologFile)))
 
-  @volatile private var stopped: Boolean = false
-
   override def update(elapsedTime: Long): Unit = {
     EntityManager.getEntitiesByClass(classOf[PlayerEntity]) match {
       case Nil => // player morto.
