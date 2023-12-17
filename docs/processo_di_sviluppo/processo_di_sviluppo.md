@@ -24,4 +24,4 @@ Per la revisione dei task si è optato per l'introduzione di un meccanismo a pul
 ## Scelta degli strumenti di test/build/continuous integration
 Per il testing si è scelto di utilizzare scalatest come strumento di automazione, essendo una tecnologia nota e facile da integrare. Va precisato che per via dei tempi brevi questo aspetto del progetto non è stato particolarmente curato. Come build tool è stato scelto sbt, e non gradle, per permettere al team di sperimentare un nuovo strumento. L'intera relazione, che descrive e documenta il progetto, è mantenuta continuamente integrata grazie a GitHub Pages che prevede un nuovo deploy ad ogni modifica.
 
-[Home](../index.md)
+[Home.](../index.md)
